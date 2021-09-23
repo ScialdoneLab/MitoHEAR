@@ -10,6 +10,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("Rsamtools")
 BiocManager::install("ComplexHeatmap")
 BiocManager::install("Biostrings")
+BiocManager::install("karyoploteR")
 
 install.packages("data.table")
 install.packages("ggplot2")
