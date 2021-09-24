@@ -12,6 +12,8 @@ BiocManager::install("ComplexHeatmap")
 BiocManager::install("Biostrings")
 BiocManager::install("karyoploteR")
 BiocManager::install("regioneR")
+BiocManager::install("GenomicRanges")
+BiocManager::install("IRanges")
 
 install.packages("data.table")
 install.packages("ggplot2")
