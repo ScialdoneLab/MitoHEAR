@@ -429,8 +429,8 @@ library(RNAheteroplasmynew)</code></pre>
 <pre class="r"><code>#setwd(&quot;/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server&quot;)
 #load(&quot;output_SNP_ana_mt.Rda&quot;)
 #data(&quot;output_SNP_ana_mt&quot;,package=&quot;RNAheteroplasmy&quot;)</code></pre>
-<pre class="r"><code>data(&quot;meta_data_ana_final_big&quot;,package=&quot;RNAheteroplasmy&quot;)
-data(&quot;meta_data_ana_final_small&quot;,package=&quot;RNAheteroplasmy&quot;)
+<pre class="r"><code>data(&quot;meta_data_ana_final_big&quot;,package=&quot;RNAheteroplasmynew&quot;)
+data(&quot;meta_data_ana_final_small&quot;,package=&quot;RNAheteroplasmynew&quot;)
 
 
 path_to_bam=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data/bam_file_ana_sorted/&quot;
@@ -451,7 +451,7 @@ bam_input_bulk=bam_input
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_bulk -f #&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa&quot; -c cell_names_bulk -o output_SNP_ana_mt.Rda  -s 20
 
-data(&quot;output_SNP_ana_mt&quot;,package=&quot;RNAheteroplasmy&quot;)</code></pre>
+data(&quot;output_SNP_ana_mt&quot;,package=&quot;RNAheteroplasmynew&quot;)</code></pre>
 <p>The output of <em>get_raw_counts_allele</em> is a list with three elements (see <em>?get_raw_counts_allele</em> for more info). The first element is the matrix of counts (n_rows = number of cells, n_cols= 4*number of bases) of the four alleles in each base. The row names are equal to cell_names.</p>
 <pre class="r"><code>#output_SNP_ana_mt=result</code></pre>
 <pre class="r"><code>matrix_allele_counts=output_SNP_ana_mt[[1]]
@@ -708,7 +708,7 @@ heatmap_plot(row.names(dist_matrix_bulk),row.names(dist_matrix_bulk),new_classif
 <div id="heteroplasmy-and-allele-frequencies-analysis-for-bases-different-from-bl6-reference-genome" class="section level2">
 <h2>Heteroplasmy and allele frequencies analysis for bases different from BL6 reference genome</h2>
 <p>As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<a href="https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1" class="uri">https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1</a> and <a href="https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1" class="uri">https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1</a>), we can identify the bases that are different from the reference genome</p>
-<pre class="r"><code>bg_path=system.file(&quot;extdata&quot;, &quot;bg.fasta.txt&quot;, package = &quot;RNAheteroplasmy&quot;)
+<pre class="r"><code>bg_path=system.file(&quot;extdata&quot;, &quot;bg.fasta.txt&quot;, package = &quot;RNAheteroplasmynew&quot;)
 
 fastaFile &lt;- readDNAStringSet(bg_path)
 seq_name = names(fastaFile)
@@ -717,7 +717,7 @@ df_bg &lt;- data.frame(seq_name, sequence)
 
 bg_sequence=df_bg$sequence
 
-hb_path=system.file(&quot;extdata&quot;, &quot;hb.fasta.txt&quot;, package = &quot;RNAheteroplasmy&quot;)
+hb_path=system.file(&quot;extdata&quot;, &quot;hb.fasta.txt&quot;, package = &quot;RNAheteroplasmynew&quot;)
 fastaFile &lt;- readDNAStringSet(hb_path)
 seq_name = names(fastaFile)
 sequence = paste(fastaFile)
@@ -725,7 +725,7 @@ df_hb &lt;- data.frame(seq_name, sequence)
 
 hb_sequence=df_hb$sequence
 
-mt_path=system.file(&quot;extdata&quot;, &quot;Mus_musculus.GRCm38.dna.chromosome.MT.fa&quot;, package = &quot;RNAheteroplasmy&quot;)
+mt_path=system.file(&quot;extdata&quot;, &quot;Mus_musculus.GRCm38.dna.chromosome.MT.fa&quot;, package = &quot;RNAheteroplasmynew&quot;)
 
 fastaFile &lt;- readDNAStringSet(mt_path)
 seq_name = names(fastaFile)

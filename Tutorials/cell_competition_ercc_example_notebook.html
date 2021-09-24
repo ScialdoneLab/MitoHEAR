@@ -376,11 +376,57 @@ summary {
 #devtools::install_github(&quot;ScialdoneLab/RNAheteroplasmy&quot;,auth_token=&quot;be68e5a7d8bdb8c1d270488c463c6bcaa5#13acf7&quot;)
 #library(RNAheteroplasmy)</code></pre>
 <pre class="r"><code>#if (!requireNamespace(&quot;devtools&quot;, quietly = TRUE)) install.packages(&quot;devtools&quot;)
-#devtools::install_github(&quot;https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master&quot;,auth_token=#&quot;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&quot;)
+#devtools::install_github(&quot;https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master&quot;,auth_token=&quot;#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&quot;)
 library(RNAheteroplasmynew)</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Loading required package: Rsamtools</code></pre>
+<pre><code>## Warning: package 'Rsamtools' was built under R version 4.0.3</code></pre>
+<pre><code>## Loading required package: GenomeInfoDb</code></pre>
+<pre><code>## Warning: package 'GenomeInfoDb' was built under R version 4.0.5</code></pre>
+<pre><code>## Loading required package: BiocGenerics</code></pre>
+<pre><code>## Warning: package 'BiocGenerics' was built under R version 4.0.5</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
+<pre><code>## 
+## Attaching package: 'BiocGenerics'</code></pre>
+<pre><code>## The following objects are masked from 'package:parallel':
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+##     union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>## Loading required package: S4Vectors</code></pre>
+<pre><code>## Warning: package 'S4Vectors' was built under R version 4.0.3</code></pre>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre><code>## 
+## Attaching package: 'S4Vectors'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     expand.grid</code></pre>
+<pre><code>## Loading required package: IRanges</code></pre>
+<pre><code>## Warning: package 'IRanges' was built under R version 4.0.3</code></pre>
+<pre><code>## Loading required package: GenomicRanges</code></pre>
+<pre><code>## Warning: package 'GenomicRanges' was built under R version 4.0.3</code></pre>
+<pre><code>## Loading required package: Biostrings</code></pre>
+<pre><code>## Warning: package 'Biostrings' was built under R version 4.0.3</code></pre>
+<pre><code>## Loading required package: XVector</code></pre>
+<pre><code>## Warning: package 'XVector' was built under R version 4.0.3</code></pre>
+<pre><code>## 
+## Attaching package: 'Biostrings'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     strsplit</code></pre>
 <p>The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns. This task is achieved with the function <em>get_raw_counts_allele</em>. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names. The matrix <em>after_qc</em> contains meta data information about the cells (i.e. cell names, cell types, batch).</p>
-<pre class="r"><code>data(&quot;after_qc&quot;,package=&quot;RNAheteroplasmy&quot;)
+<pre class="r"><code>data(&quot;after_qc&quot;,package=&quot;RNAheteroplasmynew&quot;)
 
 path_to_bam=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files_spikes/&quot;
 
@@ -404,9 +450,9 @@ path_fasta=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competiti
 
 # Command line implementation
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
-#Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_raw_counts_allele_script.R -b bam_input -f #&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa&quot; -c cell_names -o output_SNP_spikes  -s 20
+#Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_spikes  -f #&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/ERCC92.fa&quot; -c #cell_names_spikes  -o output_SNP_spikes.Rda  -s 20
 
-data(&quot;output_SNP_spikes&quot;,package=&quot;RNAheteroplasmy&quot;)</code></pre>
+data(&quot;output_SNP_spikes&quot;,package=&quot;RNAheteroplasmynew&quot;)</code></pre>
 </div>
 <div id="get-heteroplasmy-and-allele-frequencies-matrices" class="section level2">
 <h2>Get heteroplasmy and allele frequencies matrices</h2>
@@ -632,39 +678,40 @@ utils::sessionInfo()</code></pre>
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] RNAheteroplasmynew_0.1.0 ggplot2_3.3.5           
+##  [1] RNAheteroplasmynew_0.1.0 Rsamtools_2.6.0          Biostrings_2.58.0       
+##  [4] XVector_0.30.0           GenomicRanges_1.42.0     GenomeInfoDb_1.26.7     
+##  [7] IRanges_2.24.1           S4Vectors_0.28.1         BiocGenerics_0.36.1     
+## [10] ggplot2_3.3.5           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.7             lattice_0.20-41        circlize_0.4.13       
-##  [4] png_0.1-7              Rsamtools_2.6.0        Biostrings_2.58.0     
-##  [7] assertthat_0.2.1       digest_0.6.27          foreach_1.5.1         
-## [10] utf8_1.2.1             R6_2.5.0               GenomeInfoDb_1.26.7   
-## [13] dynamicTreeCut_1.63-1  stats4_4.0.2           evaluate_0.14         
-## [16] pillar_1.6.1           GlobalOptions_0.1.2    zlibbioc_1.36.0       
-## [19] rlang_0.4.11           data.table_1.14.0      gam_1.20              
-## [22] S4Vectors_0.28.1       GetoptLong_1.0.5       Matrix_1.2-18         
-## [25] rmarkdown_2.3          labeling_0.4.2         splines_4.0.2         
-## [28] BiocParallel_1.24.1    stringr_1.4.0          RCurl_1.98-1.3        
-## [31] munsell_0.5.0          compiler_4.0.2         xfun_0.17             
-## [34] pkgconfig_2.0.3        BiocGenerics_0.36.1    shape_1.4.6           
-## [37] mgcv_1.8-32            htmltools_0.5.1.1      tidyselect_1.1.0      
-## [40] gridExtra_2.3          tibble_3.1.2           GenomeInfoDbData_1.2.4
-## [43] IRanges_2.24.1         codetools_0.2-16       matrixStats_0.59.0    
-## [46] fansi_0.5.0            crayon_1.4.1           dplyr_1.0.5           
-## [49] withr_2.4.2            bitops_1.0-7           grid_4.0.2            
-## [52] nlme_3.1-149           gtable_0.3.0           lifecycle_1.0.0       
-## [55] DBI_1.1.0              magrittr_2.0.1         scales_1.1.1          
-## [58] rlist_0.4.6.1          stringi_1.5.3          farver_2.1.0          
-## [61] XVector_0.30.0         ellipsis_0.3.2         generics_0.1.0        
-## [64] vctrs_0.3.8            rdist_0.0.5            RColorBrewer_1.1-2    
-## [67] rjson_0.2.20           iterators_1.0.13       tools_4.0.2           
-## [70] Cairo_1.5-12.2         glue_1.4.2             purrr_0.3.4           
-## [73] parallel_4.0.2         yaml_2.2.1             clue_0.3-59           
-## [76] colorspace_2.0-2       cluster_2.1.0          GenomicRanges_1.42.0  
-## [79] ComplexHeatmap_2.6.2   knitr_1.29</code></pre>
+##  [4] png_0.1-7              assertthat_0.2.1       digest_0.6.27         
+##  [7] foreach_1.5.1          utf8_1.2.1             R6_2.5.0              
+## [10] dynamicTreeCut_1.63-1  evaluate_0.14          pillar_1.6.1          
+## [13] GlobalOptions_0.1.2    zlibbioc_1.36.0        rlang_0.4.11          
+## [16] data.table_1.14.0      gam_1.20               GetoptLong_1.0.5      
+## [19] Matrix_1.2-18          rmarkdown_2.3          labeling_0.4.2        
+## [22] splines_4.0.2          BiocParallel_1.24.1    stringr_1.4.0         
+## [25] RCurl_1.98-1.3         munsell_0.5.0          compiler_4.0.2        
+## [28] xfun_0.17              pkgconfig_2.0.3        shape_1.4.6           
+## [31] mgcv_1.8-32            htmltools_0.5.1.1      tidyselect_1.1.0      
+## [34] gridExtra_2.3          tibble_3.1.2           GenomeInfoDbData_1.2.4
+## [37] codetools_0.2-16       matrixStats_0.59.0     fansi_0.5.0           
+## [40] crayon_1.4.1           dplyr_1.0.5            withr_2.4.2           
+## [43] bitops_1.0-7           grid_4.0.2             nlme_3.1-149          
+## [46] gtable_0.3.0           lifecycle_1.0.0        DBI_1.1.0             
+## [49] magrittr_2.0.1         scales_1.1.1           rlist_0.4.6.1         
+## [52] stringi_1.5.3          farver_2.1.0           ellipsis_0.3.2        
+## [55] generics_0.1.0         vctrs_0.3.8            rdist_0.0.5           
+## [58] RColorBrewer_1.1-2     rjson_0.2.20           iterators_1.0.13      
+## [61] tools_4.0.2            Cairo_1.5-12.2         glue_1.4.2            
+## [64] purrr_0.3.4            yaml_2.2.1             clue_0.3-59           
+## [67] colorspace_2.0-2       cluster_2.1.0          ComplexHeatmap_2.6.2  
+## [70] knitr_1.29</code></pre>
 </div>
 
 
