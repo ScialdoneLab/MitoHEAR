@@ -53,7 +53,7 @@ cell_names[1:5]
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files/"
 bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
 path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
-output_SNP_mt=Get_raw_counts_allele(bam_input,path_fasta,cell_names)
+output_SNP_mt=get_raw_counts_allele(bam_input,path_fasta,cell_names)
 ```
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
 
