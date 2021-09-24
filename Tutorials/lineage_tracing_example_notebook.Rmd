@@ -1,0 +1,313 @@
+---
+title: "Lineage tracing"
+author: "Gabriele Lubatti"
+date: "17/06/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+In this notebook it is shown the heteroplasmy analysis performed on single cell RNA seq mouse embryo data (https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone, from Goolam M et al; Cell, 2016.).
+There are embryos at different stages from 2-cells to 8-cells stage. At each stage, for every cell it is known the embryo of origin.
+
+## Get counts for the four alleles in each base-cell pair
+
+```{r}
+#library(devtools)
+#library(ggplot2)
+#library(gridExtra)
+#library(gam)
+#library(rdist)
+#library(dynamicTreeCut)
+#library(ComplexHeatmap)
+#library(circlize)
+#library(Biostrings)
+#install_github("ScialdoneLab/RNAheteroplasmy",auth_token="be68e5a7d8bdb8c1d270488c463c6bcaa513acf7")
+#library(RNAheteroplasmy)
+
+
+#if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+#devtools::install_github("ScialdoneLab/RNAheteroplasmy",auth_token="be68e5a7d8bdb8c1d270488c463c6bcaa5#13acf7")
+#library(RNAheteroplasmy)
+```
+```{r}
+#if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+#devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
+library(RNAheteroplasmynew)
+```
+The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
+The matrix *meta_data_antonio_final* contains meta data information about the cells (i.e. cell names, cell types, batch).
+
+```{r}
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
+#load(file="output_SNP_antonio_mt.Rda")
+#data("output_SNP_antonio_mt",package="RNAheteroplasmy")
+```
+
+
+```{r}
+#setwd("/home/ies/gabriele.lubatti/revision_heteroplasmy/input_R")
+
+#load(file="meta_data_antonio_final.Rda")
+
+#path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/"
+#cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)[1:5]
+
+#bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")[1:5]
+
+#path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musc#ulus.GRCm38.dna.chromosome.MT.fa"
+
+data("meta_data_antonio_final",package="RNAheteroplasmynew")
+
+path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/"
+cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)
+
+bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
+
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+
+cell_names_antonio=cell_names
+bam_input_antonio=bam_input
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
+#save(cell_names_antonio,file="cell_names_antonio.Rda")
+#save(bam_input_antonio,file="bam_input_antonio.Rda")
+
+```
+
+We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
+A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+
+```{r}
+#output_SNP_antonio_mt=get_raw_counts_allele(bam_input_antonio,path_fasta,cell_names_antonio)
+
+# Command line implementation
+#cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
+#Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_antonio -f #"/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa" -c cell_names_antonio -o output_SNP_antonio_mt.Rda  -s 20
+
+data("output_SNP_antonio_mt",package="RNAheteroplasmynew")
+
+```
+
+The output of *get_raw_counts_allele* is a list with three elements (see *?get_raw_counts_allele* for more info). The first element is the matrix of counts (n_rows = number of cells, n_cols= 4*number of bases) of the four alleles in each base. The row names are equal to cell_names.
+
+```{r}
+#output_SNP_antonio_mt=result
+
+```
+
+
+```{r}
+matrix_allele_counts=output_SNP_antonio_mt[[1]]
+name_position_allele=output_SNP_antonio_mt[[2]]
+name_position=output_SNP_antonio_mt[[3]]
+
+```
+
+```{r}
+row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Comment.ENA_RUN.
+meta_data_antonio_final=meta_data_antonio_final[row.names(matrix_allele_counts),]
+row.names(matrix_allele_counts)=meta_data_antonio_final$antonio_array.Source.Name
+row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Source.Name
+```
+
+##  2-cells Stages
+We select only the cells for the 2-cells stage for  down-stream analysis. 
+
+```{r}
+stage_2_cells=row.names(matrix_allele_counts)[grep("2cell_",row.names(matrix_allele_counts))]
+stage_2_cells=stage_2_cells[!grepl("32cell_",stage_2_cells)]
+```
+
+The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
+This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the the remaining cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts[stage_2_cells,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
+For more info about the ouput see *?get_geteroplasmy*.
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("2cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("2cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("2cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("2cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+condition_sc[grep("2cell_5_",row.names(heteroplasmy_matrix_sc))]="5"
+condition_sc[grep("2cell_6_",row.names(heteroplasmy_matrix_sc))]="6"
+condition_sc[grep("2cell_7_",row.names(heteroplasmy_matrix_sc))]="7"
+condition_sc[grep("2cell_8_",row.names(heteroplasmy_matrix_sc))]="8"
+index_sc=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+It is possible to perform an additional filtering step on the bases keeping only the ones with an heteroplasmy value above *min_heteroplasmy* in more than *min_cells*.
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,2)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+We can compute and visualize the distribution of the average coverage of the bases.
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+### Cluster analysis among cells based on allele frequency values
+RNAheteroplasmy offers the possibility to perform a hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cell is the angular distance of the allele frequencies. In this way we can represent the difference between two cells as a vector whose cordinates are the angular distances of the bases.
+The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
+The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
+The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
+The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
+See *?clustering_dist_ang* for more info.
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,condition_sc,100,deepSplit_param=0,minClusterSize_param=2)
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+```
+
+
+## 8-cells stages
+
+```{r}
+stage_8_cells=row.names(matrix_allele_counts)[grep("8cell_",row.names(matrix_allele_counts))]
+
+```
+
+The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
+This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the the remaining cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts[stage_8_cells,],name_position_allele,name_position,50,2000,filtering = 1)
+
+
+```
+
+
+Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
+For more info about the ouput see *?get_geteroplasmy*.
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("8cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("8cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("8cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("8cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+
+index_sc=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+It is possible to perform an additional filtering step on the bases keeping only the ones with an heteroplasmy value above *min_heteroplasmy* in more than *min_cells*.
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,8)
+```
+
+We can compute and visualize the distribution of the average coverage of the bases.
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+
+### Cluster analysis among cells based on allele frequency values
+RNAheteroplasmy offers the possibility to perform a hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cell is the angular distance of the allele frequencies. In this way we can represent the difference between two cells as a vector whose cordinates are the angular distances of the bases.
+The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
+The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
+The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
+The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
+See *?clustering_dist_ang* for more info.
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,condition_sc,100,deepSplit_param=0,minClusterSize_param=2)
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+```
+
+
+```{r}
+library(utils)
+utils::sessionInfo()
+```
+
+
+
+
+
+
+
+
+
+
+
