@@ -198,6 +198,6 @@ Cluster analysis among samples based on allele frequency values (done with **clu
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/lineage_tracing_example_notebook.Rmd):**
 This tutorial uses single cell RNA seq mouse embryo data from  [Goolam *et al.*, Cell, 2016 ](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone)(Smart-Seq2 protocol). 
 There are embryos at different stages from 2-cells to 8-cells stage. At each stage, for every cell it is known the embryo of origin.
-We show that cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
+We illustrate how cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 
 
