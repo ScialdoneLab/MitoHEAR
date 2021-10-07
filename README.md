@@ -33,6 +33,26 @@ library(RNAheteroplasmynew)
 ```
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
 
+## Troubleshooting installation errors
+The package was developed within R.4.0.2. A different version of R (higher or lower) may lead to installation failed. If is not possible to install the package following the command in the section **Installation**, then download this GitHub repository (main and master) at the location *your_path* and then run the following:
+
+```
+#load required packages and functions
+setwd("/your_path/RNAHeteroplasmynew-main/Packages_Functions)
+source("RNAheteroplasmynew_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
+
+The input data in order to reproduce the vignettes in the section **Tutorials**  are availbale at the paths:
+1. **/your_path/RNAHeteroplasmynew-master/data**
+2. **/your_path/RNAHeteroplasmynew-master/inst/extdata**
+
+
 ## get_raw_counts_allele
 
 ```
