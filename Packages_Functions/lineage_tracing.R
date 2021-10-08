@@ -75,12 +75,12 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
   row.names(norm_es_plot) <- marker_plot_plot
   color_cluster = rep(0, length(unique(new_classification)))
   for (i in 1:length(color_cluster)) {
-    color_cluster[i] = EntropyMixingR::gg_color_hue(length(color_cluster))[i]
+    color_cluster[i] = gg_color_hue(length(color_cluster))[i]
   }
   names(color_cluster) = as.character(cluster_unique)
   color_condition = rep(0, length(unique(old_classification)))
   for (i in 1:length(color_condition)) {
-    color_condition[i] = EntropyMixingR::gg_color_hue(length(color_condition))[i]
+    color_condition[i] = gg_color_hue(length(color_condition))[i]
   }
   names(color_condition) = as.character(unique(old_classification))
   Condition_factor = factor(old_classification)
