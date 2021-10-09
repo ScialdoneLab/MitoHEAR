@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
 ```
 
 In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>. As a technical control,we focus on heteroplasmy on ERCC-Spike-In.
@@ -44,7 +44,7 @@ cell_names=as.vector(after_qc_fmk_epi$new_name)
 
 bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
 
-path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/ERCC92.fa"
 
 #setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
 #vedo=load("output_SNP_mt.Rda")

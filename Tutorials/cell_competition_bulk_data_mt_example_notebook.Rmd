@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
 ```
 
 In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.

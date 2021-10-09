@@ -8,8 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-gc()
-rm(list=ls())
+#gc()
+#rm(list=ls())
 #knitr::opts_chunk$set(echo = TRUE)
 ```
 
