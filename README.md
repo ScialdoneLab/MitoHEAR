@@ -38,7 +38,7 @@ The package was developed within R.4.0.2. A different version of R (higher or lo
 
 ```
 #load required packages and functions
-setwd("/your_path/RNAHeteroplasmynew-main/Packages_Functions)
+setwd(paste0(your_path,"/RNAHeteroplasmynew-main/Packages_Functions"))
 source("RNAheteroplasmynew_packages.R")
 source("get_heteroplasmy.R")
 source("get_raw_counts_allele.R")
@@ -47,11 +47,13 @@ source("other_functions.R")
 source("plotting_functions.R")
 source("statistical_test.R")
 ```
-
-The input data in order to reproduce the vignettes in the section **Tutorials**  are availbale at the paths:
+With the command above, all the functions of the library RNAheteroplasmynew will be available to use.
+The input data in order to reproduce the vignettes in the section **Tutorials** are available at the paths:
 1. **/your_path/RNAHeteroplasmynew-master/data**
 2. **/your_path/RNAHeteroplasmynew-master/inst/extdata**
 
+If RNAheteroplasmynew is not installed, it is possible to fully reproduce all the vignettes in the section **Tutorials** using the scripts available in the folder 
+**[Tutorials_no_installation](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/main/Tutorials_no_installation):**
 
 ## get_raw_counts_allele
 
@@ -75,7 +77,7 @@ cell_names[1:5]
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files/"
 bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
 path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
-output_SNP_mt=Get_raw_counts_allele(bam_input,path_fasta,cell_names)
+output_SNP_mt=get_raw_counts_allele(bam_input,path_fasta,cell_names)
 ```
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
 
@@ -111,6 +113,9 @@ It is also possible to run a [command line implementation](https://github.com/Sc
 2. **Rsamtools**
 3. **Biostrings**
 4. **data.table**
+5. **GenomicRanges**
+6. **IRanges**
+
 
 ```
 Rscript --vanilla get_raw_counts_allele_script.R -b bam_input -f "Mus_musculus.GRCm38.dna.chromosome.MT.fa" -c cell_names -o output_SNP_mt.Rda -s 20
