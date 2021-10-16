@@ -25,11 +25,11 @@ install.packages("rlist")
 install.packages("gridExtra")
 
 ```
-To install RNAheteroplasmy, please run the following:
+To install MitoHEAR, please run the following:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master",auth_token="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")
-library(RNAheteroplasmynew)
+devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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")
+library(MitoHEAR)
 ```
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
 
@@ -38,8 +38,8 @@ The package was developed within R.4.0.2. A different version of R (higher or lo
 
 ```
 #load required packages and functions
-setwd(paste0(your_path,"/RNAHeteroplasmynew-main/Packages_Functions"))
-source("RNAheteroplasmynew_packages.R")
+setwd(paste0(your_path,"/MitoHEAR-main/Packages_Functions"))
+source("MitoHEAR_packages.R")
 source("get_heteroplasmy.R")
 source("get_raw_counts_allele.R")
 source("lineage_tracing.R")
@@ -47,12 +47,12 @@ source("other_functions.R")
 source("plotting_functions.R")
 source("statistical_test.R")
 ```
-With the command above, all the functions of the library RNAheteroplasmynew will be available to use.
+With the command above, all the functions of the library MitoHEAR will be available to use.
 The input data in order to reproduce the vignettes in the section **Tutorials** are available at the paths:
-1. **/your_path/RNAHeteroplasmynew-master/data**
-2. **/your_path/RNAHeteroplasmynew-master/inst/extdata**
+1. **/your_path/MitoHEAR-master/data**
+2. **/your_path/MitoHEAR-master/inst/extdata**
 
-If RNAheteroplasmynew is not installed, it is possible to fully reproduce all the vignettes in the section **Tutorials** using the scripts available in the folder 
+If MitoHEAR is not installed, it is possible to fully reproduce all the vignettes in the section **Tutorials** using the scripts available in the folder 
 **[Tutorials_no_installation](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/main/Tutorials_no_installation):**
 
 ## get_raw_counts_allele
@@ -87,7 +87,7 @@ The output of **get_raw_counts_allele** is a list with three elements:
 3. **name_position**: character vectors with information about the name of the bases.
 
 ```
-data("output_SNP_mt",package="RNAheteroplasmy")
+data("output_SNP_mt",package="MitoHEAR")
 matrix_allele_counts=output_SNP_mt[[1]]
 ## In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
 dim(matrix_allele_counts)
@@ -146,8 +146,8 @@ starts from the output of **get_raw_counts** and performs a two step filtering p
 An example of input could be:
 
 ```
-data("output_SNP_mt",package="RNAheteroplasmy")
-data("after_qc",package="RNAheteroplasmy")
+data("output_SNP_mt",package="MitoHEAR")
+data("after_qc",package="MitoHEAR")
 
 ## We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
 row.names(after_qc)=after_qc$new_name
@@ -193,15 +193,15 @@ head(allele_matrix_ci[1:4,1:4])
 
 ```
 ## Down-stream analysis
-**RNAheteroplasmy** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
+**MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
-For more exaustive information about the functions offered by **RNAheteroplasmy** see **Tutorials section** below and the help page of the single functions. (**?function_name**).
+For more exaustive information about the functions offered by **MitoHEAR** see **Tutorials section** below and the help page of the single functions. (**?function_name**).
 
 ## Tutorials
 
-The following tutorials are completely reproducible within the package **RNAheteroplasmy**:
+The following tutorials are completely reproducible within the package **MitoHEAR**:
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
 This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
@@ -217,7 +217,7 @@ Identification and plotting of most different bases according to heteroplasmy be
 
 ### **[cell_competition_bulk_data_mt__example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
 This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
-Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **RNAheteroplasmy** is very close to the one expected.
+Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **MitoHEAR** is very close to the one expected.
 Cluster analysis among samples based on allele frequency values (done with **clustering_dist_ang**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
 
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/lineage_tracing_example_notebook.Rmd):**
