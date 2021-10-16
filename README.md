@@ -1,5 +1,5 @@
 # MitoHEAR
-R package for analysing heteroplasmy from RNA seq data, both at the bulk and at the single cell level (Smart-Seq2 style scRNA-seq data). 
+MitoHEAR (MitOChondrial Heteroplasmy Analyzer from RNA-seq) is an R package for analysing heteroplasmy from RNA seq data, both at the bulk and at the single cell level (Smart-Seq2 style scRNA-seq data). 
 
 ## Installation
 Before installing MitoHEAR, the following packages should be installed first:
