@@ -34,7 +34,7 @@ There are embryos at different stages from 2-cells to 8-cells stage. At each sta
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
-#library(RNAheteroplasmynew)
+#library(MitoHEAR)
 ```
 
 ```{r}
@@ -44,8 +44,8 @@ your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
 ```{r}
 
 
-setwd(paste0(your_path,"/RNAHeteroplasmynew-main/Packages_Functions"))
-source("RNAheteroplasmynew_packages.R")
+setwd(paste0(your_path,"/MitoHEAR-main/Packages_Functions"))
+source("MitoHEAR_packages.R")
 source("get_heteroplasmy.R")
 source("get_raw_counts_allele.R")
 source("lineage_tracing.R")
@@ -80,8 +80,8 @@ The matrix *meta_data_antonio_final* contains meta data information about the ce
 #bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")[1:5]
 
 #path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musc#ulus.GRCm38.dna.chromosome.MT.fa"
-load(paste0(your_path,"/RNAHeteroplasmynew-master/data/","meta_data_antonio_final.rda"))
-#data("meta_data_antonio_final",package="RNAheteroplasmynew")
+load(paste0(your_path,"/MitoHEAR-master/data/","meta_data_antonio_final.rda"))
+#data("meta_data_antonio_final",package="MitoHEAR")
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/"
 cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)
@@ -108,8 +108,8 @@ A command line implentation of the function *get_raw_counts_allele* is also avai
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_antonio -f #"/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa" -c cell_names_antonio -o output_SNP_antonio_mt.Rda  -s 20
 
-load(paste0(your_path,"/RNAHeteroplasmynew-master/data/","output_SNP_antonio_mt.rda"))
-#data("output_SNP_antonio_mt",package="RNAheteroplasmynew")
+load(paste0(your_path,"/MitoHEAR-master/data/","output_SNP_antonio_mt.rda"))
+#data("output_SNP_antonio_mt",package="MitoHEAR")
 
 ```
 

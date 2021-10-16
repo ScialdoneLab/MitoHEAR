@@ -9,7 +9,7 @@ output: html_document
 #knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>. As a technical control,we focus on heteroplasmy on ERCC-Spike-In.
+In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.nature.com/articles/s42255-021-00422-7>. As a technical control,we focus on heteroplasmy on ERCC-Spike-In.
 
 ## Get counts for the four alleles in each base-cell pair
 
@@ -27,8 +27,8 @@ your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
 ```{r}
 
 
-setwd(paste0(your_path,"/RNAHeteroplasmynew-main/Packages_Functions"))
-source("RNAheteroplasmynew_packages.R")
+setwd(paste0(your_path,"/MitoHEAR-main/Packages_Functions"))
+source("MitoHEAR_packages.R")
 source("get_heteroplasmy.R")
 source("get_raw_counts_allele.R")
 source("lineage_tracing.R")
@@ -41,8 +41,8 @@ source("statistical_test.R")
 
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-#devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master",auth_token="#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")
-#library(RNAheteroplasmynew)
+#devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="#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")
+#library(MitoHEAR)
 ```
 
 The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
@@ -51,8 +51,8 @@ The matrix *after_qc* contains meta data information about the cells (i.e. cell 
 
 ```{r}
 
-load(paste0(your_path,"/RNAHeteroplasmynew-master/data/","after_qc.rda"))
-#data("after_qc",package="RNAheteroplasmynew")
+load(paste0(your_path,"/MitoHEAR-master/data/","after_qc.rda"))
+#data("after_qc",package="MitoHEAR")
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files_spikes/"
 
@@ -91,9 +91,9 @@ A command line implentation of the function *get_raw_counts_allele* is also avai
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_spikes  -f #"/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/ERCC92.fa" -c #cell_names_spikes  -o output_SNP_spikes.Rda  -s 20
 
-load(paste0(your_path,"/RNAHeteroplasmynew-master/data/","output_SNP_spikes.rda"))
+load(paste0(your_path,"/MitoHEAR-master/data/","output_SNP_spikes.rda"))
 
-#data("output_SNP_spikes",package="RNAheteroplasmynew")
+#data("output_SNP_spikes",package="MitoHEAR")
 
 ```
 
@@ -196,7 +196,7 @@ p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
 ```
 
 The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown.
-Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use functions *plot_heteroplasmy* and *plot_allele_frequency*
 
 ```{r}
@@ -240,7 +240,7 @@ dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
 
 The heteroplasmy level for the top 2 relevant bases (according to GAM fit) is shown along pseudo time, with the black line denoting the GAM fit.
 The top 2 positions identified with the diffusion pseudo time analysis are equal to the top 2 positions detected with the Wilcoxon test based on clustering partition.
-Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use function *plot_dpt*.
 ```{r}
 q=list()
@@ -252,7 +252,7 @@ q
 ```
 
 Finally we can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is a batch effect, since the heteroplasmy levels are higher mainly in the batch 5 and not in an homogeneus way across all the *Loser Epiblast* cluster.
-Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use function *plot_batch*.
 
 ```{r}
