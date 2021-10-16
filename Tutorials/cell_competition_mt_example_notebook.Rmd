@@ -14,7 +14,7 @@ output:
 ```
 
 
-In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.nature.com/articles/s42255-021-00422-7>.
 
 ## Get counts for the four alleles in each base-cell pair
 
@@ -27,7 +27,7 @@ In this notebook it is shown the heteroplasmy analysis performed on mouse CI-tre
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
-library(RNAheteroplasmynew)
+library(MitoHEAR)
 ```
 
 
@@ -172,7 +172,7 @@ p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
 ```
 
 The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. We can notice that the top 10 relevant bases belong to the genes mt-Rnr1 and mt-Rnr1 and in these positions the heteroplasmy is always higher in the *Loser Epiblast*.
-Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use functions *plot_heteroplasmy* and *plot_allele_frequency*
 
 ```{r}
@@ -231,7 +231,7 @@ dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
 
 The heteroplasmy level for the top 2 relevant bases (according to GAM fit) is shown along pseudo time, with the black line denoting the GAM fit. We can notice that the top bases belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy increases with the diffusion pseudo time. 
 The top 10 positions identified with the diffusion pseudo time analysis are equal to the top 10 positions detected with the Wilcoxon test based on clustering partition.
-Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use function *plot_dpt*.
 
 ```{r}
@@ -251,7 +251,7 @@ q
 #q
 ```
 We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the heteroplasmy levels are higher among all cells in the *Loser Epiblast* clusters and not only in a specific batch.
-Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use  please use function *plot_batch*.
 
 
@@ -305,9 +305,9 @@ Finally we can visualize the mitochondrial genome showing in red the positions t
 #biomart_file=read.table("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R/mt_start_end.txt",sep="\t",header = T)
 chr_name="MT"
 heteroplasmy_matrix=heteroplasmy_matrix_ci
-biomart_file=system.file("extdata", "mt_start_end.txt", package = "RNAheteroplasmynew")
+biomart_file=system.file("extdata", "mt_start_end.txt", package = "MitoHEAR")
 biomart_file=read.table(biomart_file,sep="\t",header = T)
-fastaFile=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "RNAheteroplasmynew")
+fastaFile=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
 fastaFile <- Biostrings::readDNAStringSet(fastaFile)
 plot_coverage(biomart_file,fastaFile,chr_name,heteroplasmy_matrix)
 ```

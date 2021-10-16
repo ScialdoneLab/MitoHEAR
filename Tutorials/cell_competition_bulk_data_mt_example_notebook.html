@@ -369,7 +369,7 @@ summary {
 </div>
 
 
-<p>In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <a href="https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2" class="uri">https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2</a>. There are in total 8 samples that belong to the cell line BG (95%) and 8 samples that belongs to the cell line HB (24%). The two cell lines are built in order to have a different mitochondrial DNA from each other and from the reference genome in some bases. The cell lines BG and HB are respectively classified as Loser and Winner.</p>
+<p>In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <a href="https://www.nature.com/articles/s42255-021-00422-7" class="uri">https://www.nature.com/articles/s42255-021-00422-7</a>. There are in total 8 samples that belong to the cell line BG (95%) and 8 samples that belongs to the cell line HB (24%). The two cell lines are built in order to have a different mitochondrial DNA from each other and from the reference genome in some bases. The cell lines BG and HB are respectively classified as Loser and Winner.</p>
 <div id="get-counts-for-the-four-alleles-in-each-base-sample-pair" class="section level2">
 <h2>Get counts for the four alleles in each base-sample pair</h2>
 <pre class="r"><code>#if (!requireNamespace(&quot;devtools&quot;, quietly = TRUE)) install.packages(&quot;devtools&quot;)
@@ -377,7 +377,7 @@ summary {
 #library(RNAheteroplasmy)</code></pre>
 <pre class="r"><code>#if (!requireNamespace(&quot;devtools&quot;, quietly = TRUE)) install.packages(&quot;devtools&quot;)
 #devtools::install_github(&quot;https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master&quot;,auth_token=#&quot;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&quot;)
-library(RNAheteroplasmynew)</code></pre>
+library(MitoHEAR)</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <pre><code>## Loading required package: Rsamtools</code></pre>
 <pre><code>## Warning: package 'Rsamtools' was built under R version 4.0.3</code></pre>
@@ -492,8 +492,8 @@ library(RNAheteroplasmynew)</code></pre>
 <pre class="r"><code>#setwd(&quot;/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server&quot;)
 #load(&quot;output_SNP_ana_mt.Rda&quot;)
 #data(&quot;output_SNP_ana_mt&quot;,package=&quot;RNAheteroplasmy&quot;)</code></pre>
-<pre class="r"><code>data(&quot;meta_data_ana_final_big&quot;,package=&quot;RNAheteroplasmynew&quot;)
-data(&quot;meta_data_ana_final_small&quot;,package=&quot;RNAheteroplasmynew&quot;)
+<pre class="r"><code>data(&quot;meta_data_ana_final_big&quot;,package=&quot;MitoHEAR&quot;)
+data(&quot;meta_data_ana_final_small&quot;,package=&quot;MitoHEAR&quot;)
 
 
 path_to_bam=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data/bam_file_ana_sorted/&quot;
@@ -514,7 +514,7 @@ bam_input_bulk=bam_input
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_bulk -f #&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa&quot; -c cell_names_bulk -o output_SNP_ana_mt.Rda  -s 20
 
-data(&quot;output_SNP_ana_mt&quot;,package=&quot;RNAheteroplasmynew&quot;)</code></pre>
+data(&quot;output_SNP_ana_mt&quot;,package=&quot;MitoHEAR&quot;)</code></pre>
 <p>The output of <em>get_raw_counts_allele</em> is a list with three elements (see <em>?get_raw_counts_allele</em> for more info). The first element is the matrix of counts (n_rows = number of cells, n_cols= 4*number of bases) of the four alleles in each base. The row names are equal to cell_names.</p>
 <pre class="r"><code>#output_SNP_ana_mt=result</code></pre>
 <pre class="r"><code>matrix_allele_counts=output_SNP_ana_mt[[1]]
@@ -771,7 +771,7 @@ heatmap_plot(row.names(dist_matrix_bulk),row.names(dist_matrix_bulk),new_classif
 <div id="heteroplasmy-and-allele-frequencies-analysis-for-bases-different-from-bl6-reference-genome" class="section level2">
 <h2>Heteroplasmy and allele frequencies analysis for bases different from BL6 reference genome</h2>
 <p>As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<a href="https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1" class="uri">https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1</a> and <a href="https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1" class="uri">https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1</a>), we can identify the bases that are different from the reference genome</p>
-<pre class="r"><code>bg_path=system.file(&quot;extdata&quot;, &quot;bg.fasta.txt&quot;, package = &quot;RNAheteroplasmynew&quot;)
+<pre class="r"><code>bg_path=system.file(&quot;extdata&quot;, &quot;bg.fasta.txt&quot;, package = &quot;MitoHEAR&quot;)
 
 fastaFile &lt;- readDNAStringSet(bg_path)
 seq_name = names(fastaFile)
@@ -780,7 +780,7 @@ df_bg &lt;- data.frame(seq_name, sequence)
 
 bg_sequence=df_bg$sequence
 
-hb_path=system.file(&quot;extdata&quot;, &quot;hb.fasta.txt&quot;, package = &quot;RNAheteroplasmynew&quot;)
+hb_path=system.file(&quot;extdata&quot;, &quot;hb.fasta.txt&quot;, package = &quot;MitoHEAR&quot;)
 fastaFile &lt;- readDNAStringSet(hb_path)
 seq_name = names(fastaFile)
 sequence = paste(fastaFile)
@@ -788,7 +788,7 @@ df_hb &lt;- data.frame(seq_name, sequence)
 
 hb_sequence=df_hb$sequence
 
-mt_path=system.file(&quot;extdata&quot;, &quot;Mus_musculus.GRCm38.dna.chromosome.MT.fa&quot;, package = &quot;RNAheteroplasmynew&quot;)
+mt_path=system.file(&quot;extdata&quot;, &quot;Mus_musculus.GRCm38.dna.chromosome.MT.fa&quot;, package = &quot;MitoHEAR&quot;)
 
 fastaFile &lt;- readDNAStringSet(mt_path)
 seq_name = names(fastaFile)
@@ -954,13 +954,13 @@ utils::sessionInfo()</code></pre>
 ##  [8] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] RNAheteroplasmynew_0.1.0 karyoploteR_1.14.1       regioneR_1.20.1         
-##  [4] gridExtra_2.3            rlist_0.4.6.1            circlize_0.4.13         
-##  [7] ComplexHeatmap_2.6.2     dynamicTreeCut_1.63-1    rdist_0.0.5             
-## [10] gam_1.20                 foreach_1.5.1            data.table_1.14.0       
-## [13] Rsamtools_2.6.0          Biostrings_2.58.0        XVector_0.30.0          
-## [16] GenomicRanges_1.42.0     GenomeInfoDb_1.26.7      IRanges_2.24.1          
-## [19] S4Vectors_0.28.1         BiocGenerics_0.36.1      ggplot2_3.3.5           
+##  [1] MitoHEAR_0.1.0        karyoploteR_1.14.1    regioneR_1.20.1      
+##  [4] gridExtra_2.3         rlist_0.4.6.1         circlize_0.4.13      
+##  [7] ComplexHeatmap_2.6.2  dynamicTreeCut_1.63-1 rdist_0.0.5          
+## [10] gam_1.20              foreach_1.5.1         data.table_1.14.0    
+## [13] Rsamtools_2.6.0       Biostrings_2.58.0     XVector_0.30.0       
+## [16] GenomicRanges_1.42.0  GenomeInfoDb_1.26.7   IRanges_2.24.1       
+## [19] S4Vectors_0.28.1      BiocGenerics_0.36.1   ggplot2_3.3.5        
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_2.0-2            rjson_0.2.20               

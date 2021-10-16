@@ -390,7 +390,7 @@ summary {
 #library(RNAheteroplasmy)</code></pre>
 <pre class="r"><code>#if (!requireNamespace(&quot;devtools&quot;, quietly = TRUE)) install.packages(&quot;devtools&quot;)
 #devtools::install_github(&quot;https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master&quot;,auth_token=#&quot;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&quot;)
-library(RNAheteroplasmynew)</code></pre>
+library(MitoHEAR)</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <pre><code>## Loading required package: Rsamtools</code></pre>
 <pre><code>## Warning: package 'Rsamtools' was built under R version 4.0.3</code></pre>
@@ -516,7 +516,7 @@ library(RNAheteroplasmynew)</code></pre>
 
 #path_fasta=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musc#ulus.GRCm38.dna.chromosome.MT.fa&quot;
 
-data(&quot;meta_data_antonio_final&quot;,package=&quot;RNAheteroplasmynew&quot;)
+data(&quot;meta_data_antonio_final&quot;,package=&quot;MitoHEAR&quot;)
 
 path_to_bam=&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/&quot;
 cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)
@@ -537,7 +537,7 @@ bam_input_antonio=bam_input
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_antonio -f #&quot;/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa&quot; -c cell_names_antonio -o output_SNP_antonio_mt.Rda  -s 20
 
-data(&quot;output_SNP_antonio_mt&quot;,package=&quot;RNAheteroplasmynew&quot;)</code></pre>
+data(&quot;output_SNP_antonio_mt&quot;,package=&quot;MitoHEAR&quot;)</code></pre>
 <p>The output of <em>get_raw_counts_allele</em> is a list with three elements (see <em>?get_raw_counts_allele</em> for more info). The first element is the matrix of counts (n_rows = number of cells, n_cols= 4*number of bases) of the four alleles in each base. The row names are equal to cell_names.</p>
 <pre class="r"><code>#output_SNP_antonio_mt=result</code></pre>
 <pre class="r"><code>matrix_allele_counts=output_SNP_antonio_mt[[1]]
@@ -655,13 +655,13 @@ utils::sessionInfo()</code></pre>
 ##  [8] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] RNAheteroplasmynew_0.1.0 karyoploteR_1.14.1       regioneR_1.20.1         
-##  [4] gridExtra_2.3            rlist_0.4.6.1            circlize_0.4.13         
-##  [7] ComplexHeatmap_2.6.2     dynamicTreeCut_1.63-1    rdist_0.0.5             
-## [10] gam_1.20                 foreach_1.5.1            data.table_1.14.0       
-## [13] Rsamtools_2.6.0          Biostrings_2.58.0        XVector_0.30.0          
-## [16] GenomicRanges_1.42.0     GenomeInfoDb_1.26.7      IRanges_2.24.1          
-## [19] S4Vectors_0.28.1         BiocGenerics_0.36.1      ggplot2_3.3.5           
+##  [1] MitoHEAR_0.1.0        karyoploteR_1.14.1    regioneR_1.20.1      
+##  [4] gridExtra_2.3         rlist_0.4.6.1         circlize_0.4.13      
+##  [7] ComplexHeatmap_2.6.2  dynamicTreeCut_1.63-1 rdist_0.0.5          
+## [10] gam_1.20              foreach_1.5.1         data.table_1.14.0    
+## [13] Rsamtools_2.6.0       Biostrings_2.58.0     XVector_0.30.0       
+## [16] GenomicRanges_1.42.0  GenomeInfoDb_1.26.7   IRanges_2.24.1       
+## [19] S4Vectors_0.28.1      BiocGenerics_0.36.1   ggplot2_3.3.5        
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_2.0-2            rjson_0.2.20               

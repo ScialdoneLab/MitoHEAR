@@ -9,7 +9,7 @@ output: html_document
 #knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2>.
+In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <https://www.nature.com/articles/s42255-021-00422-7>.
 There are in total 8 samples that belong to the cell line BG (95%) and 8 samples that belongs to the cell line HB (24%). 
 The two cell lines are built in order to have a different mitochondrial DNA from each other and from the reference genome in some bases.
 The cell lines BG and HB are respectively classified as Loser and Winner. 
@@ -26,7 +26,7 @@ The cell lines BG and HB are respectively classified as Loser and Winner.
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
-library(RNAheteroplasmynew)
+library(MitoHEAR)
 ```
 
 The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
@@ -43,8 +43,8 @@ The matrixes *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain 
 
 ```{r}
 
-data("meta_data_ana_final_big",package="RNAheteroplasmynew")
-data("meta_data_ana_final_small",package="RNAheteroplasmynew")
+data("meta_data_ana_final_big",package="MitoHEAR")
+data("meta_data_ana_final_small",package="MitoHEAR")
 
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data/bam_file_ana_sorted/"
@@ -71,7 +71,7 @@ A command line implentation of the function *get_raw_counts_allele* is also avai
 #cd /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files
 #Rscript --vanilla /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/R_files/get_r#aw_counts_allele_script.R -b bam_input_bulk -f #"/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm3#8.dna.chromosome.MT.fa" -c cell_names_bulk -o output_SNP_ana_mt.Rda  -s 20
 
-data("output_SNP_ana_mt",package="RNAheteroplasmynew")
+data("output_SNP_ana_mt",package="MitoHEAR")
 
 ```
 
@@ -265,7 +265,7 @@ The new classification coincide with the old classification. This means that we 
 
 As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1>  and <https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1>), we can identify the bases that are different from the reference genome
 ```{r}
-bg_path=system.file("extdata", "bg.fasta.txt", package = "RNAheteroplasmynew")
+bg_path=system.file("extdata", "bg.fasta.txt", package = "MitoHEAR")
 
 fastaFile <- readDNAStringSet(bg_path)
 seq_name = names(fastaFile)
@@ -274,7 +274,7 @@ df_bg <- data.frame(seq_name, sequence)
 
 bg_sequence=df_bg$sequence
 
-hb_path=system.file("extdata", "hb.fasta.txt", package = "RNAheteroplasmynew")
+hb_path=system.file("extdata", "hb.fasta.txt", package = "MitoHEAR")
 fastaFile <- readDNAStringSet(hb_path)
 seq_name = names(fastaFile)
 sequence = paste(fastaFile)
@@ -282,7 +282,7 @@ df_hb <- data.frame(seq_name, sequence)
 
 hb_sequence=df_hb$sequence
 
-mt_path=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "RNAheteroplasmynew")
+mt_path=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
 
 fastaFile <- readDNAStringSet(mt_path)
 seq_name = names(fastaFile)
