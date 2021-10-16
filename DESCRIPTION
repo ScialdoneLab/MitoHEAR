@@ -1,0 +1,31 @@
+Package: MitoHEAR
+Type: Package
+Title: MitoHEAR
+Version: 0.1.0
+Author: Gabriele Lubatti
+Maintainer: Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Description: Heteroplasmy analysis from RNA seq data.
+    Use four spaces when indenting paragraphs within the Description.
+Depends:
+    R (>= 4.0.2),
+    ggplot2 (>= 3.3.2),
+    Rsamtools (>= 2.4.0),
+    grid (>= 4.0.2),
+    data.table (>= 1.13.0),
+    gam (>= 1.20),
+    rdist (>= 0.0.5),
+    dynamicTreeCut (>= 1.63-1),
+    ComplexHeatmap (>= 2.4.3),
+    circlize (>= 0.4.10),
+    Biostrings (>= 2.56.0),
+    rlist (>= 0.4.6.1),
+    gridExtra (>= 2.3),
+    parallel (>= 4.0.2),
+    GenomicRanges (>= 1.42.0),
+    IRanges (>= 2.24.1),
+    karyoploteR (>= 1.14.1),
+    regioneR (>= 1.20.1)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+biocViews: software

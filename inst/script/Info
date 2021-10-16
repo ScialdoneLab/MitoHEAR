@@ -1,0 +1,5 @@
+Mus_musculus.GRCm38.dna.chromosome.MT.fa: mt-DNA from mouse reference genome (mm10).
+ERCC92.fa: fasta file related to ERCC 92 spike ins
+bg.fasta.txt:mt-DNA sequence for BG cell line downloaded from https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1
+hb.fasta.txt:mt-DNA sequence for HB cell line downloaded from https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1 
+

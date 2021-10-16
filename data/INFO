@@ -1,0 +1,15 @@
+after_qc.Rda: data frame with meta data information about the cells (i.e. cell names, cell types, batch) fro the scRNA seq dataset used in the tutorial "cell_competition_mt_example_notebook.Rmd".
+
+output_SNP_mt.Rda: output from the function "get_raw_counts_allele", used in the tutorial "cell_competition_mt_example_notebook.Rmd".
+
+output_SNP_spikes.Rda: output from the function "get_raw_counts_allele", used in the tutorial "cell_competition_ercc_example_notebook.Rmd".
+
+meta_data_ana_final_big.Rda: data frame with meta data information about the cells (i.e. cell names, cell types, batch) fro the bulk RNA seq dataset used in the tutorial "cell_competition_bulk_data_mt_example_notebook.Rmd".
+
+meta_data_ana_final_small.Rda: data frame with meta data information about the cells (i.e. cell names, cell types, batch) fro the bulk RNA seq dataset used in the tutorial "cell_competition_bulk_data_mt_example_notebook.Rmd".
+
+output_SNP_ana_mt.Rda: output from the function "get_raw_counts_allele", used in the tutorial "cell_competition_bulk_data_mt_example_notebook.Rmd".
+
+meta_data_antonio_final.Rda: data frame with meta data information about the cells (i.e. cell names, cell types, batch) for the scRNA seq dataset used in the tutorial "lineage_tracing_example_notebook.Rmd".
+
+output_SNP_antonio_mt.Rda: output from the function "get_raw_counts_allele", used in the tutorial "lineage_tracing_example_notebook.Rmd".
