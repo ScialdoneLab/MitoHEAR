@@ -1,8 +1,8 @@
-# RNAheteroplasmynew
+# MitoHEAR
 R package for analysing heteroplasmy from RNA seq data, both at the bulk and at the single cell level (Smart-Seq2 style scRNA-seq data). 
 
 ## Installation
-Before installing RNAheteroplasmy, the following packages should be installed first:
+Before installing MitoHEAR, the following packages should be installed first:
 ```
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
