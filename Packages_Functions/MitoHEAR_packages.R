@@ -40,12 +40,12 @@ if (!require("Biostrings")) {BiocManager::install("Biostrings")}
 
 if (!require("GenomicRanges")) {BiocManager::install("GenomicRanges")}
 
-if (!require("regioneR")) {BiocManager::install("regionR")}
+if (!require("regioneR")) {BiocManager::install("regioneR")}
 
 if (!require("IRanges")) {BiocManager::install("IRanges")}
 
 
-if (!require("karyoploteR")) {BiocManager::install("regioneR")}
+if (!require("karyoploteR")) {BiocManager::install("karyoploteR")}
 
 
 if (!require("ComplexHeatmap")) {BiocManager::install("ComplexHeatmap")}
