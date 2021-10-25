@@ -30,7 +30,7 @@ library(MitoHEAR)
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
 
 ## Troubleshooting installation errors
-The package was developed within R.4.0.2. A different version of R (higher or lower) may lead to installation failed. If is not possible to install the package following the command in the section **Installation**, then download this GitHub repository (main and master) at the location *your_path* and then run the following:
+The package was developed within R.4.0.2. A different version of R (higher or lower) may lead to installation failed. If it is not possible to install the package following the command in the section **Installation**, then download this GitHub repository (main and master) at the location *your_path* and then run the following:
 
 ```
 #load required packages and functions
