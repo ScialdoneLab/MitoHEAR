@@ -48,6 +48,9 @@ if (!require("IRanges")) {BiocManager::install("IRanges")}
 if (!require("karyoploteR")) {BiocManager::install("regioneR")}
 
 
+if (!require("ComplexHeatmap")) {BiocManager::install("ComplexHeatmap")}
+
+
 
 #Load libraries
 library(ggplot2)
@@ -63,4 +66,10 @@ library(Biostrings)
 library(GenomicRanges)
 library(IRanges)
 library(karyoploteR)
+library(ComplexHeatmap)
+library(regioneR)
 
+
+
+    
+  
