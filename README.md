@@ -1,5 +1,5 @@
 # MitoHEAR
-MitoHEAR (MitOChondrial Heteroplasmy Analyzer from RNA-seq) is an R package for analysing heteroplasmy from RNA seq data, both at the bulk and at the single cell level (Smart-Seq2 style scRNA-seq data). 
+MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package for analysing heteroplasmy from RNA-seq data, either at the bulk or at the single cell level (Smart-Seq2 style scRNA-seq data). 
 
 ## Installation
 Before installing MitoHEAR, the following packages should be installed first:
@@ -7,22 +7,9 @@ Before installing MitoHEAR, the following packages should be installed first:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("Rsamtools")
-BiocManager::install("ComplexHeatmap")
-BiocManager::install("Biostrings")
-BiocManager::install("karyoploteR")
-BiocManager::install("regioneR")
-BiocManager::install("GenomicRanges")
-BiocManager::install("IRanges")
+BiocManager::install(c("Rsamtools","ComplexHeatmap","Biostrings","karyoploteR","regioneR","GenomicRanges","IRanges"))
 
-install.packages("data.table")
-install.packages("ggplot2")
-install.packages("gam")
-install.packages("rdist")
-install.packages("dynamicTreeCut")
-install.packages("circlize")
-install.packages("rlist")
-install.packages("gridExtra")
+install.packages(c("data.table","ggplot2","gam","rdist","dynamicTreeCut","circlize","rlist","gridExtra"))
 
 ```
 To install MitoHEAR, please run the following:
@@ -47,7 +34,7 @@ source("other_functions.R")
 source("plotting_functions.R")
 source("statistical_test.R")
 ```
-With the command above, all the functions of the library MitoHEAR will be available to use.
+With the commands above, all the functions of the library MitoHEAR will be available to use.
 The input data in order to reproduce the vignettes in the section **Tutorials** are available at the paths:
 1. **/your_path/MitoHEAR-master/data**
 2. **/your_path/MitoHEAR-master/inst/extdata**
@@ -79,7 +66,7 @@ bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
 path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
 output_SNP_mt=get_raw_counts_allele(bam_input,path_fasta,cell_names)
 ```
-where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
+where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to metadata information (i.e. cluster and batch).
 
 The output of **get_raw_counts_allele** is a list with three elements:
 1. **matrix_allele_counts**: matrix with rows equal to **cell_names** and with columns equal to the bases in the **path_fasta** file with the four possible alleles. For each pair sample-base there is the information about the counts on the alleles A,C,G and T
@@ -108,7 +95,7 @@ name_position=output_SNP_mt[[3]]
 name_position[1:8]
 [1] "1_MT" "1_MT" "1_MT" "1_MT" "2_MT" "2_MT" "2_MT" "2_MT"
 ```
-It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/RNAHeteroplasmynew/tree/main/Tutorials/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation is not necessary to install RNAheteroplasmy, but the following libraries should be installed:
+It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/RNAHeteroplasmynew/tree/main/Tutorials/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation, it is not necessary to install RNAheteroplasmy, but the following libraries should be installed:
 1. **rlist**
 2. **Rsamtools**
 3. **Biostrings**
@@ -141,7 +128,7 @@ Options:
 ```
 get_heteroplasmy(matrix_allele_counts,name_position_allele,name_position,number_reads,number_positions,filtering=1,my.clusters=NULL) 
 ``` 
-starts from the output of **get_raw_counts** and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
+starts from the output of **get_raw_counts** and performs a two-step filtering procedure; the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
 
 An example of input could be:
 
@@ -194,35 +181,36 @@ head(allele_matrix_ci[1:4,1:4])
 ```
 ## Down-stream analysis
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
-For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
-If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
-It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
-For more exaustive information about the functions offered by **MitoHEAR** see **Tutorials section** below and the help page of the single functions. (**?function_name**).
+For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific mitochondrial genomic position can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
+If for each sample a diffusion pseudo-time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
+It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize a heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
+For more exhaustive information about the functions offered by **MitoHEAR** see **Tutorials section** below and the help page of the single functions. (**?function_name**).
 
 ## Tutorials
 
 The following tutorials are completely reproducible within the package **MitoHEAR**:
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
-This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
+This tutorial uses single-cell RNA-seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for the mouse mitochondrial genome.
-Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
-The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo time. 
+Identification and plotting of the most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo-time (with **dpt_test** and **plot_dpt**) are shown.
+The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo-time. 
 
 
 ### **[cell_competition_ercc_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_ercc_example_notebook.Rmd):**
-This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
-The heteroplasmy is computed for ERCC-Spike-In bases, as a technical control. We should not see a significant variation in heteroplasmy between clusters or along pseudo time, since the only source of variation for ERCC is technical and not due to biological reasons.
+This tutorial uses single-cell RNA-seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
+The heteroplasmy is computed for ERCC-Spike-In bases, as a technical control. We should not see a significant variation in heteroplasmy between clusters or along pseudo-time, since the only source of variation for ERCC is technical and not due to biological reasons.
 Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
 
 ### **[cell_competition_bulk_data_mt__example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
-This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
+This tutorial uses bulk-RNA seq data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
 Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **MitoHEAR** is very close to the one expected.
 Cluster analysis among samples based on allele frequency values (done with **clustering_dist_ang**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
 
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/lineage_tracing_example_notebook.Rmd):**
-This tutorial uses single cell RNA seq mouse embryo data from  [Goolam *et al.*, Cell, 2016 ](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone)(Smart-Seq2 protocol). 
-There are embryos at different stages from 2-cells to 8-cells stage. At each stage, for every cell it is known the embryo of origin.
-We illustrate how cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
+This tutorial uses single-cell RNA-seq mouse embryo data from  [Goolam *et al.*, Cell, 2016 ](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone)(Smart-Seq2 protocol). 
+There are embryos at different stages from 2-cells to 8-cells stage. At each stage, the embryo of origin for each cell is known.
+We illustrate how cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) could be used in order to perform a lineage tracing analysis, by grouping together cells that are from the same embryo.
+
 
 
