@@ -11,22 +11,22 @@ if (!require("data.table")) {
   install.packages("data.table", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("gam")) {
-  install.packages("glmnet", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("gam", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("rdist")) {
-  install.packages("doMC", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("rdist", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("dynamicTreeCut")) {
-  install.packages("StatMatch", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("dynamicTreeCut", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("circlize")) {
-  install.packages("Rtsne", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("circlize", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("rlist")) {
-  install.packages("fpc", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("rlist", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 if (!require("gridExtra")) {
-  install.packages("GA", dependencies = TRUE, repos="http://cran.r-project.org")
+  install.packages("gridExtra", dependencies = TRUE, repos="http://cran.r-project.org")
 }
 
 if (!requireNamespace("BiocManager", quietly = TRUE)){
