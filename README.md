@@ -4,13 +4,23 @@ MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package f
 ## Installation
 Before installing MitoHEAR, the following packages should be installed first:
 ```
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install(c("Rsamtools","ComplexHeatmap","Biostrings","karyoploteR","regioneR","GenomicRanges","IRanges"))
-
-install.packages(c("data.table","ggplot2","gam","rdist","dynamicTreeCut","circlize","rlist","gridExtra"))
-
+if (!requireNamespace("BiocManager", quietly = TRUE)){
+install.packages("BiocManager")}
+if (!require("Rsamtools")) {BiocManager::install("Rsamtools")}
+if (!require("Biostrings")) {BiocManager::install("Biostrings")}
+if (!require("GenomicRanges")) {BiocManager::install("GenomicRanges")}
+if (!require("regioneR")) {BiocManager::install("regionR")}
+if (!require("IRanges")) {BiocManager::install("IRanges")}
+if (!require("karyoploteR")) {BiocManager::install("regioneR")}
+if (!require("ComplexHeatmap")) {BiocManager::install("ComplexHeatmap")}
+if (!require("ggplot2")) { install.packages("ggplot2", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("data.table")) {install.packages("data.table", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("gam")) {install.packages("gam", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("rdist")) {install.packages("rdist", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("dynamicTreeCut")) {install.packages("dynamicTreeCut", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("circlize")) {install.packages("circlize", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("rlist")) {install.packages("rlist", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("gridExtra")) {install.packages("gridExtra", dependencies = TRUE, repos="http://cran.r-project.org")}    
 ```
 To install MitoHEAR, please run the following:
 ```
