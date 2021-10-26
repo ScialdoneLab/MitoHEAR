@@ -135,7 +135,7 @@ row.names(matrix_allele_counts)=meta_data_antonio_final$antonio_array.Source.Nam
 row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Source.Name
 ```
 
-##  2-cells Stage
+##  2-cells stage
 We select only the cells for the 2-cells stage for  down-stream analysis. 
 
 ```{r}
