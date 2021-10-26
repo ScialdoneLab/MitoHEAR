@@ -10,7 +10,7 @@ output: html_document
 ```
 
 In this notebook it is shown the heteroplasmy analysis performed on bulk RNA seq mouse data from <https://www.nature.com/articles/s42255-021-00422-7>.
-There are in total 8 samples that belong to the cell line BG (95%) and 8 samples that belongs to the cell line HB (24%). 
+There are in total 8 samples that belong to the cell line BG (95%) and 8 samples that belong to the cell line HB (24%). 
 The two cell lines are built in order to have a different mitochondrial DNA from each other and from the reference genome in some bases.
 The cell lines BG and HB are respectively classified as Loser and Winner. 
 
@@ -48,9 +48,9 @@ source("statistical_test.R")
 #library(MitoHEAR)
 ```
 
-The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
-This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
-The matrixes *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain meta data information about the cells (i.e. cell names, condition). 
+The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
+The matrices *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain meta data information about the cells (i.e. cell names, condition). 
 
 ```{r}
 #setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
@@ -82,8 +82,8 @@ bam_input_bulk=bam_input
 
 ```
 
-We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
-A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+We don't execute the function *get_raw_counts_allele* here and  we directly load its output. 
+A command line implementation of the function *get_raw_counts_allele* is also available (see github README file for info).
 
 ```{r}
 #output_SNP_ana_mt=get_raw_counts_allele(bam_input_bulk,path_fasta,cell_names_bulk)
@@ -130,7 +130,7 @@ row.names(meta_data_ana_final_small)=meta_data_ana_final_small$name_fastq
 
 
 The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
-This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+This function performs a two steps filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
 
 
 ```{r}
@@ -139,7 +139,7 @@ bulk_data_competition=get_heteroplasmy(matrix_allele_counts[bulk_sample,],name_p
 
 ```
 
-Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two steps filtering procedure. 
 The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
 For more info about the ouput see *?get_geteroplasmy*.
 
@@ -184,19 +184,19 @@ Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/
 
 ```
 ## Identification of most different bases according to heteroplasmy between clusters
-For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the groups *Winner* and *Loser*. As output, for each bases, there is the adjust p value (FDR).
+For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the groups *Winner* and *Loser*. As output, for each base, there is the adjusted p value (FDR).
 
 ```{r}
 p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_bulk[,relevant_bases],cluster_bulk,"Loser","Winner" )
 ```
 
-We sort the bases according to the adjust p value in order to identify the bases where the heteroplasmy is most different between the two groups.
+We sort the bases according to the adjusted p value in order to identify the bases where the heteroplasmy is most different between the two groups.
 ```{r}
 p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
 
 ```
 
-The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. The difference in heteroplasmy values is sharp, as expected since the two cell lineages (Winner and Loser) have a different mitochondrial DNA by construction.
+The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. The difference in heteroplasmy values is sharp, as expected since the two cell lines (Winner and Loser) have a different mitochondrial DNA by construction.
 
 ```{r}
 
@@ -228,7 +228,7 @@ q
                                                             
 ```
 
-We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the difference in  heteroplasmy levels are driven by group (Winner and Loser) and not by batch (co culture-CO or separate culture-Sep).
+We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the difference in  heteroplasmy levels are driven by group (Winner and Loser) and not by batch (co cultured-CO or separate culture-Sep).
 
 
 ```{r}
@@ -259,9 +259,9 @@ q
 ```
 
 ## Cluster analysis among samples based on allele frequency values
-RNAheteroplasmy offers the possibility to perform a hierarchical clustering on the samples based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two sample is the angular distance of the allele frequencies. In this way we can represent the difference between two samples as a vector whose cordinates are the angular distances of the bases.
+MitoHEAR offers the possibility to perform a hierarchical clustering on the samples based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two sample is the angular distance of the allele frequencies. In this way we can represent the difference between two samples as a vector whose cordinates are the angular distances of the bases.
 The total distance between two sample is the euclidean norm of the vector of difference between the two samples.
-The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
+The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partition available before the cluster analysis based on allele frequencies) and the new classification (partition provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
 The heatmap of the distance matrix with samples sorted according to the new classification is shown below.
 See *?clustering_dist_ang* for more info.
 
@@ -281,9 +281,9 @@ heatmap_plot(row.names(dist_matrix_bulk),row.names(dist_matrix_bulk),new_classif
 ```
 
 
-The new classification coincide with the old classification. This means that we can perfectly distinguish between the two cell lineages only by looking at the heteroplasmy values of the mitochondrial bases. This result was expected since the samples derived from two cell lineage, whose mitochondrial DNA is built to be different between each other.
+The new classification coincides with the old classification. This means that we can perfectly distinguish between the two cell lines only by looking at the heteroplasmy values of the mitochondrial bases. This result was expected since the samples derived from two cell lines, whose mitochondrial DNA is built to be different between each other.
 
-## Heteroplasmy and allele frequencies analysis for bases different from BL6 reference genome
+## Heteroplasmy and allele frequencies analysis for bases different from mouse reference genome
 
 As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1>  and <https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1>), we can identify the bases that are different from the reference genome
 ```{r}
@@ -325,7 +325,7 @@ bg_sequence=unlist(strsplit(bg_sequence,split=NULL))
 
 ```
 
-The mt DNA sequences for the two cell lines have some insertions, since they are longer than the reference. We detect and remove the insertions with the function *detect_insertion* in order to have the two mt DNA sequences (from the two cell line) of the same length as the reference.
+The mt DNA sequences for the two cell lines have some insertions, since they are longer than the reference. We detect and remove the insertions with the function *detect_insertion* in order to have the two mt DNA sequences (from the two cell lines) of the same length as the reference.
 See *?detect_insertion* for more info.
 
 
@@ -377,7 +377,7 @@ Plot_boxplot(mean_heteroplasmy_diff,mean_heteroplasmy_equal,diff_pos,equal_pos,"
 
 The values of heteroplasmy we found in the *Different Positions* with our computational analysis were very close to those estimated by ARMS-qPCR: for BG(95%), ~7% from RNA-seq data vs ~5% measured by ARMS-qPCR (see <https://www.nature.com/articles/s42255-021-00422-7> for more details on ARMS-qPCR).
 
-We then check, for the *Different Positions*, if the dominant allele coincide with the reference allele in BG line, as expected. This is indeed the case for the vast majority of the *Different Positions*.
+We then check, for the *Different Positions*, if the dominant allele coincides with the reference allele in BG line, as expected. This is indeed the case for the vast majority of the *Different Positions*.
 
 
 
@@ -439,7 +439,7 @@ Plot_boxplot(mean_heteroplasmy_diff,mean_heteroplasmy_equal,diff_pos,equal_pos,"
 
 The values of heteroplasmy we found in the *Different Positions* with our computational analysis were very close to those estimated by ARMS-qPCR: for HB(24%), ~17% from RNA-seq data vs ~24% measured by ARMS-qPCR (see <https://www.nature.com/articles/s42255-021-00422-7> for more details on ARMS-qPCR).
 
-We then check, for the *Different Positions*, if the second dominant allele coincide with the reference allele in HB line, as expected. This is indeed the case for the vast majority of the *Different Positions*.
+We then check, for the *Different Positions*, if the second dominant allele coincides with the reference allele in HB line, as expected. This is indeed the case for the vast majority of the *Different Positions*.
 
 ```{r}
 
@@ -468,7 +468,7 @@ print(paste("Reference allele in the strain:",pos_diff_hb[i]))
 ```
 
 
-Finally we observe that the 98% of the top 50 bases defined in a unsupervised way (Wilcoxon test) are also bases that are different from the BL6 reference genome in the two cell lines. This reveals the high consistency of the analysis performed by RNAheteroplasmy. 
+Finally we observe that the 98% of the top 50 bases defined in a unsupervised way (Wilcoxon test) are also bases that are different from the mouse reference genome in the two cell lines. This reveals the high consistency of the analysis performed by MitoHEAR. 
 ```{r}
 all_position_name_diff=c(position_name_diff_bg,position_name_diff_hb)
 sum(unique(all_position_name_diff)%in%names(p_value_wilcox_test_sort)[1:50])/50
