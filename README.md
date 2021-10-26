@@ -199,27 +199,29 @@ For more exhaustive information about the functions offered by **MitoHEAR** see 
 
 The following tutorials are completely reproducible within the package **MitoHEAR**:
 
-### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
+### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/main/Tutorials/cell_competition_mt_example_notebook.Rmd):**
 This tutorial uses single-cell RNA-seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for the mouse mitochondrial genome.
 Identification and plotting of the most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo-time (with **dpt_test** and **plot_dpt**) are shown.
 The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo-time. 
 
 
-### **[cell_competition_ercc_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_ercc_example_notebook.Rmd):**
+### **[cell_competition_ercc_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/main/Tutorials/cell_competition_ercc_example_notebook.Rmd):**
 This tutorial uses single-cell RNA-seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for ERCC-Spike-In bases, as a technical control. We should not see a significant variation in heteroplasmy between clusters or along pseudo-time, since the only source of variation for ERCC is technical and not due to biological reasons.
 Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
 
-### **[cell_competition_bulk_data_mt__example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
+### **[cell_competition_bulk_data_mt__example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/main/Tutorials/cell_competition_bulk_data_mt_example_notebook.Rmd):**
 This tutorial uses bulk-RNA seq data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
 Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **MitoHEAR** is very close to the one expected.
 Cluster analysis among samples based on allele frequency values (done with **clustering_dist_ang**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
 
-### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/lineage_tracing_example_notebook.Rmd):**
+### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/main/Tutorials/lineage_tracing_example_notebook.Rmd):**
 This tutorial uses single-cell RNA-seq mouse embryo data from  [Goolam *et al.*, Cell, 2016 ](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone)(Smart-Seq2 protocol). 
 There are embryos at different stages from 2-cells to 8-cells stage. At each stage, the embryo of origin for each cell is known.
 We illustrate how cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) could be used in order to perform a lineage tracing analysis, by grouping together cells that are from the same embryo.
+
+
 
 
 
