@@ -58,8 +58,8 @@ source("statistical_test.R")
 
 
 
-The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
-This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
+The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrix *meta_data_antonio_final* contains meta data information about the cells (i.e. cell names, cell types, batch).
 
 ```{r}
@@ -98,7 +98,7 @@ bam_input_antonio=bam_input
 
 ```
 
-We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
+We don't execute the function *get_raw_counts_allele* here and we directly load his output. 
 A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
 
 ```{r}
@@ -135,7 +135,7 @@ row.names(matrix_allele_counts)=meta_data_antonio_final$antonio_array.Source.Nam
 row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Source.Name
 ```
 
-##  2-cells Stages
+##  2-cells Stage
 We select only the cells for the 2-cells stage for  down-stream analysis. 
 
 ```{r}
@@ -144,7 +144,7 @@ stage_2_cells=stage_2_cells[!grepl("32cell_",stage_2_cells)]
 ```
 
 The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
-This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the the remaining cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+This function performs a two steps filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the remaining cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
 
 ```{r}
 
@@ -152,7 +152,7 @@ sc_data=get_heteroplasmy(matrix_allele_counts[stage_2_cells,],name_position_alle
 
 ```
 
-Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two steps filtering procedure. 
 The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
 For more info about the ouput see *?get_geteroplasmy*.
 
@@ -206,9 +206,9 @@ Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/
 
 
 ### Cluster analysis among cells based on allele frequency values
-RNAheteroplasmy offers the possibility to perform a hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cell is the angular distance of the allele frequencies. In this way we can represent the difference between two cells as a vector whose cordinates are the angular distances of the bases.
-The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
-The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
+MitoHEAR offers the possibility to perform a hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cells is the angular distance of the allele frequencies. In this way we can represent the difference between two cells as a vector whose cordinates are the angular distances of the bases.
+The total distance between two cells is the euclidean norm of the vector of difference between the two cells.
+The output of *clustering_dist_ang* is a list with two elements. The first is a data frame which contains the old classification (partition available before the cluster analysis based on allele frequencies) and the new classification (partition provided by the cluster analysis based on allele frequencies ). The second is the distance matrix, on which the hierarchical clustering is done.
 The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
 The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 See *?clustering_dist_ang* for more info.
