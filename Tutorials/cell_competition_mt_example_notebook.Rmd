@@ -215,7 +215,7 @@ q
 
 ## Identification of most different bases according to heteroplasmy along pseudo-time
 
-If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and losing score is assigned to each base). For more info see *?dpt_test*
+If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and diffusion pseudo-time is assigned to each base). For more info see *?dpt_test*
 
 
 
