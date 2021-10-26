@@ -41,8 +41,8 @@ source("statistical_test.R")
 ```
 
 
-The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
-This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
+The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrix *after_qc* contains meta data information about the cells (i.e. cell names, cell types, batch).
 
 
@@ -67,7 +67,7 @@ path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_da
 ```
 
 We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
-A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+A command line implementation of the function *get_raw_counts_allele* is also available (see github README file for info).
 
 ```{r}
 #output_SNP_mt=get_raw_counts_allele(bam_input,path_fasta,cell_names)
@@ -106,7 +106,7 @@ my.clusters=after_qc_fmk_epi$cluster
 ```
 
 The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
-This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+This function performs a two steps filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
 
 
 
@@ -171,21 +171,21 @@ Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/
 ```
 
 ## Identification of most different bases according to heteroplasmy between clusters
-For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters *Winner Epiblast* and *Loser Epiblast*. As output, for each base, there is the adjust p valued (FDR).
+For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters *Winner Epiblast* and *Loser Epiblast*. As output, for each base, there is the adjusted p valued (FDR).
 
 
 ```{r}
 p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
 ```
 
-We sort the bases according to the adjust p value in order to identify the bases where the heteroplasmy is most different between the two clusters.
+We sort the bases according to the adjusted p value in order to identify the bases where the heteroplasmy is most different between the two clusters.
 ```{r}
 p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
 ```
 
 The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. We can notice that the top 10 relevant bases belong to the genes mt-Rnr1 and mt-Rnr1 and in these positions the heteroplasmy is always higher in the *Loser Epiblast*.
 Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
-For general use  please use functions *plot_heteroplasmy* and *plot_allele_frequency*
+For general use, please use functions *plot_heteroplasmy* and *plot_allele_frequency*
 
 ```{r}
 q=list()
@@ -225,9 +225,9 @@ q
 
 ```
 
-## Identication of most different bases according to heteroplasmy along pseudo-time
+## Identification of most different bases according to heteroplasmy along pseudo-time
 
-If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the Pearson or Spearman correlation test between heteroplasmy and losing score is assigned to each base). For more info see *?dpt_test*
+If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and diffusion pseudo-time is assigned to each base). For more info see *?dpt_test*
 
 
 
@@ -244,7 +244,7 @@ dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
 The heteroplasmy level for the top 2 relevant bases (according to GAM fit) is shown along pseudo time, with the black line denoting the GAM fit. We can notice that the top bases belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy increases with the diffusion pseudo time. 
 The top 10 positions identified with the diffusion pseudo time analysis are equal to the top 10 positions detected with the Wilcoxon test based on clustering partition.
 Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
-For general use  please use function *plot_dpt*.
+For general use, please use function *plot_dpt*.
 
 ```{r}
 q=list()
@@ -264,7 +264,7 @@ q
 ```
 We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the heteroplasmy levels are higher among all cells in the *Loser Epiblast* clusters and not only in a specific batch.
 Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
-For general use  please use function *plot_batch*.
+For general use, please use function *plot_batch*.
 
 
 
