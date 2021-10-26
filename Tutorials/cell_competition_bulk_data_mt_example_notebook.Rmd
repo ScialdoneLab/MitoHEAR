@@ -29,7 +29,7 @@ The cell lines BG and HB are respectively classified as Loser and Winner.
 library(MitoHEAR)
 ```
 
-The first step of the library RNAheteroplasmy is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
 This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrices *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain meta data information about the cells (i.e. cell names, condition). 
 
@@ -261,7 +261,7 @@ heatmap_plot(row.names(dist_matrix_bulk),row.names(dist_matrix_bulk),new_classif
 
 The new classification coincides with the old classification. This means that we can perfectly distinguish between the two cell lines only by looking at the heteroplasmy values of the mitochondrial bases. This result was expected since the samples derived from two cell lines, whose mitochondrial DNA is built to be different between each other.
 
-## Heteroplasmy and allele frequencies analysis for bases different from BL6 reference genome
+## Heteroplasmy and allele frequencies analysis for bases different from mouse reference genome
 
 As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1>  and <https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1>), we can identify the bases that are different from the reference genome
 ```{r}
@@ -410,7 +410,7 @@ Plot_boxplot(mean_heteroplasmy_diff,mean_heteroplasmy_equal,diff_pos,equal_pos,"
 ```
 
 
-The values of heteroplasmy we found in the *Different Positions* with our computational analysis were very close to those estimated by ARMS-qPCR: for HB(24%), ~17% from RNA-seq data vs ~24% measured by ARMS-qPCR (see <https://www.biorxiv.org/content/10.1101/2020.01.15.900613v2> for more details on ARMS-qPCR).
+The values of heteroplasmy we found in the *Different Positions* with our computational analysis were very close to those estimated by ARMS-qPCR: for HB(24%), ~17% from RNA-seq data vs ~24% measured by ARMS-qPCR (see <https://www.nature.com/articles/s42255-021-00422-7> for more details on ARMS-qPCR).
 
 We then check, for the *Different Positions*, if the second dominant allele coincides with the reference allele in HB line, as expected. This is indeed the case for the vast majority of the *Different Positions*.
 
@@ -441,7 +441,7 @@ print(paste("Reference allele in the #strain:",pos_diff_hb[i]))
 ```
 
 
-Finally we observe that the 98% of the top 50 bases defined in a unsupervised way (Wilcoxon test) are also bases that are different from the BL6 reference genome in the two cell lines. This reveals the high consistency of the analysis performed by MitoHEAR. 
+Finally we observe that the 98% of the top 50 bases defined in a unsupervised way (Wilcoxon test) are also bases that are different from mouse reference genome in the two cell lines. This reveals the high consistency of the analysis performed by MitoHEAR. 
 ```{r}
 all_position_name_diff=c(position_name_diff_bg,position_name_diff_hb)
 sum(unique(all_position_name_diff)%in%names(p_value_wilcox_test_sort)[1:50])/50
