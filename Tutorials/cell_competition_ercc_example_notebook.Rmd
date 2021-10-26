@@ -196,7 +196,7 @@ q
 
 ## Identication of most different bases according to heteroplasmy along pseudo-time
 
-If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and losing score is assigned to each base). For more info see *?dpt_test*
+If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and diffusion pseudo-time is assigned to each base). For more info see *?dpt_test*
 We notice that there are not positions with an FDR value below 0.001, as expected, since the heteroplasmy in the ERCC Spikes-In should not change in a significant way along the pseudo time.
 
 
@@ -221,7 +221,7 @@ q=list(q,p)
 q
 ```
 
-Finally we can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is a batch effect, since the heteroplasmy levels are higher mainly in the batch 5 and not in an homogeneus way across all the *Loser Epiblast* cluster.
+Finally we can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is a batch effect, since the heteroplasmy levels are higher mainly in the batch 5 and not in an homogeneous way across all the *Loser Epiblast* cluster.
 Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
 For general use, please use function *plot_batch*.
 
