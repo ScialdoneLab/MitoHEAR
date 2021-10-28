@@ -1,12 +1,4 @@
 ---
-output:
-  html_document: default
-  pdf_document: default
----
-
-
-
----
 title: 'MitoHEAR'
 aas-journal: Astrophysical Journal <- The name of the AAS journal.
 date: "17 June 2021"
@@ -16,7 +8,7 @@ authors:
   name: Gabriele Lubatti^[first author]
 - affiliation: 1, 2, 3
   name: Elmir Mahammadov^[co-author]
-- affiliation: 1,2, 3
+- affiliation: 1, 2, 3
   name: Antonio Scialdone^[corresponding author]
 affiliations:
 - index: 1
@@ -30,7 +22,6 @@ tags:
 - bioinformatics
 - single cell RNA seq
 - heteroplasmy
-aas-doi: 10.3847/xxxxx 
 ---
 
 # Summary
