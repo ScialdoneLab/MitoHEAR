@@ -24,7 +24,11 @@ Depends:
     GenomicRanges (>= 1.42.0),
     IRanges (>= 2.24.1),
     karyoploteR (>= 1.14.1),
-    regioneR (>= 1.20.1)
+    regioneR (>= 1.20.1),
+    clustree (>= 0.4.4),
+    mcclust (>=1.0),
+    fmsb (>= 0.7.2),
+    plotly (>= 4.10.0)
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
