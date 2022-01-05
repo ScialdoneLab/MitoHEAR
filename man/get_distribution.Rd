@@ -12,10 +12,10 @@ get_distribution(matrix,FUNCTION,index=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{matrix}{A matrix with samples on the row and bases on the columns.
+  \item{matrix}{A matrix with samples on the rows and bases on the columns.
 
 }
-\item{FUNCTION}{A character specifyng the function to be applied on each columns of \emph{matrix}. The possible values are: \emph{mean},\emph{max},\emph{min},\emph{median}and \emph{sum}.
+\item{FUNCTION}{A character specifyng the function to be applied on each column of \emph{matrix}. The possible values are: \emph{mean},\emph{max},\emph{min},\emph{median} and \emph{sum}.
 
 }
 \item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.

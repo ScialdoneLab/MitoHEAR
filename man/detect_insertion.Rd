@@ -13,10 +13,10 @@ detect_insertion(ref_sequence,different_sequence,length_comparison=10)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{ref_sequence}{
-Character vector whose element are the bases of a DNA sequence to use as reference.
+Character vector whose elements are the bases of a DNA sequence to use as reference.
 }
 \item{different_sequence}{
-Character vector whose element are the bases of a DNA sequence different from the reference.
+Character vector whose elements are the bases of a DNA sequence different from the reference.
 }
 \item{length_comparison}{
 Integer number. Number of bases to consider for the comparison between the two DNA sequences in order to detect and remove insertions in the non-reference sequence.
@@ -26,7 +26,7 @@ Integer number. Number of bases to consider for the comparison between the two D
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Character vector of the *different_sequence* with length equal to *ref_sequence*, after having removed the insertions.
+Character vector of the different_sequence with length equal to ref_sequence, after having removed the insertions.
 }
 \references{
 %% ~put references to the literature/web site here ~

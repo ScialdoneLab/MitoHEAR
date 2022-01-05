@@ -22,7 +22,7 @@ Plot_distribution(quantity_counts_cell,x_name,title_name)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-ggplot density plot of the numeric vector \emph{quantity_counts_cell}
+ggplot density plot of the numeric vector quantity_counts_cell.
 }
 \references{
 %% ~put references to the literature/web site here ~

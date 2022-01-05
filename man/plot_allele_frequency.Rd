@@ -21,7 +21,7 @@ plot_allele_frequency(position,heteroplasmy_matrix,allele_matrix,cluster,names_a
 \item{allele_matrix}{Matrix with allele frequencies values obtained from \emph{get_heteroplasmy}.
 
 }
-\item{cluster}{Charachter vector specifying a partion of the samples, with length equal to n_row of allele_matrix.
+\item{cluster}{Characher vector specifying a partition of the samples, with length equal to n_row of allele_matrix.
 
 }
 \item{names_allele_qc}{Character vector with length equal to n_col of allele_matrix. Each element specifies the name of the base and the allele.
@@ -42,7 +42,7 @@ plot_allele_frequency(position,heteroplasmy_matrix,allele_matrix,cluster,names_a
 
 }
 \value{
-\emph{grid.arrange} plot of allele frequencies of a specific base across samples divided according to cluster
+\emph{grid.arrange} plot of allele frequencies of a specific base across samples divided according to cluster.
 }
 \references{
 %% ~put references to the literature/web site here ~

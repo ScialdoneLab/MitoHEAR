@@ -5,8 +5,8 @@
 get_raw_counts_allele
 }
 \description{
-It is one the two main function of the \strong{RNAheteroplasmy} package (together with \emph{get_heteroplasmy}).
-The function allows to obtain a matrix of counts (n_row = number of sample, n_col= 4*number of bases) of the four allele in each base, for every sample. It takes as input a vector of sorted bam files (one bam file for each sample) and a fasta file for the genomic region of interest. It is based on the \emph{pileup} function of the package Rsamtools.
+It is one the two main function of the \strong{MitoHEAR} package (together with \emph{get_heteroplasmy}).
+The function allows to obtain a matrix of counts (n_row = number of sample, n_col= 4*number of bases) of the four alleles in each base, for every sample. It takes as input a vector of sorted bam files (one bam file for each sample) and a fasta file for the genomic region of interest. It is based on the \emph{pileup} function of the package Rsamtools.
 }
 \usage{
 get_raw_counts_allele(bam_input,path_fasta,cell_names,cores_number)
@@ -34,9 +34,9 @@ Number of cores to use.
 \value{
 A list with three elements
 
-\item{matrix_allele_counts }{Matrix of counts (n_row = number of sample, n_col= 4*number of bases) of the four allele in each base, for every sample. The row names is equal to cell_names. }
-\item{name_position_allele}{Character vector with length equal to n_col of matrix_allele_counts. Each element specifies the name of the base and the allele}
-\item{name_position}{Character vector with length equal to n_col of matrix_allele_counts. Each element specifies the name of the base}
+\item{matrix_allele_counts }{Matrix of counts (n_row = number of sample, n_col= 4*number of bases) of the four alleles in each base, for every sample. The row names is equal to cell_names. }
+\item{name_position_allele}{Character vector with length equal to n_col of matrix_allele_counts. Each element specifies the coordinate of genomic position for a base and the allele.}
+\item{name_position}{Character vector with length equal to n_col of matrix_allele_counts. Each element specifies the coordinate of genomic position for a base.}
 
 }
 \references{

@@ -16,9 +16,9 @@ plot_batch(position,heteroplasmy_matrix,batch,colour,text_size,index=NULL)
 }
 \item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from \emph{get_heteroplasmy}.
 }
-\item{batch}{Vector of batch name,with length equal to n_row of heteroplasmy_matrix.}
+\item{batch}{Vector of batch names,with length equal to n_row of heteroplasmy_matrix.}
 
-\item{colour}{Vector of colour name,with length equal to n_row of heteroplasmy_matrix.}
+\item{colour}{Vector of colour names,with length equal to n_row of heteroplasmy_matrix.}
 
 \item{text_size}{Character specifying the size of the text for ggplot.}
 

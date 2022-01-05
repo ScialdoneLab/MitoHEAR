@@ -21,7 +21,7 @@ dpt_test(heteroplasmy_matrix,time,index=NULL,method="GAM")
 
 \item{method}{Character name denoting the method to choose for assigning an adjusted p value to each of the bases. Can be one of GAM,pearson and spearman.
 GAM: For each base, a GAM fit with formula z ~ lo(t) is performed between the heteroplasmy values (z) and the time (t). The p value from the table "Anova for Parametric Effects" is then assigned to the base.
-pearson,spearman:for each base, a Pearson or Spearman correlation test is performed between the heteroplasmy values and the time . The p value obtained from the test is then assigne to the base.
+pearson,spearman:for each base, a pearson or spearman correlation test is performed between the heteroplasmy values and the time . The p value obtained from the test is then assigned to the base.
 In all the three possible  methods, all the p values are then corrected with the method FDR.
 }
 

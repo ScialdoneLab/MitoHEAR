@@ -15,11 +15,11 @@ get_wilcox_test(matrix,cluster,label_1,label_2,index=NULL)
   \item{matrix}{Matrix with heteroplasmy values obtained from \emph{get_heteroplasmy}.
 
 }
-\item{cluster}{Charachter vector specifying a partion of the samples, with length equal to n_row of matrix.
+\item{cluster}{Charachter vector specifying a partition of the samples, with length equal to n_row of matrix.
 }
-\item{label_1}{Character name of a first partition included in cluster. It denotes the first group used for the Wilcoxon test
+\item{label_1}{Character name of a first label included in cluster. It denotes the first group used for the Wilcoxon test
 }
-\item{label_2}{Character name of a second partition included in cluster and different from label_1. it denotes the second group used for the Wilcoxon test.
+\item{label_2}{Character name of a second label included in cluster and different from label_1. it denotes the second group used for the Wilcoxon test.
 }
 \item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.
 }

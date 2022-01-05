@@ -8,8 +8,10 @@ heatmap_plot
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-heatmap_plot(marker_plot,marker_plot_plot,new_classification,old_classification,res_ang_sqrt
-,cluster_columns=T,cluster_rows=T,name_legend)
+
+
+heatmap_plot(marker_plot, marker_plot_plot, new_classification,
+                       old_classification,res_ang_sqrt, cluster_columns = F, cluster_rows = T, name_legend)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,13 +19,13 @@ heatmap_plot(marker_plot,marker_plot_plot,new_classification,old_classification,
 Character vector. Samples to select for showing in the heatmap.
 }
 \item{marker_plot_plot}{
-Character vector. Selected sample will be labelled with the elements of this vector in the heatmap.
+Character vector. Selected samples will be labelled with the elements of this vector in the heatmap.
 }
 \item{new_classification}{
 Character vector with length equal to selected samples,corresponding to the clustering analysis based on heteroplasmy values. See \emph{clustering_dist_ang} for more info.
 }
 \item{old_classification}{
-Character vector with length equal to selected samples,corresponding to the partion available before clustering on heteroplasmy values.
+Character vector with length equal to selected samples,corresponding to the partition available before clustering on heteroplasmy values.
 }
 \item{res_ang_sqrt
 }{Distance matrix obtained from \emph{clustering_dist_ang}

@@ -29,7 +29,7 @@ index returned by \emph{get_heteroplasmy}. Default=NULL.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Character vector of bases that have an heteroplasmy greater than min_heteroplasmy in more than min_cells
+Character vector of bases that have an heteroplasmy greater than min_heteroplasmy in more than min_cells.
 }
 \references{
 %% ~put references to the literature/web site here ~

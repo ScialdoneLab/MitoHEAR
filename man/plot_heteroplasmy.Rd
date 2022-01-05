@@ -16,7 +16,7 @@ plot_heteroplasmy(position,heteroplasmy_matrix,cluster,index=NULL)
 }
 \item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from \emph{get_heteroplasmy}.
 }
-\item{cluster}{Charachter vector specifying a partion of the samples, with length equal to n_row of heteroplasmy_matrix.
+\item{cluster}{Charachter vector specifying a partition of the samples, with length equal to n_row of heteroplasmy_matrix.
 }
 \item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.
 }
