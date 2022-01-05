@@ -42,8 +42,8 @@ The package was developed within R.4.0.2. A different version of R (higher or lo
 
 ```
 #load required packages and functions
-setwd(paste0(your_path,"/RNAHeteroplasmynew-main/Packages_Functions"))
-source("RNAheteroplasmynew_packages.R")
+setwd(paste0(your_path,"/MitoHEAR-master/vignettes"))
+source("MitoHEAR_packages.R")
 source("get_heteroplasmy.R")
 source("get_raw_counts_allele.R")
 source("lineage_tracing.R")
@@ -51,13 +51,12 @@ source("other_functions.R")
 source("plotting_functions.R")
 source("statistical_test.R")
 ```
-With the command above, all the functions of the library RNAheteroplasmynew will be available to use.
+With the command above, all the functions of the library MitoHEAR will be available to use.
 The input data in order to reproduce the vignettes in the section **Tutorials** are available at the paths:
-1. **/your_path/RNAHeteroplasmynew-master/data**
-2. **/your_path/RNAHeteroplasmynew-master/inst/extdata**
+1. **/your_path/MitoHEAR-master/inst/extdata**
 
-If RNAheteroplasmynew is not installed, it is possible to fully reproduce all the vignettes in the section **Tutorials** using the scripts available in the folder 
-**[Tutorials_no_installation](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/main/Tutorials_no_installation):**
+If MitoHEAR is not installed, it is possible to fully reproduce all the vignettes in the section **Tutorials** using the scripts available in the folder 
+**[Tutorials_no_installation](https://github.com/ScialdoneLab/MitoHEAR/tree/master/Tutorials_no_installation):**
 
 ## get_raw_counts_allele
 
