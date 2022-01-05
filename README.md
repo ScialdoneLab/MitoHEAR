@@ -220,7 +220,7 @@ Identification and plotting of most different bases according to heteroplasmy be
 
 ### **[cell_competition_bulk_data_mt__example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
 This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
-Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **RNAheteroplasmy** is very close to the one expected.
+Since the mt DNA sequence of the two cell lines BG(Loser-95%) and HB(Winner-24%) is available (https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1  and https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1), we identify the bases that are different from the reference genome and then check that in these positions the level of heteroplasmy given by **MitoHEAR** is very close to the one expected.
 Cluster analysis among samples based on allele frequency values (done with **clustering_dist_ang**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
 
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/lineage_tracing_example_notebook.Rmd):**
