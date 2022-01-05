@@ -32,7 +32,7 @@ if (!require("plotly")) {install.packages("plotly", dependencies = TRUE, repos="
 To install MitoHEAR, please run the following:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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")
+devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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")
 library(MitoHEAR)
 ```
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
