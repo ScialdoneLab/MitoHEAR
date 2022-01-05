@@ -73,7 +73,7 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 
 An example of input could be:
 ```
-data("after_qc",package="MitoHEAR")
+load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 cell_names=as.vector(after_qc$new_name)
 cell_names[1:5]
 [1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
@@ -90,7 +90,7 @@ The output of **get_raw_counts_allele** is a list with three elements:
 3. **name_position**: character vectors with information about the name of the bases.
 
 ```
-data("output_SNP_mt",package="MitoHEAR")
+load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 matrix_allele_counts=output_SNP_mt[[1]]
 ## In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
 dim(matrix_allele_counts)
@@ -149,8 +149,8 @@ starts from the output of **get_raw_counts** and performs a two step filtering p
 An example of input could be:
 
 ```
-data("output_SNP_mt",package="MitoHEAR")
-data("after_qc",package="MitoHEAR")
+load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
+load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 
 ## We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
 row.names(after_qc)=after_qc$new_name
