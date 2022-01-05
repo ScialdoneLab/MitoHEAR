@@ -4,7 +4,7 @@ MitoHEAR (MitOChondrial Heteroplasmy Analyzer from RNA-seq) is an R package for 
 ## Installation
 Before installing MitoHEAR, the following packages should be installed first:
 ```
-```
+
 if (!requireNamespace("BiocManager", quietly = TRUE)){
 install.packages("BiocManager")}
 if (!require("Rsamtools")) {BiocManager::install("Rsamtools")}
@@ -28,7 +28,7 @@ if (!require("fmsb")) {install.packages("fmsb", dependencies = TRUE, repos="http
 if (!require("plotly")) {install.packages("plotly", dependencies = TRUE, repos="http://cran.r-project.org")}
 
 ```
-```
+
 To install MitoHEAR, please run the following:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
