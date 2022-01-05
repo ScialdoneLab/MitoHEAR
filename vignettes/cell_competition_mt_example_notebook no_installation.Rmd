@@ -30,11 +30,22 @@ In this notebook it is shown the heteroplasmy analysis performed on mouse CI-tre
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
 #library(RNAheteroplasmynew)
-library(MitoHEAR)
-library(fmsb)
-library(plotly)
+#library(MitoHEAR)
+#library(fmsb)
+#library(plotly)
 ```
 
+```{r}
+your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
+setwd(paste0(your_path,"/MitoHEAR-master/Packages_Functions"))
+source("MitoHEAR_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
 
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
 This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
@@ -46,7 +57,9 @@ The matrix *after_qc* contains meta data information about the cells (i.e. cell 
 
 #data("after_qc",package="RNAheteroplasmy")
 
-load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","after_qc.Rda"))
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files/"
 cell_names=as.vector(after_qc$new_name)
@@ -74,7 +87,9 @@ A command line implementation of the function *get_raw_counts_allele* is also av
 
 #data("output_SNP_mt",package="RNAheteroplasmy")
 
-load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_mt.Rda"))
 
 ```
 
@@ -174,9 +189,13 @@ We can visualize the mitochondrial genome showing in red the positions that pass
 #biomart_file=read.table("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R/mt_start_end.txt",sep="\t",header = T)
 chr_name="MT"
 heteroplasmy_matrix=heteroplasmy_matrix_ci
-biomart_file=system.file("extdata", "mt_start_end.txt", package = "MitoHEAR")
+#biomart_file=system.file("extdata", "mt_start_end.txt", package = "MitoHEAR")
+
+biomart_file=paste0(your_path,"/MitoHEAR-master/inst/extdata/","mt_start_end.txt")
+
 biomart_file=read.table(biomart_file,sep="\t",header = T)
-fastaFile=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
+#fastaFile=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
+fastaFile=paste0(your_path,"/MitoHEAR-master/inst/extdata/","Mus_musculus.GRCm38.dna.chromosome.MT.fa")
 fastaFile <- Biostrings::readDNAStringSet(fastaFile)
 plot_coverage(biomart_file,fastaFile,chr_name,heteroplasmy_matrix)
 ```
@@ -350,10 +369,10 @@ plot_spider_chart("303_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
 #load(file="coordinate_dm.Rda")
 
 
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","coordinate_dm.Rda"))
 
 
-
-load(system.file("extdata", "coordinate_dm.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "coordinate_dm.Rda", package = "MitoHEAR"))
 
 
 

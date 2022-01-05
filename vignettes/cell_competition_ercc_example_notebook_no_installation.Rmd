@@ -22,7 +22,7 @@ In this notebook it is shown the heteroplasmy analysis performed on mouse CI-tre
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="#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")
-library(MitoHEAR)
+#library(MitoHEAR)
 ```
 
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
@@ -30,7 +30,20 @@ This task is achieved with the function *get_raw_counts_allele*. As input we nee
 The matrix *after_qc* contains meta data information about the cells (i.e. cell names, cell types, batch).
 
 ```{r}
-load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
+your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
+setwd(paste0(your_path,"/MitoHEAR-master/Packages_Functions"))
+source("MitoHEAR_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
+
+```{r}
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","after_qc.Rda"))
+#load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 #data("after_qc",package="MitoHEAR")
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files_spikes/"
@@ -66,7 +79,9 @@ A command line implementation of the function *get_raw_counts_allele* is also av
 
 #data("output_SNP_spikes",package="MitoHEAR")
 
-load(system.file("extdata", "output_SNP_spikes.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "output_SNP_spikes.Rda", package = "MitoHEAR"))
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_spikes.Rda"))
 
 ```
 

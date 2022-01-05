@@ -42,8 +42,23 @@ There are embryos at different stages from 2-cells to 8-cells stage. At each sta
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
 #library(RNAheteroplasmynew)
-library(MitoHEAR)
+#library(MitoHEAR)
 ```
+
+
+```{r}
+your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
+setwd(paste0(your_path,"/MitoHEAR-master/Packages_Functions"))
+source("MitoHEAR_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
+
+
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
 This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrix *meta_data_antonio_final* contains meta data information about the cells (i.e. cell names, cell types, batch).
@@ -69,8 +84,8 @@ The matrix *meta_data_antonio_final* contains meta data information about the ce
 
 #data("meta_data_antonio_final",package="RNAheteroplasmynew")
 
-
-load(system.file("extdata", "meta_data_antonio_final.Rda", package = "MitoHEAR"))
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","meta_data_antonio_final.Rda"))
+#load(system.file("extdata", "meta_data_antonio_final.Rda", package = "MitoHEAR"))
 
 path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/"
 cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)
@@ -99,7 +114,9 @@ A command line implementation of the function *get_raw_counts_allele* is also av
 
 #data("output_SNP_antonio_mt",package="RNAheteroplasmynew")
 
-load(system.file("extdata", "output_SNP_antonio_mt.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "output_SNP_antonio_mt.Rda", package = "MitoHEAR"))
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_antonio_mt.Rda"))
 
 ```
 

@@ -1,0 +1,568 @@
+---
+title: "Ludwig et al"
+author: "Gabriele Lubatti"
+date: "1/3/2022"
+output: html_document
+---
+
+```{r }
+gc()
+rm(list=ls())
+```
+
+
+
+```{r}
+your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
+setwd(paste0(your_path,"/MitoHEAR-master/Packages_Functions"))
+source("MitoHEAR_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
+
+
+
+
+## Dataset GSE115210 
+
+Start with dataset GEO accession number GSE115210 from <https://doi.org/10.1016/j.cell.2019.01.022>  used in fig. 2/S2. Individually sorted cells from clonally derived TF1 clones (C9, D6, and G10) were processed with single cell RNA-seq (Smart-seq2)
+
+
+
+```{r}
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","name_cells_fig_2.Rda"))
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","name_cells_fig_2_analysis.Rda"))
+
+#load(system.file("extdata", "name_cells_fig_2.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "name_cells_fig_2_analysis.Rda", package = "MitoHEAR"))
+
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Published_data/fig_2")
+#load(file="name_cells_fig_2.Rda")
+#load(file="name_cells_fig_2_analysis.Rda")
+
+
+path_to_bam_fig_2="/nas_storage/gabriele.lubatti/heteroplasmy/published_dataset/all_bam_files/"
+
+bam_input_fig_2=paste(path_to_bam_fig_2,name_cells_fig_2,".unique.bam",sep="")
+
+
+path_fasta="/nas_storage/gabriele.lubatti/heteroplasmy/published_dataset/Homo_sapiens.GRCh38.dna.chromosome.MT.fa.gz"
+```
+We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
+A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+
+```{r}
+#/home/linuxbrew/.linuxbrew/Cellar/r/4.0.2_1/bin/Rscript --vanilla get_raw_counts_allele_script.R -b bam_input_fig_2 -f "/nas_storage/gabriele.lubatti/heteroplasmy/published_dataset/new_human_genome/chrM.fa" -c name_cells_fig_2_analysis -o output_SNP_mt_fig_2_new.Rda -s 8
+```
+
+```{r}
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_mt_fig_2_new.Rda"))
+#load(system.file("extdata", "output_SNP_mt_fig_2_new.Rda", package = "MitoHEAR"))
+
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Published_data")
+#load("output_SNP_mt_fig_2_new.Rda")
+output_SNP_mt_fig_2=result
+matrix_allele_counts=output_SNP_mt_fig_2[[1]]
+name_position_allele=output_SNP_mt_fig_2[[2]]
+name_position=output_SNP_mt_fig_2[[3]]
+```
+
+```{r}
+
+my.clusters=rep(0,length(name_cells_fig_2))
+my.clusters[grep("_G10_",name_cells_fig_2)]="G10"
+my.clusters[grep("_D6_",name_cells_fig_2)]="D6"
+my.clusters[grep("_C9_",name_cells_fig_2)]="C9"
+
+tfi_fig_2=get_heteroplasmy(matrix_allele_counts,name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 1,my.clusters)
+
+```
+
+
+
+```{r}
+sum_matrix=tfi_fig_2[[1]]
+sum_matrix_qc=tfi_fig_2[[2]]
+heteroplasmy_matrix_ci=tfi_fig_2[[3]]
+allele_matrix_ci=tfi_fig_2[[4]]
+cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
+cluster_ci=my.clusters[row.names(sum_matrix)%in%row.names(sum_matrix_qc)]
+
+index_ci=tfi_fig_2[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,min_heteroplasmy=0.01,min_cells=10,index_ci)
+```
+
+
+### Identification of most different bases according to heteroplasmy between clones
+
+```{r}
+p_value_wilcox_test_1=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"C9","D6" ,index_ci)
+
+p_value_wilcox_test_2=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"C9","G10" ,index_ci)
+
+p_value_wilcox_test_3=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"D6","G10" ,index_ci)
+
+
+```
+
+
+```{r}
+p_value_wilcox_test_sort_1=sort(p_value_wilcox_test_1,decreasing = F)
+p_value_wilcox_test_sort_2=sort(p_value_wilcox_test_2,decreasing = F)
+p_value_wilcox_test_sort_3=sort(p_value_wilcox_test_3,decreasing = F)
+
+p_value_wilcox_test_sort_small_1=p_value_wilcox_test_sort_1[p_value_wilcox_test_sort_1<0.05]
+p_value_wilcox_test_sort_small_2=p_value_wilcox_test_sort_2[p_value_wilcox_test_sort_2<0.05]
+p_value_wilcox_test_sort_small_3=p_value_wilcox_test_sort_3[p_value_wilcox_test_sort_3<0.05]
+```
+
+```{r}
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort_small_3)){
+p=plot_heteroplasmy(names(p_value_wilcox_test_sort_small_3)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggtitle(paste(names(p_value_wilcox_test_sort_small_3)[i],round(p_value_wilcox_test_sort_small_3[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort_small_3)){
+p=plot_allele_frequency(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+
+```
+
+
+### Supervised cluster analysis among cells based on allele frequency values
+
+
+```{r}
+
+features_cluster=c(names(p_value_wilcox_test_sort_small_1),names(p_value_wilcox_test_sort_small_2),names(p_value_wilcox_test_sort_small_3))
+features_cluster=unique(features_cluster)
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(colnames(heteroplasmy_matrix_ci)),deepSplit_param=1,minClusterSize_param=15,0.2,min_value=0.001,index=index_ci,relevant_bases = features_cluster)
+
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+top_dist=result_clustering_sc[[3]]
+common_idx=result_clustering_sc[[4]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+```
+
+
+Comparison between the ground truth and the new partition obtained with supervised cluster analysis
+```{r}
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=F,cluster_rows=F,"Euclidean distance")
+
+
+```
+
+### Unsupervised cluster analysis among cells based on allele frequency values
+
+```{r}
+
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(colnames(heteroplasmy_matrix_ci)),deepSplit_param=1,minClusterSize_param=15,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+top_dist=result_clustering_sc[[3]]
+common_idx=result_clustering_sc[[4]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+Plot_distance_matrix(dist_matrix_sc,old_classification)
+```
+
+
+Comparison between the ground truth and the new partition obtained with unsupervised cluster analysis
+```{r}
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=F,cluster_rows=F,"Euclidean distance")
+
+```
+
+
+Below the bases selected for the unsupervised cluster analysis
+
+```{r}
+q=list()
+for ( i in 1:length(top_dist)){
+p=plot_heteroplasmy(top_dist[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+```
+
+
+
+
+
+
+
+## Dataset GSE115214
+
+Start with dataset GEO accession number GSE115214 from <https://doi.org/10.1016/j.cell.2019.01.022> used in fig. 5.
+Primary human cells( CD34+ hematopoietic stem and progenitor cells HSPCs) from two independent donors were processed with single cell RNA-seq (Smart-seq2)
+ 
+
+
+
+```{r}
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","name_cells_fig_5_all.Rda"))
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","name_cells_fig_5_all_analysis.Rda"))
+
+#load(system.file("extdata", "name_cells_fig_5_all.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "name_cells_fig_5_all_analysis.Rda", package = "MitoHEAR"))
+
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Published_data")
+#load(file="name_cells_fig_5_all.Rda")
+#load(file="name_cells_fig_5_all_analysis.Rda")
+```
+
+
+```{r}
+
+
+path_to_bam_fig_5="/nas_storage/gabriele.lubatti/heteroplasmy/published_dataset/figure_5/aligned_file/sorted_files/"
+bam_input_fig_5=paste(path_to_bam_fig_5,name_cells_fig_5_all,".unique.bam",sep="")
+
+
+```
+
+```{r}
+#cell_convert=read.table("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Pub#lished_data/CD34_colonies_table.txt",header = T)
+#path_meta_data=system.file("extdata", "CD34_colonies_table.txt", package = "MitoHEAR")
+
+path_meta_data=paste0(your_path,"/MitoHEAR-master/inst/extdata/","CD34_colonies_table.txt")
+cell_convert=read.table(path_meta_data,header = T)
+cell_old=cell_convert$ID1
+cell_new=cell_convert$ID2
+
+cell_old_summary=rep(0,length(name_cells_fig_5_all))
+
+for (i in 1:length(cell_old_summary)){
+  
+cell_old_summary[i]=c(paste(strsplit(name_cells_fig_5_all,"_")[[i]][3:6],collapse ="_"))
+}
+change=cell_old_summary[grep("_colonies",cell_old_summary)]
+cell_old_summary[grep("_colonies",cell_old_summary)]=substr(change,1,nchar(change)-9)
+
+
+
+```
+
+
+
+We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
+A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+
+```{r}
+#/home/linuxbrew/.linuxbrew/Cellar/r/4.0.2_1/bin/Rscript --vanilla get_raw_counts_allele_script.R -b bam_input_fig_5 -f "/nas_storage/gabriele.lubatti/heteroplasmy/published_dataset/new_human_genome/chrM.fa" -c name_cells_fig_5_all_analysis -o output_SNP_mt_fig_5_new.Rda -s 8
+```
+
+```{r}
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_mt_fig_5_new.Rda"))
+#path_meta_data=load(system.file("extdata", "output_SNP_mt_fig_5_new.Rda", package = "MitoHEAR"))
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Published_data")
+#load("output_SNP_mt_fig_5_new.Rda")
+output_SNP_mt_fig_5=result
+matrix_allele_counts=output_SNP_mt_fig_5[[1]]
+name_position_allele=output_SNP_mt_fig_5[[2]]
+name_position=output_SNP_mt_fig_5[[3]]
+```
+
+```{r}
+common_old=intersect(cell_old,cell_old_summary)
+row.names(matrix_allele_counts)=cell_old_summary
+
+matrix_allele_counts=matrix_allele_counts[common_old,]
+
+meta_old=data.frame(cell_old,cell_new)
+row.names(meta_old)=cell_old
+meta_old=meta_old[common_old,]
+new_small=meta_old[,2]
+
+row.names(matrix_allele_counts)=new_small
+
+```
+
+
+
+```{r}
+
+
+donor_all=rep(0,length(row.names(matrix_allele_counts)))
+donor_all[grep("Donor1_",row.names(matrix_allele_counts))]="Donor_1"
+donor_all[grep("Donor2_",row.names(matrix_allele_counts))]="Donor_2"
+
+
+donor_1_2=get_heteroplasmy(matrix_allele_counts,name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 2,donor_all)
+
+```
+
+
+
+```{r}
+sum_matrix=donor_1_2[[1]]
+sum_matrix_qc=donor_1_2[[2]]
+heteroplasmy_matrix_ci=donor_1_2[[3]]
+allele_matrix_ci=donor_1_2[[4]]
+
+cluster_ci=donor_all[row.names(sum_matrix)%in%row.names(sum_matrix_qc)]
+
+index_ci=donor_1_2[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,min_heteroplasmy=0.01,min_cells=50,index_ci)
+```
+
+
+
+### Identification of most different bases according to heteroplasmy between donor1 and donor2
+
+```{r}
+p_value_wilcox_test_1=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Donor_1","Donor_2" ,index_ci)
+
+
+
+```
+
+
+```{r}
+p_value_wilcox_test_sort_1=sort(p_value_wilcox_test_1,decreasing = F)
+
+p_value_wilcox_test_sort_small_1=p_value_wilcox_test_sort_1[p_value_wilcox_test_sort_1<0.05]
+
+p_value_wilcox_test_sort_top=p_value_wilcox_test_sort_small_1[1:5]
+
+```
+
+```{r}
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort_top)){
+p=plot_heteroplasmy(names(p_value_wilcox_test_sort_top)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggtitle(paste(names(p_value_wilcox_test_sort_top)[i],round(p_value_wilcox_test_sort_small_1[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort_top)){
+p=plot_allele_frequency(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+```
+
+
+
+
+```{r}
+heteroplasmy_matrix_ci_small=heteroplasmy_matrix_ci[,relevant_bases]
+
+allele_matrix_ci_small=allele_matrix_ci[,name_position_qc%in%relevant_bases]
+
+```
+
+
+### Unsupervised cluster analysis among cells based on allele frequency values
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci_small,allele_matrix_ci_small,cluster_ci,length(colnames(heteroplasmy_matrix_ci_small)),deepSplit_param=0,minClusterSize_param=100,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+top_dist=result_clustering_sc[[3]]
+common_idx=result_clustering_sc[[4]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+
+Plot_distance_matrix(dist_matrix_sc,old_classification)
+
+```
+
+
+Below the bases selected for the unsupervised cluster analysis
+
+```{r}
+q=list()
+for ( i in 1:length(top_dist)){
+p=plot_heteroplasmy(top_dist[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+```
+
+
+The unsupervised cluster analysis divides cells in two groups that perfectly coincide with donor 1 and donor 2 
+
+```{r }
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=F,cluster_rows=F,"Euclidean distance")
+```
+
+The final number of clusters obtained does not change with the number of top bases used (determined with the parameter *min_value* in the function *choose_features_clustering*.
+The number in the clustree plot (1,2,3,4) refers to the index of the vector min_frac. So in this case 1 refers to 0.1, 2 to 0.01 and so on.
+```{r}
+library(clustree)
+min_frac=c(0.1,0.01,0.001,0.0001)
+choose_features_clustering(heteroplasmy_matrix_ci_small,allele_matrix_ci_small,cluster_ci,top_pos=length(colnames(heteroplasmy_matrix_ci_small)),deepSplit_param=0,minClusterSize_param=100,min_frac,0.2,index = index_ci)
+```
+
+
+
+## Dataset GSE115214 only with donor 1.
+Start with dataset GEO accession number GSE115214 from <https://doi.org/10.1016/j.cell.2019.01.022> used in fig. 5.
+Primary human cells( CD34+ hematopoietic stem and progenitor cells HSPCs) from two independent donors were processed with single cell RNA-seq (Smart-seq2). 
+Below we focus only on some colonies from donor 1.
+
+```{r}
+donor_1=donor_all[donor_all=="Donor_1"]
+```
+
+
+
+
+```{r}
+colony_1=rep(0,length(seq(101,135)))
+for (i in 1:length(seq(101,135))){
+  colony_1[i]=paste0("C",seq(101,135)[i],collapse = "")
+}
+colony_1_all=rep(0,length(row.names(matrix_allele_counts)))
+for (i in colony_1 ){
+colony_1_all[grep(i,row.names(matrix_allele_counts))]=i
+}
+
+
+
+cluster_ci=colony_1_all[grep("Donor1_",row.names(matrix_allele_counts))]
+
+only_col=c("C101","C103","C107","C109","C112","C114","C116","C118","C120","C122","C124","C132","C135")
+
+```
+
+```{r}
+
+matrix_allele_counts_1=matrix_allele_counts[grep("Donor1_",row.names(matrix_allele_counts)),]
+
+
+donor_1=get_heteroplasmy(matrix_allele_counts_1[cluster_ci%in%only_col,],name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 2,donor_1[cluster_ci%in%only_col])
+```
+
+
+```{r}
+sum_matrix=donor_1[[1]]
+sum_matrix_qc=donor_1[[2]]
+heteroplasmy_matrix_ci=donor_1[[3]]
+allele_matrix_ci=donor_1[[4]]
+
+cluster_ci=cluster_ci[cluster_ci%in%only_col]
+
+cluster_ci=cluster_ci[row.names(sum_matrix)%in%row.names(sum_matrix_qc)]
+
+index_ci=donor_1[[5]]
+```
+
+
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,min_heteroplasmy=0.01,min_cells=10,index_ci)
+```
+
+```{r}
+heteroplasmy_matrix_ci_small=heteroplasmy_matrix_ci[,relevant_bases]
+
+allele_matrix_ci_small=allele_matrix_ci[,name_position_qc%in%relevant_bases]
+
+```
+
+### Unsupervised cluster analysis among cells based on allele frequency values
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci_small,allele_matrix_ci_small,cluster_ci,length(row.names(heteroplasmy_matrix_ci_small)),deepSplit_param=0,minClusterSize_param=10,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+top_dist=result_clustering_sc[[3]]
+common_idx=result_clustering_sc[[4]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+Plot_distance_matrix(dist_matrix_sc,old_classification)
+```
+
+
+Comparison between the ground truth and the new partition obtained with unsupervised cluster analysis
+```{r }
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=F,cluster_rows=F,"Euclidean distance")
+```
+
+
+
+Below the bases selected for the unsupervised cluster analysis
+
+```{r}
+q=list()
+for ( i in 1:length(top_dist)){
+p=plot_heteroplasmy(top_dist[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+```

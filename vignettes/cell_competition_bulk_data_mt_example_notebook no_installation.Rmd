@@ -26,12 +26,26 @@ The cell lines BG and HB are respectively classified as Loser and Winner.
 ```{r}
 #if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 #devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmy_new/tree/master",auth_token=#"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")
-library(MitoHEAR)
+#library(MitoHEAR)
 ```
 
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
 This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrices *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain meta data information about the cells (i.e. cell names, condition). 
+
+
+```{r}
+your_path="/home/ies/gabriele.lubatti/revision_heteroplasmy"
+setwd(paste0(your_path,"/MitoHEAR-master/Packages_Functions"))
+source("MitoHEAR_packages.R")
+source("get_heteroplasmy.R")
+source("get_raw_counts_allele.R")
+source("lineage_tracing.R")
+source("other_functions.R")
+source("plotting_functions.R")
+source("statistical_test.R")
+```
+
 
 ```{r}
 #setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
@@ -42,9 +56,11 @@ The matrices *meta_data_ana_final_big* and *meta_data_ana_final_small*  contain 
 ```
 
 ```{r}
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","meta_data_ana_final_big.Rda"))
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","meta_data_ana_final_small.Rda"))
 
-load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
-load(system.file("extdata", "meta_data_ana_final_small.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "meta_data_ana_final_small.Rda", package = "MitoHEAR"))
 
 #data("meta_data_ana_final_big",package="MitoHEAR")
 #data("meta_data_ana_final_small",package="MitoHEAR")
@@ -76,7 +92,9 @@ A command line implementation of the function *get_raw_counts_allele* is also av
 
 #data("output_SNP_ana_mt",package="MitoHEAR")
 
-load(system.file("extdata", "output_SNP_ana_mt.Rda", package = "MitoHEAR"))
+#load(system.file("extdata", "output_SNP_ana_mt.Rda", package = "MitoHEAR"))
+
+load(paste0(your_path,"/MitoHEAR-master/inst/extdata/","output_SNP_ana_mt.Rda"))
 
 ```
 
@@ -301,7 +319,9 @@ The new classification coincides with the old classification. This means that we
 
 As anticipated at the beginning of the notebook, the two cell lines are built in order to have a different mitochondrial DNA than the reference genome in some bases. Since the mt DNA sequence of the two cell lines is available (<https://www.ncbi.nlm.nih.gov/nuccore/KC663619.1>  and <https://www.ncbi.nlm.nih.gov/nuccore/KC663620.1>), we can identify the bases that are different from the reference genome
 ```{r}
-bg_path=system.file("extdata", "bg.fasta.txt", package = "MitoHEAR")
+bg_path=paste0(your_path,"/MitoHEAR-master/inst/extdata/","bg.fasta.txt")
+
+#bg_path=system.file("extdata", "bg.fasta.txt", package = "MitoHEAR")
 
 fastaFile <- readDNAStringSet(bg_path)
 seq_name = names(fastaFile)
@@ -310,7 +330,8 @@ df_bg <- data.frame(seq_name, sequence)
 
 bg_sequence=df_bg$sequence
 
-hb_path=system.file("extdata", "hb.fasta.txt", package = "MitoHEAR")
+#hb_path=system.file("extdata", "hb.fasta.txt", package = "MitoHEAR")
+hb_path=paste0(your_path,"/MitoHEAR-master/inst/extdata/","hb.fasta.txt")
 fastaFile <- readDNAStringSet(hb_path)
 seq_name = names(fastaFile)
 sequence = paste(fastaFile)
@@ -318,7 +339,8 @@ df_hb <- data.frame(seq_name, sequence)
 
 hb_sequence=df_hb$sequence
 
-mt_path=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
+#mt_path=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
+mt_path=paste0(your_path,"/MitoHEAR-master/inst/extdata/","Mus_musculus.GRCm38.dna.chromosome.MT.fa")
 
 fastaFile <- readDNAStringSet(mt_path)
 seq_name = names(fastaFile)
