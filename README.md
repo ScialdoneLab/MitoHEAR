@@ -4,26 +4,30 @@ MitoHEAR (MitOChondrial Heteroplasmy Analyzer from RNA-seq) is an R package for 
 ## Installation
 Before installing MitoHEAR, the following packages should be installed first:
 ```
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+```
+if (!requireNamespace("BiocManager", quietly = TRUE)){
+install.packages("BiocManager")}
+if (!require("Rsamtools")) {BiocManager::install("Rsamtools")}
+if (!require("Biostrings")) {BiocManager::install("Biostrings")}
+if (!require("GenomicRanges")) {BiocManager::install("GenomicRanges")}
+if (!require("regioneR")) {BiocManager::install("regioneR")}
+if (!require("IRanges")) {BiocManager::install("IRanges")}
+if (!require("karyoploteR")) {BiocManager::install("karyoploteR")}
+if (!require("ComplexHeatmap")) {BiocManager::install("ComplexHeatmap")}
+if (!require("ggplot2")) { install.packages("ggplot2", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("data.table")) {install.packages("data.table", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("gam")) {install.packages("gam", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("rdist")) {install.packages("rdist", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("dynamicTreeCut")) {install.packages("dynamicTreeCut", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("circlize")) {install.packages("circlize", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("rlist")) {install.packages("rlist", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("gridExtra")) {install.packages("gridExtra", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("clustree")) {install.packages("clustree", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("mcclust")) {install.packages("mcclust", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("fmsb")) {install.packages("fmsb", dependencies = TRUE, repos="http://cran.r-project.org")}
+if (!require("plotly")) {install.packages("plotly", dependencies = TRUE, repos="http://cran.r-project.org")}
 
-BiocManager::install("Rsamtools")
-BiocManager::install("ComplexHeatmap")
-BiocManager::install("Biostrings")
-BiocManager::install("karyoploteR")
-BiocManager::install("regioneR")
-BiocManager::install("GenomicRanges")
-BiocManager::install("IRanges")
-
-install.packages("data.table")
-install.packages("ggplot2")
-install.packages("gam")
-install.packages("rdist")
-install.packages("dynamicTreeCut")
-install.packages("circlize")
-install.packages("rlist")
-install.packages("gridExtra")
-
+```
 ```
 To install MitoHEAR, please run the following:
 ```
