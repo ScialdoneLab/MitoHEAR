@@ -228,7 +228,7 @@ This tutorial uses single cell RNA seq mouse embryo data from  [Goolam *et al.*,
 There are embryos at different stages from 2-cells to 8-cells stage. At each stage, for every cell it is known the embryo of origin.
 We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 
-### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/Ludwig_et_al_example_notebook.Rmd.Rmd):**
+### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/Ludwig_et_al_example_notebook.Rmd):**
 This tutorial uses two single cell RNA seq human cells dataset from  [Ludwig *et al.*, Cell, 2019 ](https://doi.org/10.1016/j.cell.2019.01.022). 
 We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with **clustering_dist_ang**) can be used in order to aggregate cells. The result from unsupervised cluster analysis are consistent with previously available information (colonies of cells, donors).
 
