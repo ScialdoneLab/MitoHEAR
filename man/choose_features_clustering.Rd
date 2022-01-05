@@ -2,14 +2,14 @@
 \alias{choose_features_clustering}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-choose_features_clustering(heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
+choose_features_clustering
 
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-choose_features_clustering
+choose_features_clustering(heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
