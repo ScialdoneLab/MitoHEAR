@@ -111,7 +111,7 @@ name_position=output_SNP_mt[[3]]
 name_position[1:8]
 [1] "1_MT" "1_MT" "1_MT" "1_MT" "2_MT" "2_MT" "2_MT" "2_MT"
 ```
-It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/RNAHeteroplasmynew/tree/main/Tutorials/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation is not necessary to install MitoHEAR, but the following libraries should be installed:
+It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation is not necessary to install MitoHEAR, but the following libraries should be installed:
 1. **rlist**
 2. **Rsamtools**
 3. **Biostrings**
