@@ -73,7 +73,7 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 
 An example of input could be:
 ```
-data("after_qc",package="RNAheteroplasmy")
+data("after_qc",package="MitoHEAR")
 cell_names=as.vector(after_qc$new_name)
 cell_names[1:5]
 [1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
@@ -90,7 +90,7 @@ The output of **get_raw_counts_allele** is a list with three elements:
 3. **name_position**: character vectors with information about the name of the bases.
 
 ```
-data("output_SNP_mt",package="RNAheteroplasmy")
+data("output_SNP_mt",package="MitoHEAR")
 matrix_allele_counts=output_SNP_mt[[1]]
 ## In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
 dim(matrix_allele_counts)
@@ -111,7 +111,7 @@ name_position=output_SNP_mt[[3]]
 name_position[1:8]
 [1] "1_MT" "1_MT" "1_MT" "1_MT" "2_MT" "2_MT" "2_MT" "2_MT"
 ```
-It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/RNAHeteroplasmynew/tree/main/Tutorials/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation is not necessary to install RNAheteroplasmy, but the following libraries should be installed:
+It is also possible to run a [command line implementation](https://github.com/ScialdoneLab/RNAHeteroplasmynew/tree/main/Tutorials/get_raw_counts_allele_script.R) of the function **get_raw_counts_allele**: For the command line implementation is not necessary to install MitoHEAR, but the following libraries should be installed:
 1. **rlist**
 2. **Rsamtools**
 3. **Biostrings**
@@ -149,8 +149,8 @@ starts from the output of **get_raw_counts** and performs a two step filtering p
 An example of input could be:
 
 ```
-data("output_SNP_mt",package="RNAheteroplasmy")
-data("after_qc",package="RNAheteroplasmy")
+data("output_SNP_mt",package="MitoHEAR")
+data("after_qc",package="MitoHEAR")
 
 ## We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
 row.names(after_qc)=after_qc$new_name
@@ -196,7 +196,7 @@ head(allele_matrix_ci[1:4,1:4])
 
 ```
 ## Down-stream analysis
-**RNAheteroplasmy** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
+**MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
@@ -204,7 +204,7 @@ For more exaustive information about the functions offered by **RNAheteroplasmy*
 
 ## Tutorials
 
-The following tutorials are completely reproducible within the package **RNAheteroplasmy**:
+The following tutorials are completely reproducible within the package **MitoHEAR**:
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
 This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
