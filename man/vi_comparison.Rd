@@ -15,19 +15,19 @@ vi_comparison(old_classification,new_classification,number_iter)}
 Character vector. First column of the dataframe returned by function \emph{clustering_dist_ang} (first element of the output).
 }
 \item{new_classification}{
-Character vector.Second column of the dataframe returned by function \emph{clustering_dist_ang} (first element of the output).
+Character vector. Second column of the dataframe returned by function \emph{clustering_dist_ang} (first element of the output).
 }
 
 \item{number_iter}{
-Integer value. Specify how many random partition are generated (starting from re-shuffle of labels in \emph{old_classification}).
+Integer value specifying how many random partitions are generated (starting from re-shuffle of labels in \emph{old_classification}).
 }
 
 }
 \details{
 We compute the variation of information (VI) between the partition provided by \emph{new_classification} and \emph{old_classification}.
-The VI between a random partitions (obtained wth re-shuflle from original labels in \emph{old_classification}) and \emph{old_classification} is also computed.
+The VI between random partitions (obtained wth re-shuflle from original labels in \emph{old_classification}) and \emph{old_classification} is also computed.
 A distribution of VI values from random partitions is built.
-Finally, from the comparison with this distribution, an empirical p value is given to the VI of the unsupervised cluster analysis.
+Finally, from the comparison with this distribution, an empirical p value is given to the VI related to the unsupervised cluster analysis (\emph{new_classification}).
 }
 \value{
 
