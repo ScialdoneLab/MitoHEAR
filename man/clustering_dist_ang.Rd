@@ -69,12 +69,12 @@ On this final distance matrix, a hierarchical clustering approach is performed u
 \value{
 It returns a list with 4 elements:
 \item{classe}{
-Data frame with two columns and n_row equal to n_row in heteroplasmy_matrix. The first column is the old cluster annotation provided by cluster. The second columns is the new cluster annotation obtained with hierarichal clustering on distance matrix based on heteroplasmy values.
+Data frame with two columns and n_row equal to n_row in heteroplasmy_matrix. The first column is the old cluster annotation provided by cluster. The second columns is the new cluster annotation obtained with hierarichal clustering on distance matrix based on allele frequencies values.
 
 }
 
 \item{res_ang_sqrt}{
-Distance matrix based on heteroplasmy values as defined in the section \emph{Details}
+Distance matrix based on allele frequencies values as defined in the section \emph{Details}
 
 }
 
