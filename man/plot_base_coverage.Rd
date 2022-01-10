@@ -19,7 +19,7 @@ First element returned by the function \emph{get_heteroplasmy}.
 Second element returned by the function \emph{get_heteroplasmy}.
 }
 \item{selected_cells}{
-Character vector with cells used fro plotting the coverage.
+Character vector with cells used for plotting the coverage.
 }
 \item{interactive}{
 Logical. If TRUE an interactive plot is produced.
