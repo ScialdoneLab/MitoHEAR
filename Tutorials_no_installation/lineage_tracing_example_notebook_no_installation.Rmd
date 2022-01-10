@@ -226,8 +226,8 @@ MitoHEAR offers the possibility to perform an unsupervised hierarchical clusteri
 Given a base, the variance of the distance values between two cells is also computed.
 Top bases with highest variance are selected for down stream analysis.
 We can represent the difference between two cells as a vector whose cordinates are the angular distances of the top bases.
-The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
-The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
+The total distance between two cells is the euclidean norm of the vector of difference between the two cells.
+The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partition available before the cluster analysis based on allele frequencies) and the new classification (partition provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
 The third element is a vector with the top bases according to variance.
 
 It is also possible to run *clustering_dist_ang* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
@@ -286,7 +286,7 @@ choose_features_clustering(heteroplasmy_matrix_sc,allele_matrix_sc,condition_sc,
 
 
 We compute the variation of information (VI) between the partition provided by the unsupervised cluster analysis and the ground truth. 
-The VI between a random partitions (obtained wth re-shuflle from original labels in ground truth) and ground truth is also computed.
+The VI between random partitions (obtained wth re-shuflle from original labels in ground truth) and ground truth is also computed.
 A distribution of VI values from random partitions is built.
 Finally, from the comparison with this distribution, an empirical p value is given to the VI of the unsupervised cluster analysis.
 
