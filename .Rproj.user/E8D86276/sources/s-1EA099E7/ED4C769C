@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643188290482.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "ED4C769C",
+    "lastKnownWriteTime" : 1643271507,
+    "last_content_update" : 1643271507648,
+    "path" : "~/MitoHEAR/R/lineage_tracing.R",
+    "project_path" : "R/lineage_tracing.R",
+    "properties" : {
+        "cursorPosition" : "76,25",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

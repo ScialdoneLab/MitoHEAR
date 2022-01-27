@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643189827799.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "ECFEEA74",
+    "lastKnownWriteTime" : 1643277234,
+    "last_content_update" : 1643277234702,
+    "path" : "~/MitoHEAR/R/statistical_test.R",
+    "project_path" : "R/statistical_test.R",
+    "properties" : {
+        "cursorPosition" : "26,25",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

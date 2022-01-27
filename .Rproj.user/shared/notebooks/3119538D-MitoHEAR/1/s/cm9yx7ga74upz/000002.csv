@@ -1,0 +1,6 @@
+"0","row.names(after_qc)=after_qc$new_name"
+"0","cells_fmk_epi=after_qc[(after_qc$condition==""Cell competition OFF"")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),""new_name""]"
+"0",""
+"0","after_qc_fmk_epi=after_qc[cells_fmk_epi,]"
+"0","my.clusters=after_qc_fmk_epi$cluster"
+"0",""

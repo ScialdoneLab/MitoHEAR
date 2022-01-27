@@ -1,0 +1,5 @@
+"0","q=list()"
+"0","for ( i in names(p_value_wilcox_test_sort)[1:2]){"
+"0","p=plot_allele_frequency(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  "
+"0","q=list(q,p)"
+"0","}"

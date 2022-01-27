@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643208146274.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F4303ADF",
+    "lastKnownWriteTime" : 1643230935,
+    "last_content_update" : 1643230935283,
+    "path" : "~/Desktop/Phd/Heteroplasmy_library_R/script/heteroplasmy_second_part.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "51,51",
+        "scrollLine" : "28"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 15,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

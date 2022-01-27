@@ -1,0 +1,2 @@
+"0","load(system.file(""extdata"", ""output_SNP_mt.Rda"", package = ""MitoHEAR""))"
+"0",""

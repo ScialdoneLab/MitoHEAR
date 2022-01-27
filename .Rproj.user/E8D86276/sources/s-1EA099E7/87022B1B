@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643190090633.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "87022B1B",
+    "lastKnownWriteTime" : 1643290279,
+    "last_content_update" : 1643290279,
+    "path" : "~/MitoHEAR/R/get_heteroplasmy.R",
+    "project_path" : "R/get_heteroplasmy.R",
+    "properties" : {
+        "cursorPosition" : "204,42",
+        "scrollLine" : "182"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

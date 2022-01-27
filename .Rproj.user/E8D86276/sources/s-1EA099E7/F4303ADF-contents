@@ -1,0 +1,3934 @@
+---
+title: "Untitled"
+author: "bo"
+date: "12/2/2020"
+output: html_document
+---
+karyoploteR (>= 1.14.1),
+    regioneR (>= 1.20.1),
+    
+```{r}
+gc()
+rm(list=ls())
+```
+Change name to R package
+#https://rdrr.io/cran/changer/man/changer.html
+
+R documentation for function
+#https://rdrr.io/cran/changer/man/changer.html
+
+Suggest package in description
+#https://stackoverflow.com/questions/19446429/roxygen-and-suggested-packages
+
+Rstudio and github
+#https://r-pkgs.org/git.html#git
+
+
+Check with devtools
+
+##devtools::check
+
+For having documentation inside .R file
+#Rd2roxygen::Rd2roxygen('path/to/source/pkg')
+For testing R package
+#https://r-pkgs.org/tests.html
+
+how to build an r package
+##https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html
+General info on devtools
+#https://github.com/r-lib/devtools
+
+#Instructions on how to build documentation with Roxygen2
+#https://kbroman.org/pkg_primer/pages/docs.html
+
+
+##Instructiosn on how to build vignette in R package
+#https://bookdown.org/yihui/rmarkdown-cookbook/package-vignette.html
+
+
+#Instructions about how to create an R package in Rstudio:
+#http://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf
+#Instructions about how to upload an R package to Github:
+#http://lulushang.org/docs/Academic/RpackageGithub/
+#Instructions about how to download an R package from Github:
+#1)install_github("ScialdoneLab/RNAheteroplasmy",auth_token="be68e5a7d8bdb8c1d270488c463c6bcaa513acf7")
+#2)https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html
+#Instructions about how to add changed files to Github:
+#https://docs.github.com/en/free-pro-team@latest/github/managing-files-in-a-repository/adding-a-file-to-#a-repository-using-the-command-line
+
+
+##Instructions on how to change name to R package in local computer and GitHub:https://www.njtierney.com/post/2017/10/27/change-pkg-name/
+
+## where to find the raw data used for RNA heterolasmy
+
+The fastq and bam files are on the server submit01ser at the adress: /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_fastq_files and /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files.
+
+The bam files aligned on ERCC-spikes are on the server submit01ser at the adress:
+/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files_spikes
+
+The fastq and bam files for the bulk RNA seq data are on the server submit01ser at the adress:
+/home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data
+
+The fastq and bam files for the sc RNA seq embryo data are on the server submit01ser at the adress:
+/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data
+
+
+Rscript --vanilla get_raw_counts_allele_script.R -b bam_input -f "Mus_musculus.GRCm38.dna.chromosome.MT.fa" -c cell_names -o output_SNP_mt.Rda -s 20
+
+```{r}
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+devtools::install_github("https://github.com/ScialdoneLab/RNAheteroplasmynew/tree/master",auth_token="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")
+library(RNAheteroplasmynew)
+```
+
+#Check for cmt ell competition dataset  (all cells)
+```{r}
+#on the server icb at path /home/ies/gabriele.lubatti/revision_heteroplasmy/input_R/command_line
+data("after_qc",package="RNAheteroplasmy")
+cell_names=as.vector(after_qc$new_name)
+path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files/"
+bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(bam_input,file="bam_input.Rda")
+save(cell_names,file="cell_names.Rda")
+save(bam_input,file="bam_input.Rda")
+
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+
+#Rscript --vanilla get_raw_counts_allele_script.R -b bam_input -f "/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa" -c cell_names -o output_SNP_mt_check.Rda -s 10
+
+data("output_SNP_mt",package="RNAheteroplasmy")
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(output_SNP_mt,file="output_SNP_mt.Rda")
+
+```
+## Check for spikes dataset (epi cells)
+```{r}
+data("after_qc",package="RNAheteroplasmynew")
+
+path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/all_unique_bam_files_spikes/"
+
+row.names(after_qc)=after_qc$new_name
+cells_fmk_epi=after_qc[(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+
+after_qc_fmk_epi=after_qc[cells_fmk_epi,]
+
+cell_names=as.vector(after_qc_fmk_epi$new_name)
+
+bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
+
+data("output_SNP_spikes",package="RNAheteroplasmynew")
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/ERCC92.fa"
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+cell_names_spikes=cell_names
+bam_input_spikes=bam_input
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(cell_names_spikes,file="cell_names_spikes.Rda")
+save(bam_input_spikes,file="bam_input_spikes.Rda")
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(output_SNP_spikes,file="output_SNP_spikes.Rda")
+
+
+#Rscript --vanilla get_raw_counts_allele_script.R -b bam_input_spikes -f "/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/ERCC92.fa" -c cell_names_spikes -o output_SNP_spikes_check.Rda -s 20
+
+```
+
+## Check for mt bulk dataset 
+
+```{r}
+
+data("meta_data_ana_final_big",package="RNAheteroplasmynew")
+data("meta_data_ana_final_small",package="RNAheteroplasmynew")
+
+
+path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data/bam_file_ana_sorted/"
+cell_names=as.vector(meta_data_ana_final_big$name_cell)
+
+bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
+
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+cell_names_bulk=cell_names
+bam_input_bulk=bam_input
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(cell_names_bulk,file="cell_names_bulk.Rda")
+save(bam_input_bulk,file="bam_input_bulk.Rda")
+data("output_SNP_ana_mt",package="RNAheteroplasmynew")
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(output_SNP_ana_mt,file="output_SNP_ana_mt.Rda")
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R_server")
+#save(cell_names_bulk,file="cell_names_bulk.Rda")
+#save(bam_input_bulk,file="bam_input_bulk.Rda")
+
+#Rscript --vanilla get_raw_counts_allele_script.R -b bam_input_bulk -f "/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa" -c cell_names_bulk -o output_SNP_bulk_check.Rda -s 20
+
+```
+
+## Check for mt antonio dataset 
+
+```{r}
+data("meta_data_antonio_final",package="RNAheteroplasmynew")
+
+path_to_bam="/home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data/bam_file_antonio_sorted/"
+cell_names=as.vector(meta_data_antonio_final$antonio_array.Comment.ENA_RUN.)
+
+bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
+
+path_fasta="/home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data/fasta_files/Mus_musculus.GRCm38.dna.chromosome.MT.fa"
+
+cell_names_antonio=cell_names
+bam_input_antonio=bam_input
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Check")
+save(cell_names_antonio,file="cell_names_antonio.Rda")
+save(bam_input_antonio,file="bam_input_antonio.Rda")
+
+data("output_SNP_antonio_mt",package="RNAheteroplasmynew")
+
+save(output_SNP_antonio_mt,file="output_SNP_antonio_mt.Rda")
+
+#Rscript --vanilla get_raw_counts_allele_script.R -b bam_input_antonio -f "/home/ies/gabriele.lubatti/revision_heteroplasmy/heteroplasmy_mt/Genome/Mus_musculus.GRCm38.dna.chromosome.MT.fa" -c cell_names_antonio -o output_SNP_antonio_check.Rda -s 20
+```
+
+#Add for fourth round revision
+```{r}
+  library(karyoploteR)
+```
+
+
+
+```{r}
+
+
+
+plot_coverage=function(biomart_file,fastaFile,chr_name,heteroplasmy_matrix){
+  seq_name = names(fastaFile)
+  sequence = paste(fastaFile)
+  df_bg <- data.frame(seq_name, sequence)
+name_sequences=rep(0,length(df_bg$seq_name))
+for (i in 1:length(df_bg$seq_name)){
+name_sequences[i]=strsplit(df_bg$seq_name[i],split=" ")[[1]][1]
+}
+  
+  df_bg$seq_name=name_sequences
+  
+  length_sequence=rep(0,length(df_bg$seq_name))
+  for (q in 1:length(df_bg$seq_name)){
+    length_sequence[q]=length(unlist(strsplit(df_bg$sequence[q],split=NULL)))
+  
+  }
+  
+ length_chr=length_sequence[df_bg$seq_name=="MT"] 
+base_name=rep(0,length(colnames(heteroplasmy_matrix)))
+for ( i in 1:length(colnames(heteroplasmy_matrix_ci))){
+  base_name[i]=strsplit(colnames(heteroplasmy_matrix_ci),"_")[[i]][1]
+}
+mt_name=biomart_file
+mt_name=mt_name[mt_name$Chromosome.scaffold.name==chr_name,]
+nomi=mt_name$Gene.name
+p=rep(0,length(nomi))
+for (j in 1:length(nomi)){
+i=which(mt_name$Gene.name==nomi[j])
+bo=seq(mt_name$Gene.start..bp.[i],mt_name$Gene.end..bp.[i])
+bo=as.character(bo)
+
+if (sum(colnames(heteroplasmy_matrix)%in%bo)>0){
+  p[i]=nomi[i]
+}
+  
+}
+mt_name_small=mt_name[mt_name$Gene.name%in%p,]
+
+start_plot=c(mt_name_small$Gene.start..bp.,mt_name_small$Gene.end..bp.)
+nomi_plot=paste0(mt_name_small$Gene.name,"-start")
+nomi_plot_2=paste0(mt_name_small$Gene.name,"-end")
+names(start_plot)=c(nomi_plot,nomi_plot_2)
+start_plot=sort(start_plot)
+
+
+mt_name_new=mt_name[!(mt_name$Gene.stable.ID%in%mt_name_small$Gene.stable.ID),]
+
+start_plot_new=c(mt_name_new$Gene.start..bp.,mt_name_new$Gene.end..bp.)
+nomi_plot=paste0(mt_name_new$Gene.name,"-start")
+nomi_plot_2=paste0(mt_name_new$Gene.name,"-end")
+names(start_plot_new)=c(nomi_plot,nomi_plot_2)
+start_plot_new=sort(start_plot_new)
+
+
+colnames(heteroplasmy_matrix)=base_name
+all_base=seq(1,length_chr)
+all_base=as.character(all_base)
+
+name_all_base=rep(0,length_chr)
+name_all_base[all_base%in%colnames(heteroplasmy_matrix)]="Covered"
+name_all_base[!all_base%in%colnames(heteroplasmy_matrix)]="Not_Covered"
+name_all_base=paste0(name_all_base,all_base)
+colore=rep(0,length_chr)
+colore[all_base%in%colnames(heteroplasmy_matrix)]="red"
+colore[!all_base%in%colnames(heteroplasmy_matrix)]="black"
+
+
+custom.genome <- toGRanges(data.frame(chr=c(chr_name), start=c(1), end=c(length_chr)))
+
+kp <- karyoploteR::plotKaryotype(genome = custom.genome,plot.type = 2)
+
+df <- data.frame(chr=c(rep(chr_name,length(all_base))), start=all_base, end=all_base)
+karyoploteR::kpPlotRegions(kp, data=df, col=colore, border=colore, r0=0, r1=0.10)
+
+
+
+markers <- data.frame(chr=rep(chr_name, length(start_plot)), pos=start_plot, labels=names(start_plot))
+markers_new <- data.frame(chr=rep(chr_name, length(start_plot_new)), pos=start_plot_new, labels=names(start_plot_new))
+karyoploteR::kpAddBaseNumbers(kp,tick.dist=1000,minor.tick.dist=1000,add.units=T,tick.len = 30)
+
+karyoploteR::kpPlotMarkers(kp, chr=markers$chr, x=markers$pos, labels=markers$labels,r0=0.10,r1=0.55,cex=0.3,label.color = rep("red",length(markers_new)),label.margin = 1,line.color = rep("red",length(markers_new)))
+karyoploteR::kpPlotMarkers(kp, chr=markers_new$chr, x=markers_new$pos, labels=markers_new$labels,r0=0.10,r1=0.55,cex=0.3,label.dist = 0.000001,data.panel=2,marker.parts = c(0, 0.9, 0.1),label.margin = 0.0001)
+
+legend(x = "topleft", fill = c("red", "black"), legend = c("Covered", "Not covered"),cex=0.5)
+
+}
+```
+
+
+```{r}
+biomart_file=read.table("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R/mt_start_end.txt",sep="\t",header = T)
+chr_name="MT"
+heteroplasmy_matrix=entropia_matrix_ci
+
+fastaFile <- Biostrings::readDNAStringSet( "/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R/Mus_musculus.GRCm38.dna.chromosome.MT.fa")
+  
+  
+plot_coverage(biomart_file,fastaFile,chr_name,heteroplasmy_matrix)
+```
+
+
+
+
+```{r}
+colnames(entropia_matrix_ci)=base_name
+all_base=seq(1,16299)
+all_base=as.character(all_base)
+#all_base=paste(all_base,"MT",sep="_")
+name_all_base=rep(0,16299)
+name_all_base[all_base%in%colnames(entropia_matrix_ci)]="Covered"
+name_all_base[!all_base%in%colnames(entropia_matrix_ci)]="Not_Covered"
+name_all_base=paste0(name_all_base,all_base)
+colore=rep(0,16299)
+colore[all_base%in%colnames(entropia_matrix_ci)]="red"
+colore[!all_base%in%colnames(entropia_matrix_ci)]="black"
+#colore_plot=rep(0,16299)
+#colore_plot[all_base%in%colnames(entropia_matrix_ci)]="acen"
+#colore_plot[!all_base%in%colnames(entropia_matrix_ci)]="acen"
+#vedo_mt_new=data.frame(rep("MT",length(37)),all_base,all_base,name_all_base,colore_plot)
+
+#provo_vedo=data.frame(rep("MT",length(65)),start_all,fine_all,name_base,colore_new)
+
+
+custom.genome <- toGRanges(data.frame(chr=c("MT"), start=c(1), end=c(16299)))
+
+kp <- plotKaryotype(genome = custom.genome,plot.type = 2)
+
+df <- data.frame(chr=c(rep("MT",length(all_base))), start=all_base, end=all_base)
+kpPlotRegions(kp, data=df, col=colore, border=colore, r0=0, r1=0.10)
+
+
+
+markers <- data.frame(chr=rep("MT", length(start_plot)), pos=start_plot, labels=names(start_plot))
+markers_new <- data.frame(chr=rep("MT", length(start_plot_new)), pos=start_plot_new, labels=names(start_plot_new))
+kpAddBaseNumbers(kp,tick.dist=1000,minor.tick.dist=1000,add.units=T,tick.len = 30)
+
+kpPlotMarkers(kp, chr=markers$chr, x=markers$pos, labels=markers$labels,r0=0.10,r1=0.55,cex=0.3,label.color = rep("red",length(markers_new)),label.margin = 1,line.color = rep("red",length(markers_new)))
+kpPlotMarkers(kp, chr=markers_new$chr, x=markers_new$pos, labels=markers_new$labels,r0=0.10,r1=0.55,cex=0.3,label.dist = 0.000001,data.panel=2,marker.parts = c(0, 0.9, 0.1),label.margin = 0.0001)
+
+legend(x = "topleft", fill = c("red", "black"), legend = c("Covered", "Not covered"),cex=0.5)
+
+
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+#Define functions
+
+```{r}
+plot_heteroplasmy=function(position,heteroplasmy_matrix,cluster,index=NULL){
+  position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+  if(is.null(index)){
+  heteroplasmy=heteroplasmy_matrix[,position]}
+  else{
+    cluster=cluster[as.numeric(index[[position]])]
+  heteroplasmy=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+    
+  }
+dati_scatter_1=data.frame(as.character(cluster),heteroplasmy)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x =cluster
+                         ,y = heteroplasmy,col=cluster
+                         )) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Cluster")+labs(y="Heteroplasmy") +ggtitle(position) 
+}
+```
+
+```{r}
+plot_heteroplasmy_epiblast=function(position,heteroplasmy_matrix,cluster,index=NULL){
+  position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+  if(is.null(index)){
+  heteroplasmy=heteroplasmy_matrix[,position]}
+  else{
+    cluster=cluster[as.numeric(index[[position]])]
+  heteroplasmy=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+    
+  }
+dati_scatter_1=data.frame(as.character(cluster),heteroplasmy)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+                         ,y = heteroplasmy
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Cluster")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))
+
+}
+```
+
+```{r}
+plot_heteroplasmy_ve=function(position,entropia_matrix,cluster){
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+  mutazione=entropia_matrix[,position]
+dati_scatter_1=data.frame(as.character(cluster),mutazione)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x =factor(cluster,levels=c("Visceral Endoderm"),ordered = TRUE)
+                         ,y = mutazione
+                         ,col =factor(cluster,levels=c("Visceral Endoderm"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Cluster")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c('#56B4E9'),labels=c("Visceral Endoderm"))
+
+}
+```
+
+```{r}
+plot_heteroplasmy_exe=function(position,entropia_matrix,cluster){
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+  mutazione=entropia_matrix[,position]
+dati_scatter_1=data.frame(as.character(cluster),mutazione)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x =factor(cluster,levels=c("Extraembryonic Ectoderm"),ordered = TRUE)
+                         ,y = mutazione
+                         ,col =factor(cluster,levels=c("Extraembryonic Ectoderm"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Cluster")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c('#800080'),labels=c("Extraembryonic Ectoderm"))
+
+}
+
+```
+
+```{r}
+plot_allele_frequency=function(position,heteroplasmy_matrix,allele_matrix,cluster,names_allele_qc,names_position_qc,size_text,title,index=NULL){
+  position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+ if (is.null(index)){
+   
+  a=position
+  
+
+colnames(allele_matrix)=names_position_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+
+allele_1=allele_matrix[,allele[1]]
+data_plot_1=data.frame(cluster,allele_1)
+allele_2=allele_matrix[,allele[2]]
+data_plot_2=data.frame(cluster,allele_2)
+
+allele_3=allele_matrix[,allele[3]]
+data_plot_3=data.frame(cluster,allele_3)
+
+allele_4=allele_matrix[,allele[4]]
+data_plot_4=data.frame(cluster,allele_4)
+   
+ }
+  else{
+    cluster=cluster[as.numeric(index[[position]])]
+  a=position
+  
+
+colnames(allele_matrix)=names_position_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+allele_1=allele_matrix[as.numeric(index[[position]]),allele[1]]
+data_plot_1=data.frame(cluster,allele_1)
+allele_2=allele_matrix[as.numeric(index[[position]]),allele[2]]
+data_plot_2=data.frame(cluster,allele_2)
+
+allele_3=allele_matrix[as.numeric(index[[position]]),allele[3]]
+data_plot_3=data.frame(cluster,allele_3)
+
+allele_4=allele_matrix[as.numeric(index[[position]]),allele[4]]
+data_plot_4=data.frame(cluster,allele_4)
+    
+    
+  }
+  
+  
+plot_1=ggplot(data =data_plot_1
+                    ,aes(x =cluster
+                         ,y = allele_1,col=cluster
+                         )) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[1])+ylim(0,1)+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_2=ggplot(data =data_plot_2
+                    ,aes(x =cluster
+                         ,y = allele_2,col=cluster
+                         )) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[2])+ylim(0,1)+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_3=ggplot(data =data_plot_3
+                    ,aes(x =cluster
+                         ,y = allele_3,col=cluster
+                         )) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[3])+ylim(0,1)+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_4=ggplot(data =data_plot_4
+                    ,aes(x =cluster
+                         ,y = allele_4,col=cluster
+                        
+                         )) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[4])+ylim(0,1)+theme(axis.text=element_text(size=size_text))
+
+
+
+
+grid.arrange(plot_1,plot_2,plot_3,plot_4 ,
+             ncol = 2, nrow = 2,top=title)
+
+
+}
+
+```
+
+
+```{r}
+plot_allele_frequency_epiblast=function(position,heteroplasmy_matrix,allele_matrix,cluster,names_allele_qc,names_position_qc,size_text,index=NULL){
+  position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+ if (is.null(index)){
+   
+  a=position
+  
+
+colnames(allele_matrix)=names_position_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+
+allele_1=allele_matrix[,allele[1]]
+data_plot_1=data.frame(cluster,allele_1)
+allele_2=allele_matrix[,allele[2]]
+data_plot_2=data.frame(cluster,allele_2)
+
+allele_3=allele_matrix[,allele[3]]
+data_plot_3=data.frame(cluster,allele_3)
+
+allele_4=allele_matrix[,allele[4]]
+data_plot_4=data.frame(cluster,allele_4)
+   
+ }
+  else{
+    cluster=cluster[as.numeric(index[[position]])]
+  a=position
+  
+
+colnames(allele_matrix)=names_position_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+allele_1=allele_matrix[as.numeric(index[[position]]),allele[1]]
+data_plot_1=data.frame(cluster,allele_1)
+allele_2=allele_matrix[as.numeric(index[[position]]),allele[2]]
+data_plot_2=data.frame(cluster,allele_2)
+
+allele_3=allele_matrix[as.numeric(index[[position]]),allele[3]]
+data_plot_3=data.frame(cluster,allele_3)
+
+allele_4=allele_matrix[as.numeric(index[[position]]),allele[4]]
+data_plot_4=data.frame(cluster,allele_4)
+    
+    
+  }
+  
+  
+plot_1=ggplot(data =data_plot_1
+                    ,aes(x =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+                         ,y = allele_1
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[1])+ylim(0,1)+scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_2=ggplot(data =data_plot_2
+                    ,aes(x =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+                         ,y = allele_2
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[2])+ylim(0,1)+scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_3=ggplot(data =data_plot_3
+                    ,aes(x =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+                         ,y = allele_3
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[3])+ylim(0,1)+scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))+theme(axis.text=element_text(size=size_text))
+
+
+
+
+  
+plot_4=ggplot(data =data_plot_4
+                    ,aes(x =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+                         ,y = allele_4
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Embryo")+labs(y="Allele frequency") +ggtitle(allele[4])+ylim(0,1)+scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))+theme(axis.text=element_text(size=size_text))
+
+
+
+
+grid.arrange(plot_1,plot_2,plot_3,plot_4 ,
+             ncol = 2, nrow = 2)
+
+
+}
+
+```
+
+
+
+
+
+
+```{r}
+plot_allele_frequency_exe=function(position,entropia_matrix,allele_matrix,cluster,names_allele_qc,names_qc,number){
+  
+  
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+ 
+
+  a=position
+colnames(allele_matrix)=names_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+mutazione_1=allele_matrix[,allele[1]]
+dati_scatter_1=data.frame(cluster,mutazione_1)
+
+
+  
+  
+plot_1=ggplot(data =dati_scatter_1
+                    ,aes(x =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE)
+                         ,y = mutazione_1
+                         ,col =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[1])+ylim(0,1)+scale_color_manual(values=c('#800080'),labels=c('Extraembryonic Ectoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_2=allele_matrix[,allele[2]]
+dati_scatter_2=data.frame(cluster,mutazione_2)
+  
+plot_2=ggplot(data =dati_scatter_2
+                    ,aes(x =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE)
+                         ,y = mutazione_2
+                         ,col =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[2])+ylim(0,1)+scale_color_manual(values=c("#800080"),labels=c('Extraembryonic Ectoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_3=allele_matrix[,allele[3]]
+dati_scatter_3=data.frame(cluster,mutazione_3)
+  
+plot_3=ggplot(data =dati_scatter_3
+                    ,aes(x =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE)
+                         ,y = mutazione_3
+                         ,col =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[3])+ylim(0,1)+scale_color_manual(values=c('#800080'),labels=c('Extraembryonic Ectoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_4=allele_matrix[,allele[4]]
+dati_scatter_4=data.frame(cluster,mutazione_4)
+  
+plot_4=ggplot(data =dati_scatter_4
+                    ,aes(x =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE)
+                         ,y = mutazione_4
+                         ,col =factor(cluster,levels=c('Extraembryonic Ectoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Embryo")+labs(y="Allele frequency") +ggtitle(allele[4])+ylim(0,1)+scale_color_manual(values=c('#800080'),labels=c('Extraembryonic Ectoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+
+grid.arrange(plot_1,plot_2,plot_3,plot_4 ,
+             ncol = 2, nrow = 2)
+
+
+}
+```
+
+
+```{r}
+plot_allele_frequency_ve=function(position,entropia_matrix,allele_matrix,cluster,names_allele_qc,names_qc,number){
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+ 
+
+  a=position
+colnames(allele_matrix)=names_qc
+allele=colnames(allele_matrix)[names_allele_qc==a]
+
+
+
+mutazione_1=allele_matrix[,allele[1]]
+dati_scatter_1=data.frame(cluster,mutazione_1)
+
+
+  
+  
+plot_1=ggplot(data =dati_scatter_1
+                    ,aes(x =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE)
+                         ,y = mutazione_1
+                         ,col =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[1])+ylim(0,1)+scale_color_manual(values=c('#56B4E9'),labels=c('Visceral Endoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_2=allele_matrix[,allele[2]]
+dati_scatter_2=data.frame(cluster,mutazione_2)
+  
+plot_2=ggplot(data =dati_scatter_2
+                    ,aes(x =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE)
+                         ,y = mutazione_2
+                         ,col =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[2])+ylim(0,1)+scale_color_manual(values=c('#56B4E9'),labels=c('Visceral Endoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_3=allele_matrix[,allele[3]]
+dati_scatter_3=data.frame(cluster,mutazione_3)
+  
+plot_3=ggplot(data =dati_scatter_3
+                    ,aes(x =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE)
+                         ,y = mutazione_3
+                         ,col =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[3])+ylim(0,1)+scale_color_manual(values=c('#56B4E9'),labels=c('Visceral Endoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+mutazione_4=allele_matrix[,allele[4]]
+dati_scatter_4=data.frame(cluster,mutazione_4)
+  
+plot_4=ggplot(data =dati_scatter_4
+                    ,aes(x =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE)
+                         ,y = mutazione_4
+                         ,col =factor(cluster,levels=c('Visceral Endoderm'),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8) + 
+  geom_point()+labs(col="Cluster")+labs(y="Allele Frequency")+labs(col="Cluster")+labs(x="Cluster")+labs(y="Allele frequency") +ggtitle(allele[4])+ylim(0,1)+scale_color_manual(values=c('#56B4E9'),labels=c('Visceral Endoderm'))+theme(axis.text=element_text(size=number))
+
+
+
+
+grid.arrange(plot_1,plot_2,plot_3,plot_4 ,
+             ncol = 2, nrow = 2)
+
+
+}
+
+```
+
+```{r}
+plot_losing_score=function(position,heteroplasmy_matrix,cluster,time,gam_fit_result,index=NULL){
+  if(is.null(index)){
+    position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+mutation=heteroplasmy_matrix[,position]
+data_plot_1=data.frame(time,mutation)
+  }
+  else{
+position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+cluster=cluster[as.numeric(index[[position]])]
+mutation=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+time=time[as.numeric(index[[position]])]
+data_plot_1=data.frame(time,mutation)}
+plot<-ggplot(data_plot_1, aes(x=time, y=mutation)) + geom_point(aes(colour = (cluster)))+labs(col="Cluster")+labs(x="Losing Score")+labs(y="Heteroplasmy") +ggtitle(paste(as.character(position),"adjusted p value=",round(gam_fit_result[position,1],(floor(-log10(gam_fit_result[position,1])))+1),sep=" "))+
+  geom_smooth(method="loess",se=F,color="black",fullrange=F)
+plot
+}
+```
+
+
+
+
+
+```{r}
+plot_losing_score_epiblast=function(position,heteroplasmy_matrix,cluster,time,gam_fit_result,index=NULL){
+  if(is.null(index)){
+    position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+cluster=factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+mutation=heteroplasmy_matrix[,position]
+data_plot_1=data.frame(time,mutation)
+  }
+  else{
+position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+cluster=cluster[as.numeric(index[[position]])]
+cluster=factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE)
+mutation=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+time=time[as.numeric(index[[position]])]
+data_plot_1=data.frame(time,mutation)}
+plot<-ggplot(data_plot_1, aes(x=time, y=mutation)) + geom_point(aes(colour = (cluster)))+labs(col="Cluster")+labs(x="Losing Score")+labs(y="Heteroplasmy") +scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winning Epiblast","Intermediate", "Losing Epiblast"))+ggtitle(paste(as.character(position),"adjusted p value=",round(gam_fit_result[position,1],(floor(-log10(gam_fit_result[position,1])))+1),sep=" "))+
+  geom_smooth(method="loess",se=F,color="black",fullrange=F)
+plot
+}
+```
+
+```{r}
+plot_losing_score_exe=function(position,entropia_matrix,cluster,time,fit){
+position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+cluster=factor(cluster,levels=c("Extraembryonic Ectoderm"),ordered = TRUE)
+mutation=entropia_matrix[,position]
+dati_scatter_1=data.frame(time,mutation)
+plot<-ggplot(dati_scatter_1, aes(x=time, y=mutation)) + geom_point(aes(colour = (cluster)))+labs(col="Cluster")+labs(x="Losing Score")+labs(y="Heteroplasmy") +scale_color_manual(values=c('#800080'),labels=c("Extraembryonic Ectoderm"))+ggtitle(paste(as.character(position),"adjusted p value=",round(fit[position,1],(floor(-log10(fit[position,1])))+1),sep=" "))+
+  geom_smooth(method="loess",se=F,color="black",fullrange=F)
+plot
+}
+```
+
+```{r}
+plot_losing_score_ve=function(position,entropia_matrix,cluster,time,fit){
+position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+cluster=factor(cluster,levels=c("Visceral Endoderm"),ordered = TRUE)
+mutation=entropia_matrix[,position]
+dati_scatter_1=data.frame(time,mutation)
+plot<-ggplot(dati_scatter_1, aes(x=time, y=mutation)) + geom_point(aes(colour = (cluster)))+labs(col="Cluster")+labs(x="Losing Score")+labs(y="Heteroplasmy") +scale_color_manual(values=c('#56B4E9'),labels=c("Visceral Endoderm"))+ggtitle(paste(as.character(position),"adjusted p value=",round(fit[position,1],(floor(-log10(fit[position,1])))+1),sep=" "))+
+  geom_smooth(method="loess",se=F,color="black",fullrange=F)
+plot
+}
+```
+
+```{r}
+plot_batch=function(position,heteroplasmy_matrix,batch,colour,text_size,index=NULL){
+  if(is.null(index)){
+
+    position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+
+    heteroplasmy=heteroplasmy_matrix[,position]
+
+    data_plot_1=data.frame(batch,heteroplasmy,colour)
+
+
+  }
+  else{
+    position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+    batch=batch[as.numeric(index[[position]])]
+    heteroplasmy=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+    colour=colour[as.numeric(index[[position]])]
+    data_plot_1=data.frame(batch,heteroplasmy,colour)}
+
+
+  ggplot(data =data_plot_1
+         ,aes(x = batch
+              ,y = heteroplasmy,col=batch
+              ,col=colour
+         )) +
+    geom_boxplot(width=0.9,alpha=0.8)+
+    labs(col="Cluster")+labs(x="Batch")+labs(y="Heteroplasmy") +ggtitle(position) +theme(axis.text=element_text(size=text_size))
+
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+plot_batch_epiblast=function(position,heteroplasmy_matrix,batch,colour,cluster,text_size,index=NULL){
+  if(is.null(index)){
+    
+    position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+  
+  heteroplasmy=heteroplasmy_matrix[,position]
+  
+data_plot_1=data.frame(batch,heteroplasmy)
+    
+    
+  }
+  else{
+  position=colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix)==position]
+  batch=batch[as.numeric(index[[position]])]
+  heteroplasmy=heteroplasmy_matrix[as.numeric(index[[position]]),position]
+  colour=colour[as.numeric(index[[position]])]
+  cluster=cluster[as.numeric(index[[position]])]
+data_plot_1=data.frame(batch,heteroplasmy)}
+
+
+ggplot(data =data_plot_1
+                    ,aes(x = batch
+                         ,y = heteroplasmy
+                         ,col =factor(cluster,levels=c("Winner Epiblast","Intermediate","Loser Epiblast"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Batch")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c("#DD6400",  "#0000FF","#006400"),labels=c("Winner Epiblast","Intermediate", "Loser Epiblast"))+theme(axis.text=element_text(size=text_size))
+
+}
+```
+
+
+
+
+```{r}
+plot_batch_exe=function(position,entropia_matrix,batch,colour,cluster,number){
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+  mutazione=entropia_matrix[,position]
+dati_scatter_1=data.frame(batch,mutazione)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x = batch
+                         ,y = mutazione
+                         ,col =factor(cluster,levels=c("Extraembryonic Ectoderm"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Batch")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c('#800080'),labels=c("Extraembryonic Ectoderm"))+theme(axis.text=element_text(size=number))
+
+}
+```
+
+```{r}
+plot_batch_ve=function(position,entropia_matrix,batch,colour,cluster,number){
+  position=colnames(entropia_matrix)[colnames(entropia_matrix)==position]
+  mutazione=entropia_matrix[,position]
+
+dati_scatter_1=data.frame(batch,mutazione)
+
+
+ggplot(data =dati_scatter_1
+                    ,aes(x = batch
+                         ,y = mutazione
+                         ,col =factor(cluster,levels=c("Visceral Endoderm"),ordered = TRUE))) +
+geom_boxplot(width=0.9,alpha=0.8)+
+labs(col="Cluster")+labs(x="Batch")+labs(y="Heteroplasmy") +ggtitle(position) +scale_color_manual(values=c('#56B4E9'),labels=c("Visceral Endoderm"))+theme(axis.text=element_text(size=number))
+
+}
+```
+
+
+```{r}
+dpt_test=function(heteroplasmy_matrix,time,index=NULL,method="GAM"){
+#position=colnames(heteroplasmy_matrix)
+#filter=rep(0,length(position))
+#if(is.null(index)){for (i in 1:length(position)){
+  if(is.null(index)){
+    
+#Y=data.frame(t(heteroplasmy_matrix[,position[i]]))
+#filter[i]=sum(Y>min_heteroplasmy)
+#considero[considero]
+#}
+#heteroplasmy_matrix_select=heteroplasmy_matrix[,which(filter>min_cells)]
+
+position=colnames(heteroplasmy_matrix)
+
+p_value=rep(0,length(position))
+
+for (i in 1:length(position)){
+  Y=data.frame(t(heteroplasmy_matrix[,position[i]]))
+t=time
+if(method!="GAM")  {
+  
+  p_value[i]=cor.test(as.numeric(Y),t,method = method)$p.value
+    
+}
+if(method=="GAM"){
+
+
+#Run GAM with LOESS function for all the genes: save the p-value of parametric ANOVA 
+#and the fitted expression values for each genes
+gam.res <- apply(Y, 1, function(z){
+  z=as.numeric(as.vector(z))
+    d <- data.frame(z=z, t=t)
+    tmp <- gam(z ~ lo(t), data=d)
+    p <- summary(tmp)[4][[1]][1,5]  #p-value parametric ANOVA
+    f<-fitted(tmp)
+    c(p,f)
+})
+genes.table<-data.frame(genes.names=rownames(Y))
+genes.table$pvals<-gam.res[1,]
+genes.table$FDR<-p.adjust(genes.table$pvals, method="fdr") #Adjust p-values
+genes.table<-genes.table[order(genes.table$FDR),] #Order the genes according to the FDR
+genes.table$genes.names <- as.character(genes.table$genes.names)
+row.names(genes.table)=genes.table$genes.names
+
+
+results.gam.tot=genes.table
+
+
+
+gam.fitted<-gam.res[-1,]
+
+
+results_gam_nomi=results.gam.tot$genes.names
+gam_fitted=gam.fitted
+p_value[i]=results.gam.tot$pvals
+}}
+  
+    }
+else{
+#for (i in 1:length(position)){
+#Y=data.frame(t(heteroplasmy_matrix[as.numeric(index[[position[i]]]),position[i]]))
+#filter[i]=sum(Y>min_heteroplasmy)
+#}
+#heteroplasmy_matrix_select=heteroplasmy_matrix[,which(filter>min_cells)]
+
+position=colnames(heteroplasmy_matrix)
+
+p_value=rep(0,length(position))
+
+for (i in 1:length(position)){
+  Y=data.frame(t(heteroplasmy_matrix[as.numeric(index[[position[i]]]),position[i]]))
+t=time[as.numeric(index[[position[i]]])]
+
+if(method!="GAM")  {
+  
+  p_value[i]=cor.test(as.numeric(Y),t,method = method)$p.value
+    
+}
+
+if(method=="GAM"){
+#Run GAM with LOESS function for all the genes: save the p-value of parametric ANOVA 
+#and the fitted expression values for each genes
+gam.res <- apply(Y, 1, function(z){
+  z=as.numeric(as.vector(z))
+    d <- data.frame(z=z, t=t)
+    tmp <- gam(z ~ lo(t), data=d)
+    p <- summary(tmp)[4][[1]][1,5]  #p-value parametric ANOVA
+    f<-fitted(tmp)
+    #p2 <- summary(tmp)[3][[1]][2,3]  #p-value non-parametric ANOVA
+    c(p,f)
+    #c(p1,p2)   #If we want to return both the parametric and non-parametric p-values
+})
+genes.table<-data.frame(genes.names=rownames(Y))
+genes.table$pvals<-gam.res[1,]
+genes.table$FDR<-p.adjust(genes.table$pvals, method="fdr") #Adjust p-values
+genes.table<-genes.table[order(genes.table$FDR),] #Order the genes according to the FDR
+genes.table$genes.names <- as.character(genes.table$genes.names)
+row.names(genes.table)=genes.table$genes.names
+
+
+results.gam.tot=genes.table
+
+
+
+gam.fitted<-gam.res[-1,]
+
+
+
+results_gam_nomi=results.gam.tot$genes.names
+gam_fitted=gam.fitted
+p_value[i]=results.gam.tot$pvals
+}}}
+fdr_update=p.adjust(p_value, method="fdr") 
+position_fdr=data.frame(fdr_update,colnames(heteroplasmy_matrix))
+colnames(position_fdr)=c('FDR_value',"Position")
+row.names(position_fdr)=colnames(heteroplasmy_matrix)
+position_fdr=position_fdr[order(position_fdr$'FDR_value'),]
+return(position_fdr)
+
+}
+
+```
+
+
+#yes
+```{r}
+
+#get_heteroplasmy=function(raw_counts_allele,cell_stage,name_position_allele,name_position,number_reads,#number_positions,filtering=1,selection=FALSE,cell_clu_1=NULL,cell_clu_3=NULL,cell_clu_4=NULL){
+
+
+get_heteroplasmy=function(raw_counts_allele,name_position_allele,name_position,number_reads,number_positions,filtering=1,my.clusters=NULL){
+
+
+
+
+#raw_counts_allele_filter=raw_counts_allele[cell_stage,]
+raw_counts_allele_filter=raw_counts_allele
+sum_matrix=matrix(0,ncol=length(unique(name_position)),nrow = length(row.names(raw_counts_allele_filter)))
+colnames(sum_matrix)=unique(name_position)
+row.names(sum_matrix)=row.names(raw_counts_allele_filter)
+colnames(raw_counts_allele_filter)=name_position
+
+for (i in unique(name_position)){
+  
+sum_matrix[,i]=apply(raw_counts_allele_filter[,colnames(raw_counts_allele_filter)%in%i],1,function(x){
+  
+  return(sum(x))
+  })
+}
+
+
+
+#First filtering step
+sum_matrix=as.matrix(sum_matrix)
+pos_cov=apply(sum_matrix,1,function(x){sum(x>number_reads)})
+
+
+pos_cov_20000=pos_cov[pos_cov>number_positions]
+sum_matrix_qc=sum_matrix[pos_cov>number_positions,]
+
+
+##Second filtering step
+if (filtering==1){
+raw_counts_allele_update=apply(sum_matrix_qc,2,function(x){
+    if(sum(x>number_reads)==length(row.names(sum_matrix_qc))){return (TRUE)}
+  
+  else{return (FALSE)}  
+})
+
+sum_matrix_qc=sum_matrix_qc[,raw_counts_allele_update]
+
+index=NULL
+}
+
+if (filtering==2){
+  my.clusters=my.clusters[pos_cov>number_positions]
+  cluster_unique=unique(my.clusters)
+#cluster_unique=sort(cluster_unique,decreasing = F)
+
+index=as.list(rep(0,length(unique(my.clusters))))
+for (i in 1:length(cluster_unique)){
+  index[[i]]=which(my.clusters==cluster_unique[i])
+}
+
+
+
+
+  
+  raw_counts_allele_update=apply(sum_matrix_qc,2,function(x){
+    
+    cell_cluster=as.list(rep(0,length(unique(my.clusters))))
+    selection_base=as.list(rep(0,length(unique(my.clusters))))
+    
+    for (i in 1:length(cluster_unique)){
+      cell_cluster[[i]]=x[index[[i]]]
+      #print(cell_cluster[[i]])
+      if (sum(cell_cluster[[i]]>number_reads)>(0.5*length(cell_cluster[[i]]))){
+        selection_base[[i]]=TRUE
+      }
+      else{selection_base[[i]]=FALSE}
+    }
+    
+    if (all(unlist(selection_base))){
+      return(TRUE)
+    }
+    else{return(FALSE)}
+    })
+
+  
+ # raw_counts_allele_update=apply(sum_matrix_qc,2,function(x){
+  #clu_1=x[row.names(sum_matrix_qc)%in%cell_clu_1]
+  
+  #clu_3=x[row.names(sum_matrix_qc)%in%cell_clu_3]
+  
+  #clu_4=x[row.names(sum_matrix_qc)%in%cell_clu_4]
+  
+    #if((sum(clu_1>number_reads)>0.5*length(clu_1))&(sum(clu_3>number_reads)>0.5*length(clu_3))&(sum(clu#_4>number_reads)>0.5*length(clu_4))){return (TRUE)}
+  
+  #else{return (FALSE)}  
+#})
+  
+ 
+
+sum_matrix_qc=sum_matrix_qc[,raw_counts_allele_update]
+
+index=apply(sum_matrix_qc,2,function(x){
+  logic=which(x>number_reads)
+  
+  return((logic))}
+)
+
+}
+
+ #if(selection==TRUE){
+   #test_cell=apply(sum_matrix_qc,1,function(x){sum(x>number_reads)})
+
+#cell_common=row.names(sum_matrix_qc)[which(test_cell==dim(sum_matrix_qc)[2])]
+
+
+
+#sum_matrix_qc=sum_matrix_qc[cell_common,] 
+    
+# }
+
+
+raw_counts_allele_filter_qc=raw_counts_allele_filter[row.names(sum_matrix_qc),colnames(raw_counts_allele_filter)%in%colnames(sum_matrix_qc)]
+
+
+norm_counts_allele_filter_qc=matrix(0,ncol=length(colnames(raw_counts_allele_filter_qc)),nrow = length(row.names(raw_counts_allele_filter_qc)))
+colnames(norm_counts_allele_filter_qc)=name_position[colnames(raw_counts_allele_filter)%in%colnames(sum_matrix_qc)]
+row.names(norm_counts_allele_filter_qc)=row.names(sum_matrix_qc)
+colnames(raw_counts_allele_filter_qc)=name_position[colnames(raw_counts_allele_filter)%in%colnames(sum_matrix_qc)]
+
+for (i in 1:length(colnames(raw_counts_allele_filter_qc))){
+  
+  
+  
+  
+norm_counts_allele_filter_qc[,i]=raw_counts_allele_filter_qc[,i]/(sum_matrix_qc[,colnames(sum_matrix_qc)%in%colnames(raw_counts_allele_filter_qc)[i]])
+}
+norm_counts_allele_filter_qc[is.na(norm_counts_allele_filter_qc)]=0
+
+
+##repeat
+
+sum_allele=as.list(rep(0,length(colnames(sum_matrix_qc))))
+if (filtering==1){
+for (i in 1:length(colnames(sum_matrix_qc))){
+sum_allele[[i]]=apply(norm_counts_allele_filter_qc[,colnames(norm_counts_allele_filter_qc)%in%colnames(sum_matrix_qc)[i]],1,sum)
+
+}}
+
+if (filtering==2){
+for (i in 1:length(colnames(sum_matrix_qc))){
+  index_cell=index[[which(names(index)==colnames(sum_matrix_qc)[i])]]
+sum_allele[[i]]=apply(norm_counts_allele_filter_qc[index_cell,colnames(norm_counts_allele_filter_qc)%in%colnames(sum_matrix_qc)[i]],1,sum)
+
+}}
+
+for (i in 1:length(colnames(sum_matrix_qc))){
+  if (all(sum_allele[[i]]==1)!=TRUE){print(paste("Error:sum of allele frequencies is not one for one or more cells in base ",i,sep=""))}
+}
+
+
+
+###Compute Entropy
+heteroplasmy_matrix=matrix(0,ncol=length(colnames(sum_matrix_qc)),nrow=length(row.names(norm_counts_allele_filter_qc)))
+colnames(heteroplasmy_matrix)=colnames(sum_matrix_qc)
+row.names(heteroplasmy_matrix)=row.names(norm_counts_allele_filter_qc)
+colnames(norm_counts_allele_filter_qc)=name_position[name_position%in%colnames(raw_counts_allele_filter_qc)]
+for (i in colnames(sum_matrix_qc)){
+  
+heteroplasmy_matrix[,i]=apply(norm_counts_allele_filter_qc[,colnames(norm_counts_allele_filter_qc)%in%i],1,function(x){
+  x=as.numeric(as.vector(x))
+  
+  if (sum(x)==0){return(-1)}
+  else{
+  
+  return(1-max(x))
+  }
+})
+
+}
+
+
+
+
+
+colnames(norm_counts_allele_filter_qc)=name_position_allele[name_position%in%colnames(raw_counts_allele_filter_qc)]
+
+return(list(sum_matrix,sum_matrix_qc,heteroplasmy_matrix,norm_counts_allele_filter_qc,index))
+
+}
+```
+
+
+
+
+```{r}
+Plot_distribution=function(quantity_counts_cell,x_name,title_name){
+data_plot=data.frame(quantity_counts_cell)
+
+ggplot(data_plot, aes(x=quantity_counts_cell))+
+  geom_density(color="darkblue", fill="lightblue")+xlab(x_name) + ggtitle(title_name)}
+```
+
+
+```{r}
+Plot_boxplot=function(distribution_1,distribution_2,label_1,label_2,name_x,name_y,name_title){
+
+
+distribution_all=c(distribution_1,distribution_2)
+label_all=c(label_1,label_2)
+
+
+
+
+data_plot=data.frame(distribution_all,label_all)
+
+res <- wilcox.test(distribution_all ~ label_all, data = data_plot,
+                   exact = FALSE)
+
+add_test=paste("Wilcoxon test:",round(res$p.value,4),sep=" ")
+
+plot_gene=ggplot(data_plot, aes(x=label_all, y=distribution_all,col=label_all)) + 
+ geom_boxplot()+xlab(name_x)+ylab(name_y)+labs(col=name_x)+ggtitle(paste(name_title,add_test,sep=" - "))
+
+
+
+return(plot_gene)
+}
+```
+
+
+
+```{r}
+pileupFreq <- function(p) {
+  nucleotides <- levels(p$nucleotide)
+  res <- split(p, p$seqnames)
+  res <- lapply(res, function (x) {split(x, x$pos)})
+  res <- lapply(res, function (positionsplit) {
+    nuctab <- lapply(positionsplit, function(each) {
+      chr = as.character(unique(each$seqnames))
+      pos = as.character(unique(each$pos))
+      tablecounts <- sapply(nucleotides, function (n) {sum(each$count[each$nucleotide == n])})
+      c(chr,pos, tablecounts)
+    })
+    nuctab <- data.frame(do.call("rbind", nuctab),stringsAsFactors=F)
+    rownames(nuctab) <- NULL
+    nuctab
+  })
+  res <- data.frame(do.call("rbind", res),stringsAsFactors=F)
+  rownames(res) <- NULL
+  colnames(res) <- c("seqnames","start",levels(p$nucleotide))
+  res[3:ncol(res)] <- apply(res[3:ncol(res)], 2, as.numeric)
+  res
+}
+
+```
+
+```{r}
+get_distribution=function(matrix,FUNCTION,index=NULL){
+  base=colnames(matrix)
+distribution=rep(0,length(base))
+if(is.null(index)){
+  for (i in 1:length(base)){
+  
+  
+
+Y=as.vector(matrix[,base[i]])
+if (FUNCTION=='mean'){
+Y=mean(Y)}
+if (FUNCTION=='max'){
+Y=max(Y)}
+if (FUNCTION=='min'){
+Y=min(Y)}
+if (FUNCTION=='median'){
+Y=median(Y)}
+if (FUNCTION=='sum'){
+Y=sum(Y)}
+
+distribution[i]=Y
+names(distribution)[i]=base[i]
+}}
+  
+
+
+else{
+
+for (i in 1:length(base)){
+  index_cell=index[[which(names(index)==base[i])]]
+  
+
+Y=as.vector(matrix[index_cell,base[i]])
+if (FUNCTION=='mean'){
+Y=mean(Y)}
+if (FUNCTION=='max'){
+Y=max(Y)}
+if (FUNCTION=='min'){
+Y=min(Y)}
+if (FUNCTION=='median'){
+Y=median(Y)}
+if (FUNCTION=='sum'){
+Y=sum(Y)}
+
+distribution[i]=Y
+names(distribution)[i]=base[i]
+}}
+return(distribution)
+}
+```
+
+```{r}
+get_wilcox_test=function(matrix,cluster,label_1,label_2,index=NULL){
+ base=colnames(matrix)
+distribution=rep(0,length(base))
+if(is.null(index)){
+  for (i in 1:length(base)){
+Y=as.vector(matrix[,base[i]])
+Y_label_1=Y[cluster==label_1]
+Y_label_2=Y[cluster==label_2]
+Y_label_all=c(Y_label_1,Y_label_2)
+name_label_1=rep(label_1,length(Y_label_1))
+name_label_2=rep(label_2,length(Y_label_2))
+name_label_all=c(name_label_1,name_label_2)
+data_test=data.frame(Y_label_all,name_label_all)
+colnames(data_test)=c("Heteroplasmy","Cluster")
+
+res <- wilcox.test( Heteroplasmy~ Cluster, data = data_test)
+distribution[i]=res$p.value
+if(is.nan(res$p.value)&all(Y_label_all==0)){
+  distribution[i]=1
+}
+names(distribution)[i]=base[i]
+
+
+
+
+}}
+  
+
+
+else{
+
+for (i in 1:length(base)){
+  index_cell=index[[which(names(index)==base[i])]]
+  
+cluster_index=cluster[index_cell]
+Y=as.vector(matrix[index_cell,base[i]])
+Y_label_1=Y[cluster_index==label_1]
+Y_label_2=Y[cluster_index==label_2]
+Y_label_all=c(Y_label_1,Y_label_2)
+name_label_1=rep(label_1,length(Y_label_1))
+name_label_2=rep(label_2,length(Y_label_2))
+name_label_all=c(name_label_1,name_label_2)
+data_test=data.frame(Y_label_all,name_label_all)
+colnames(data_test)=c("Heteroplasmy","Cluster")
+
+res <- wilcox.test( Heteroplasmy~ Cluster, data = data_test)
+distribution[i]=res$p.value
+if(is.nan(res$p.value)&all(Y_label_all==0)){
+  distribution[i]=1
+}
+names(distribution)[i]=base[i]
+
+}}
+distribution_adjusted=p.adjust(distribution,method="fdr")
+return(distribution_adjusted)
+}
+
+```
+
+
+```{r}
+filter_bases=function(heteroplasmy_matrix,min_heteroplasmy,min_cells,index=NULL){
+  position=colnames(heteroplasmy_matrix)
+  filter=rep(0,length(position))
+  if(is.null(index)){
+    for (i in 1:length(position)){
+Y=data.frame(t(heteroplasmy_matrix[,position[i]]))
+filter[i]=sum(Y>min_heteroplasmy)
+}
+heteroplasmy_matrix_select=heteroplasmy_matrix[,which(filter>min_cells)]
+
+    
+  }
+  else{
+for (i in 1:length(position)){
+Y=data.frame(t(heteroplasmy_matrix[as.numeric(index[[position[i]]]),position[i]]))
+filter[i]=sum(Y>min_heteroplasmy)
+}
+heteroplasmy_matrix_select=heteroplasmy_matrix[,which(filter>min_cells)]}
+return(colnames(heteroplasmy_matrix_select))
+}
+```
+
+
+#EXAMPLE
+```{r}
+library(Rsamtools)
+library(VariantAnnotation)
+library(data.table)
+example_spikes=pileup(("/Users/gabriele.lubatti/Desktop/Phd/Cell_Competition/Revision/heteroplasmy/Spikes_control/spikes_epiblast_bam_files_second/sorted_bam_all/24538_5_2.unique.bam"),pileupParam=PileupParam(min_nucleotide_depth=0,min_base_quality= 30, distinguish_strands=FALSE,include_insertions=FALSE,distinguish_nucleotides=TRUE,ignore_query_Ns=FALSE,include_deletions=FALSE))
+
+matrix_example_spikes=pileupFreq(example_spikes)
+
+matrix_example_spikes_2=dcast(example_spikes, seqnames+pos ~ nucleotide, value.var="count", fun.aggregate=sum)
+```
+
+
+###START HERE 
+
+# at server submit01: /home/ies/gabriele.lubatti/revision_heteroplasmy/Cell_Competition_data
+#1) all_fastq_files: 723 fastq files for all cells which pass QC (R1 and R2 for every cell)
+#2) all_unique_bam_files: 723 bam and bai unique files (aligned on the mouse reference genome with STAR)
+#3) all_unique_bam_files_spikes: 512 bam and bai unique files (only-epiblast cells, aligned on the ERCC fasta files with STAR)
+#4) fasta_files: mouse MT.fasta files and ERCC fasta files
+
+```{r}
+library(Rsamtools)
+library(VariantAnnotation)
+library(data.table)
+library(ggplot2)
+library(gam)
+```
+
+##### 1 part####
+# ERCC fasta files
+
+```{r}
+#setwd("/Users/gabriele.lubatti/Desktop/Phd/Cell_Competition/Revision/heteroplasmy/outputR")
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+load("after_qc.Rda")
+load("output_SNP_spikes.Rda")
+```
+
+
+```{r}
+matrix_allele_counts=output_SNP_spikes[[1]]
+name_position_allele=output_SNP_spikes[[2]]
+name_position=output_SNP_spikes[[3]]
+
+```
+
+#Epiblast CI
+
+```{r}
+row.names(after_qc)=after_qc$new_name
+cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+
+after_qc_fmk_epi=after_qc[cells_fmk_epi,]
+
+my.clusters=after_qc_fmk_epi$cluster
+
+```
+
+
+
+```{r}
+
+epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_allele,name_position,50,2000,filtering = 2,my.clusters)
+
+```
+
+
+
+
+```{r}
+sum_matrix=epiblast_ci[[1]]
+sum_matrix_qc=epiblast_ci[[2]]
+heteroplasmy_matrix_ci=epiblast_ci[[3]]
+allele_matrix_ci=epiblast_ci[[4]]
+cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
+cluster_ci[cluster_ci=="1"]="Winner Epiblast"
+cluster_ci[cluster_ci=="3"]="Intermediate"
+cluster_ci[cluster_ci=="4"]="Loser Epiblast"
+condition_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$condition)
+index_ci=epiblast_ci[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,0.01,10,index_ci)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_ci[,relevant_bases],"max",index_ci)
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean",index_ci)
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci) 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
+```
+
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time
+
+dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
+```
+
+
+
+
+```{r}
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+
+utile=after_qc[row.names(heteroplasmy_matrix_ci),]
+numero=rep(0,length(utile$cluster))
+numero[utile$cluster==1&utile$batch=="1"]="a)Win 1"
+numero[utile$cluster==1&utile$batch=="5"]="a)Win 5"
+numero[utile$cluster==1&utile$batch=="4"]="a)Win 4"
+numero[utile$cluster==1&utile$batch=="2"]="a)Win 2"
+numero[utile$cluster==1&utile$batch=="3"]="a)Win 3"
+numero[utile$cluster==3&utile$batch=="1"]="b)Int 1"
+numero[utile$cluster==3&utile$batch=="5"]="b)Int 5"
+numero[utile$cluster==3&utile$batch=="4"]="b)Int 4"
+numero[utile$cluster==3&utile$batch=="2"]="b)Int 2"
+numero[utile$cluster==3&utile$batch=="3"]="b)Int 3"
+numero[utile$cluster==4&utile$batch=="1"]="c)Los 1"
+numero[utile$cluster==4&utile$batch=="5"]="c)Los 5"
+numero[utile$cluster==4&utile$batch=="4"]="c)Los 4"
+numero[utile$cluster==4&utile$batch=="2"]="c)Los 2"
+numero[utile$cluster==4&utile$batch=="3"]="c)Los 3"
+
+
+colore=rep(0,length(numero))
+colore[grep("Int",numero)]="#0000FF"
+colore[grep("Los",numero)]="#006400"
+colore[grep("Win",numero)]="#DD6400"
+
+
+
+plot_batch_epiblast(dpt_analysis$Position[1],heteroplasmy_matrix_ci,numero,colore,cluster_ci,6,index_ci)
+
+plot_batch_epiblast(dpt_analysis$Position[2],heteroplasmy_matrix_ci,numero,colore,cluster_ci,6,index_ci)
+
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,time,dpt_analysis,index_ci)
+q=list(q,p)
+}
+q
+```
+
+#Start batch effect check
+#Delete cells from batch 5
+
+```{r}
+index_delete=which(!((numero=="c)Los 5")|(numero=="b)Int 5")))
+cells_fmk_epi_delete=cells_fmk_epi[index_delete]
+my.clusters_delete=my.clusters[index_delete]
+```
+
+
+```{r}
+epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi_delete,],name_position_allele,name_position,50,2000,filtering = 2,my.clusters_delete)
+
+```
+
+
+
+
+```{r}
+sum_matrix=epiblast_ci[[1]]
+sum_matrix_qc=epiblast_ci[[2]]
+heteroplasmy_matrix_ci=epiblast_ci[[3]]
+allele_matrix_ci=epiblast_ci[[4]]
+cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
+cluster_ci[cluster_ci=="1"]="Winner Epiblast"
+cluster_ci[cluster_ci=="3"]="Intermediate"
+cluster_ci[cluster_ci=="4"]="Loser Epiblast"
+condition_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$condition)
+index_ci=epiblast_ci[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,0.01,10,index_ci)
+```
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time
+
+dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,time,dpt_analysis,index_ci)
+q=list(q,p)
+}
+q
+```
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
+```
+
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+```
+
+
+```{r}
+
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort[1:10])){
+p=plot_heteroplasmy_epiblast(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+#Stop part with batch effect check
+
+
+```{r}
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+length_ERCC_full=read.csv("ERCC_length.csv",sep=";",header=F)
+#length_ERCC=length_ERCC_full$V5
+#names_ERCC=length_ERCC_full$V1
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+ERCC_low_quality=read.csv("low_quality_base.csv",sep=";",header=T)
+low_quality_base=paste(ERCC_low_quality$POS,ERCC_low_quality$CHROM,sep="_")
+low_quality_base=low_quality_base[low_quality_base%in%relevant_bases]
+
+high_quality_base=relevant_bases[!relevant_bases%in%low_quality_base]
+
+```
+
+
+
+```{r}
+low_base_heteroplasmy=get_distribution(heteroplasmy_matrix_ci[,low_quality_base],'mean',index_ci)
+```
+
+```{r}
+high_base_heteroplasmy=get_distribution(heteroplasmy_matrix_ci[,high_quality_base],'mean',index_ci)
+```
+
+
+
+```{r}
+Plot_distribution(low_base_heteroplasmy,"Mean heteroplasmy/base","Distribution mean heteroplasmy/base")
+Plot_distribution(high_base_heteroplasmy,"Mean heteroplasmy/base","Distribution mean heteroplasmy/base")
+```
+
+
+
+```{r}
+low_quality_base=rep("Low quality  base",(length(low_base_heteroplasmy)))
+high_quality_base=rep("High quality base",(length(high_base_heteroplasmy)))
+Plot_boxplot(as.numeric(low_base_heteroplasmy),as.numeric(high_base_heteroplasmy),low_quality_base,high_quality_base,"Condition","Mean heteroplasmy/base","Distribution mean heteroplasmy/base")
+```
+
+
+
+
+
+
+###2 part###
+#MT fasta file
+#Epiblast CI
+
+###Old name
+#YES
+#fastq from epiblast cells at 
+# /nas_storage/gabriele.lubatti/old_home_folder/gabriele.lubatti/epiblast_25271_1
+# bam files from epiblast cells for spikes at #/nas_storage/gabriele.lubatti/revision_heteroplasmy/spikes_december_2020/sorted_bam_all
+
+
+
+#YES
+#fastq from epiblast cells at 
+# /nas_storage/gabriele.lubatti/old_home_folder/gabriele.lubatti/epiblast_25271_1
+# bam files from epiblast cells at 
+#/nas_storage/gabriele.lubatti/cell_competition/old_version_heteroplasmy/bam_mito/mt_bam
+
+#fastq files from visceral endoderm at:
+#/nas_storage/gabriele.lubatti/old_home_folder/gabriele.lubatti/visceral_endoderm_24538_5
+#bam files from visceral endoderm cells at #/nas_storage/gabriele.lubatti/old_home_folder/gabriele.lubatti/visceral_endoderm_bam_files
+
+#bam files from ExE cells at:
+#/nas_storage/gabriele.lubatti/cell_competition/exe_fastq #/nas_storage/gabriele.lubatti/old_home_folder/gabriele.lubatti/exe_bam_files 
+
+#don't run just an example
+```{r}
+sbp <- ScanBamParam(which=GRanges("chr14", IRanges(1, 53674770)))
+res <- pileup(fl, scanBamParam=sbp)
+head(res)
+table(res$strand, res$nucleotide)
+
+```
+
+
+
+#Start here on MAC
+
+```{r}
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+load("output_SNP_mt.Rda")
+load("after_qc.Rda")
+```
+
+
+```{r}
+matrix_allele_counts=output_SNP_mt[[1]]
+name_position_allele=output_SNP_mt[[2]]
+name_position=output_SNP_mt[[3]]
+
+```
+
+#Epiblast CI
+
+```{r}
+row.names(after_qc)=after_qc$new_name
+cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+
+after_qc_fmk_epi=after_qc[cells_fmk_epi,]
+my.clusters=after_qc_fmk_epi$cluster
+
+#cell_clu_1_fmk_epi=after_qc_fmk_epi$new_name[after_qc_fmk_epi$cluster==1]
+#cell_clu_3_fmk_epi=after_qc_fmk_epi$new_name[after_qc_fmk_epi$cluster==3]
+#cell_clu_4_fmk_epi=after_qc_fmk_epi$new_name[after_qc_fmk_epi$cluster==4]
+
+```
+
+
+
+```{r}
+
+
+epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_allele,name_position,50,2000,filtering = 2,my.clusters)
+
+```
+
+```{r}
+sum_matrix=epiblast_ci[[1]]
+sum_matrix_qc=epiblast_ci[[2]]
+heteroplasmy_matrix_ci=epiblast_ci[[3]]
+allele_matrix_ci=epiblast_ci[[4]]
+cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
+cluster_ci[cluster_ci=="1"]="Winner Epiblast"
+cluster_ci[cluster_ci=="3"]="Intermediate"
+cluster_ci[cluster_ci=="4"]="Loser Epiblast"
+condition_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$condition)
+index_ci=epiblast_ci[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,0.01,10,index_ci)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_ci[,relevant_bases],"max",index_ci)
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean",index_ci)
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci) 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
+```
+
+
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+```
+
+
+```{r}
+
+
+
+
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort[1:10])){
+p=plot_heteroplasmy_epiblast(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+```{r}
+
+plot_heteroplasmy_epiblast("2074_MT",heteroplasmy_matrix_ci,cluster_ci,index_ci)
+
+plot_heteroplasmy_epiblast("1352_MT",heteroplasmy_matrix_ci,cluster_ci,index_ci)
+
+plot_allele_frequency_epiblast("2074_MT",heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci) 
+
+plot_allele_frequency_epiblast("1352_MT",heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci) 
+
+```
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time
+
+dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+
+utile=after_qc[row.names(heteroplasmy_matrix_ci),]
+numero=rep(0,length(utile$cluster))
+numero[utile$cluster==1&utile$batch=="1"]="a)Win 1"
+numero[utile$cluster==1&utile$batch=="5"]="a)Win 5"
+numero[utile$cluster==1&utile$batch=="4"]="a)Win 4"
+numero[utile$cluster==1&utile$batch=="2"]="a)Win 2"
+numero[utile$cluster==1&utile$batch=="3"]="a)Win 3"
+numero[utile$cluster==3&utile$batch=="1"]="b)Int 1"
+numero[utile$cluster==3&utile$batch=="5"]="b)Int 5"
+numero[utile$cluster==3&utile$batch=="4"]="b)Int 4"
+numero[utile$cluster==3&utile$batch=="2"]="b)Int 2"
+numero[utile$cluster==3&utile$batch=="3"]="b)Int 3"
+numero[utile$cluster==4&utile$batch=="1"]="c)Los 1"
+numero[utile$cluster==4&utile$batch=="5"]="c)Los 5"
+numero[utile$cluster==4&utile$batch=="4"]="c)Los 4"
+numero[utile$cluster==4&utile$batch=="2"]="c)Los 2"
+numero[utile$cluster==4&utile$batch=="3"]="c)Los 3"
+
+
+colore=rep(0,length(numero))
+colore[grep("Int",numero)]="#0000FF"
+colore[grep("Los",numero)]="#006400"
+colore[grep("Win",numero)]="#DD6400"
+
+
+
+plot_batch_epiblast(dpt_analysis$Position[1],heteroplasmy_matrix_ci,numero,colore,cluster_ci,6,index_ci)
+
+plot_batch_epiblast(dpt_analysis$Position[2],heteroplasmy_matrix_ci,numero,colore,cluster_ci,6,index_ci)
+
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,time,fit_result,index_ci)
+q=list(q,p)
+}
+q
+```
+
+
+
+
+
+
+
+
+#Epiblast DMSO
+
+```{r}
+
+row.names(after_qc)=after_qc$new_name
+cells_dmso_epi=after_qc[(after_qc$condition=="Cell competition ON")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+
+after_qc_dmso_epi=after_qc[cells_dmso_epi,]
+
+
+```
+
+```{r}
+
+epiblast_dmso=get_heteroplasmy(matrix_allele_counts[cells_dmso_epi,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+
+
+
+```{r}
+sum_matrix=epiblast_dmso[[1]]
+sum_matrix_qc=epiblast_dmso[[2]]
+heteroplasmy_matrix_dmso=epiblast_dmso[[3]]
+allele_matrix_dmso=epiblast_dmso[[4]]
+cluster_dmso=as.character(after_qc[row.names(heteroplasmy_matrix_dmso),]$cluster)
+cluster_dmso[cluster_dmso=="1"]="Winner Epiblast"
+cluster_dmso[cluster_dmso=="3"]="Intermediate"
+cluster_dmso[cluster_dmso=="4"]="Loser Epiblast"
+condition_dmso=as.character(after_qc[row.names(heteroplasmy_matrix_dmso),]$condition)
+index_dmso=epiblast_dmso[[5]]
+```
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_dmso,0.01,10)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_dmso[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_dmso,cluster_dmso)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency_epiblast(i,heteroplasmy_matrix_dmso,allele_matrix_dmso,cluster_dmso,name_position_qc,name_position_allele_qc,5) 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_dmso[,relevant_bases],cluster_dmso,"Winner Epiblast","Intermediate" )
+```
+
+
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+```
+
+
+```{r}
+
+
+
+
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort[1:10])){
+p=plot_heteroplasmy_epiblast(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_dmso,cluster_dmso)+ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_dmso,allele_matrix_dmso,cluster_dmso,name_position_qc,name_position_allele_qc,5)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_dmso),]$pseudo_time
+dpt_analysis=dpt_test(heteroplasmy_matrix_dmso[,relevant_bases],time,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.01,]
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_heteroplasmy_epiblast(i,heteroplasmy_matrix_dmso,cluster_dmso)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_allele_frequency_epiblast(i,heteroplasmy_matrix_dmso,allele_matrix_dmso,cluster_dmso,name_position_qc,name_position_allele_qc,5)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+
+utile=after_qc[row.names(heteroplasmy_matrix_dmso),]
+numero=rep(0,length(utile$cluster))
+numero[utile$cluster==1&utile$batch=="1"]="a)Win 1"
+numero[utile$cluster==1&utile$batch=="5"]="a)Win 5"
+numero[utile$cluster==1&utile$batch=="4"]="a)Win 4"
+numero[utile$cluster==1&utile$batch=="2"]="a)Win 2"
+numero[utile$cluster==1&utile$batch=="3"]="a)Win 3"
+numero[utile$cluster==3&utile$batch=="1"]="b)Int 1"
+numero[utile$cluster==3&utile$batch=="5"]="b)Int 5"
+numero[utile$cluster==3&utile$batch=="4"]="b)Int 4"
+numero[utile$cluster==3&utile$batch=="2"]="b)Int 2"
+numero[utile$cluster==3&utile$batch=="3"]="b)Int 3"
+numero[utile$cluster==4&utile$batch=="1"]="c)Los 1"
+numero[utile$cluster==4&utile$batch=="5"]="c)Los 5"
+numero[utile$cluster==4&utile$batch=="4"]="c)Los 4"
+numero[utile$cluster==4&utile$batch=="2"]="c)Los 2"
+numero[utile$cluster==4&utile$batch=="3"]="c)Los 3"
+
+
+colore=rep(0,length(numero))
+colore[grep("Int",numero)]="#0000FF"
+colore[grep("Los",numero)]="#006400"
+colore[grep("Win",numero)]="#DD6400"
+
+
+
+plot_batch_epiblast(dpt_analysis$Position[1],heteroplasmy_matrix_dmso,numero,colore,cluster_dmso,6)
+
+plot_batch_epiblast(dpt_analysis$Position[2],heteroplasmy_matrix_dmso,numero,colore,cluster_dmso,6)
+
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_epiblast(i,heteroplasmy_matrix_dmso,cluster_dmso,time,dpt_analysis,index_dmso)
+q=list(q,p)
+}
+q
+```
+
+
+
+
+
+
+#ExE CI
+
+```{r}
+row.names(after_qc)=after_qc$new_name
+cells_ci_exe=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==2),"new_name"]
+
+after_qc_ci_exe=after_qc[cells_ci_exe,]
+
+
+
+```
+
+
+```{r}
+
+exe_ci=get_heteroplasmy(matrix_allele_counts[cells_ci_exe,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+
+
+
+```{r}
+sum_matrix=exe_ci[[1]]
+sum_matrix_qc=exe_ci[[2]]
+heteroplasmy_matrix_exe_ci=exe_ci[[3]]
+allele_matrix_exe_ci=exe_ci[[4]]
+cluster_exe_ci=as.character(after_qc[row.names(heteroplasmy_matrix_exe_ci),]$cluster)
+cluster_exe_ci[cluster_exe_ci=="2"]="Extraembryonic Ectoderm"
+condition_exe_ci=as.character(after_qc[row.names(heteroplasmy_matrix_exe_ci),]$condition)
+index_exe_ci=exe_ci[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_exe_ci,0.01,5)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_exe_ci[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy_exe(i,heteroplasmy_matrix_exe_ci,cluster_exe_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency_exe(i,heteroplasmy_matrix_exe_ci,allele_matrix_exe_ci,cluster_exe_ci,name_position_qc,name_position_allele_qc,5) 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_exe_ci),]$pseudo_time
+dpt_analysis=dpt_test(heteroplasmy_matrix_exe_ci[,relevant_bases],time,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.01,]
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_heteroplasmy_exe(i,heteroplasmy_matrix_exe_ci,cluster_exe_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_allele_frequency_exe(i,heteroplasmy_matrix_exe_ci,allele_matrix_exe_ci,cluster_exe_ci,name_position_qc,name_position_allele_qc,5)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+
+
+
+
+utile=after_qc[row.names(heteroplasmy_matrix_exe_ci),]
+numero=rep(0,length(utile$cluster))
+numero[utile$cluster==2&utile$batch=="1"]="a)ExE 1"
+numero[utile$cluster==2&utile$batch=="5"]="a)ExE 5"
+numero[utile$cluster==2&utile$batch=="4"]="a)ExE 4"
+numero[utile$cluster==2&utile$batch=="2"]="a)ExE 2"
+numero[utile$cluster==2&utile$batch=="3"]="a)ExE 3"
+
+
+
+colore=rep(0,length(numero))
+colore[grep("ExE",numero)]="#800080"
+
+
+
+
+plot_batch_exe(dpt_analysis$Position[1],heteroplasmy_matrix_exe_ci,numero,colore,cluster_exe_ci,number=6)
+
+
+
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_exe(i,heteroplasmy_matrix_exe_ci,cluster_exe_ci,time,dpt_analysis)
+q=list(q,p)
+}
+q
+```
+
+
+
+
+
+
+#VE CI
+
+```{r}
+row.names(after_qc)=after_qc$new_name
+cells_ci_ve=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==5),"new_name"]
+
+after_qc_ci_ve=after_qc[cells_ci_ve,]
+
+
+
+```
+
+
+
+```{r}
+
+ve_ci=get_heteroplasmy(matrix_allele_counts[cells_ci_ve,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+
+
+
+```{r}
+sum_matrix=ve_ci[[1]]
+sum_matrix_qc=ve_ci[[2]]
+heteroplasmy_matrix_ve_ci=ve_ci[[3]]
+allele_matrix_ve_ci=ve_ci[[4]]
+cluster_ve_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ve_ci),]$cluster)
+cluster_ve_ci[cluster_ve_ci=="5"]="Visceral Endoderm"
+condition_ve_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ve_ci),]$condition)
+index_ve_ci=ve_ci[[5]]
+```
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ve_ci,0.01,1)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_ve_ci[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy_ve(i,heteroplasmy_matrix_ve_ci,cluster_ve_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency_ve(i,heteroplasmy_matrix_ve_ci,allele_matrix_ve_ci,cluster_ve_ci,name_position_qc,name_position_allele_qc,5) 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_ve_ci),]$pseudo_time
+dpt_analysis=dpt_test(heteroplasmy_matrix_ve_ci[,relevant_bases],time)
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.01,]
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_heteroplasmy_ve(i,heteroplasmy_matrix_ve_ci,cluster_ve_ci)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_allele_frequency_ve(i,heteroplasmy_matrix_ve_ci,allele_matrix_ve_ci,cluster_ve_ci,name_position_qc,name_position_allele_qc,5)  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+
+
+```{r}
+
+
+
+
+utile=after_qc[row.names(heteroplasmy_matrix_ve_ci),]
+numero=rep(0,length(utile$cluster))
+numero[utile$cluster==5&utile$batch=="1"]="a)VE 1"
+numero[utile$cluster==5&utile$batch=="5"]="a)VE 5"
+numero[utile$cluster==5&utile$batch=="4"]="a)VE 4"
+numero[utile$cluster==5&utile$batch=="2"]="a)VE 2"
+numero[utile$cluster==5&utile$batch=="3"]="a)VE 3"
+
+
+
+colore=rep(0,length(numero))
+colore[grep("VE",numero)]="#56B4E9"
+
+
+
+
+plot_batch_ve(dpt_analysis$Position[1],heteroplasmy_matrix_ve_ci,numero,colore,cluster_ve_ci,number=6)
+
+
+```
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:10]){
+p=plot_losing_score_ve(i,heteroplasmy_matrix_ve_ci,cluster_ve_ci,time,dpt_analysis)
+q=list(q,p)
+}
+q
+```
+
+
+
+#Ana data
+#server submit01: /home/ies/gabriele.lubatti/revision_heteroplasmy/Ana_data/bam_file_ana_sorted
+#1) ana_fastq 
+#2) bam_file_ana_sorted
+
+```{r}
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+load("output_SNP_ana_mt.Rda")
+load(file="meta_data_ana_final_big.Rda")
+load(file="meta_data_ana_final_small.Rda")
+load(file="raw_data_ana.Rda")
+```
+
+
+```{r}
+matrix_allele_counts=output_SNP_ana_mt[[1]]
+name_position_allele=output_SNP_ana_mt[[2]]
+name_position=output_SNP_ana_mt[[3]]
+
+```
+
+```{r}
+row.names(meta_data_ana_final_big)=meta_data_ana_final_big$name_cell
+meta_data_ana_final_big=meta_data_ana_final_big[row.names(matrix_allele_counts),]
+delete_duplicate=meta_data_ana_final_big$name_cell[seq(1,48,3)]
+meta_data_ana_final_big_filter=meta_data_ana_final_big[delete_duplicate,]
+bulk_sample=meta_data_ana_final_big_filter$name_cell_original
+
+matrix_allele_counts=matrix_allele_counts[delete_duplicate,]
+row.names(matrix_allele_counts)=bulk_sample
+
+
+row.names(meta_data_ana_final_small)=meta_data_ana_final_small$name_fastq
+```
+
+
+
+```{r}
+
+bulk_data_competition=get_heteroplasmy(matrix_allele_counts[bulk_sample,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+
+
+
+```{r}
+sum_matrix=bulk_data_competition[[1]]
+sum_matrix_qc=bulk_data_competition[[2]]
+heteroplasmy_matrix_bulk=bulk_data_competition[[3]]
+allele_matrix_bulk=bulk_data_competition[[4]]
+cluster_bulk=as.character(meta_data_ana_final_small[row.names(heteroplasmy_matrix_bulk),]$status)
+condition_bulk=as.character(meta_data_ana_final_small[row.names(heteroplasmy_matrix_bulk),]$condition)
+index_bulk=bulk_data_competition[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_bulk,0.01,8)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_bulk[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_bulk,cluster_bulk)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_bulk,allele_matrix_bulk,cluster_bulk,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_bulk[,relevant_bases],cluster_bulk,"Loser","Winner" )
+```
+
+
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+
+```
+
+
+```{r}
+
+
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort[1:10])){
+p=plot_heteroplasmy(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_bulk,cluster_bulk)+ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:10]){
+p=plot_allele_frequency(i,heteroplasmy_matrix_bulk,allele_matrix_bulk,cluster_bulk,name_position_qc,name_position_allele_qc,5,title = "Allele frequencies")  
+q=list(q,p)
+}
+q
+
+
+                                                            
+```
+
+```{r}
+utile=meta_data_ana_final_small[row.names(heteroplasmy_matrix_bulk),]
+batch=rep(0,length(utile$cluster))
+batch[utile$status=="Loser"&utile$condition=="CO"]="Loser-CO"
+batch[utile$status=="Loser"&utile$condition=="Sep"]="Loser-Sep"
+batch[utile$status=="Winner"&utile$condition=="CO"]="Winner-CO"
+batch[utile$status=="Winner"&utile$condition=="Sep"]="Winner-Sep"
+
+
+
+
+colour=rep(0,length(batch))
+colour[grep("Loser",batch)]=gg_color_hue(2)[1]
+colour[grep("Winner",batch)]=gg_color_hue(2)[2]
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:2]){
+p=plot_batch(i,heteroplasmy_matrix_bulk,batch,colour,6)
+q=list(q,p)
+}
+q
+```
+
+
+
+
+
+```{r}
+library(rdist)
+library(dynamicTreeCut)
+library(ComplexHeatmap)
+library(circlize)
+library("Biostrings")
+```
+
+```{r}
+clustering_dist_ang=function(entropia_matrix,allele_matrix,cluster,top_pos,deepSplit_param,minClusterSize_param,relevant_bases=NULL){
+
+  res_ang=rep(0,length(colnames(entropia_matrix)))
+  res_ang=as.list(res_ang)
+  names(res_ang)=colnames(entropia_matrix)
+  j=1
+  for (i in 1:length(colnames(entropia_matrix))){
+    allele_matrix_2_1=allele_matrix[,(j:(j+3))]
+    dist_ang_pos=pdist(allele_matrix_2_1,metric='angular')
+    res_ang[[i]]=dist_ang_pos
+    j=j+3+1
+  }
+
+  res_ang_square=lapply(res_ang,FUN = function(x){return(x^2)})
+  if (!is.null(relevant_bases)){res_ang_sel=res_ang_square[which(names(res_ang)%in%relevant_bases)]}
+  else{
+
+    var_dist=lapply(res_ang_square,FUN = function(x){return(var(as.vector(as.dist(x))))})
+
+    var_dist=as.numeric(var_dist)
+    names(var_dist)=names(res_ang)
+
+
+    var_dist=var_dist[order(var_dist,decreasing = T)]
+
+    var_dist_top=var_dist[1:top_pos]
+    top_dist=names(var_dist_top)
+
+    res_ang_sel=res_ang_square[which(names(res_ang)%in%top_dist)]
+  }
+
+  res_ang_sum=Reduce('+', res_ang_sel)
+
+  res_ang_sqrt=sqrt(res_ang_sum)
+
+  dist_ang_sqrt=as.dist(res_ang_sqrt)
+
+
+
+  my.tree <- hclust(dist_ang_sqrt
+                    #, method="ward.D2" # met = "ward.D2" was adopted form the reference
+  )
+  my.clusters <- cutreeHybrid(my.tree
+                              ,distM=as.matrix(dist_ang_sqrt),deepSplit=deepSplit_param
+                              ,minClusterSize =minClusterSize_param )$label#5)$label
+
+  length(unique(my.clusters))
+  #new_cluster=cutree(my.tree, k = 8)
+  classe<-data.frame(old_classification = cluster
+                     ,new_classification = my.clusters)
+
+
+
+  return(list(classe,res_ang_sqrt))}
+
+```
+
+
+
+```{r }
+heatmap_plot=function(marker_plot,marker_plot_plot,new_classification,old_classification,norm_es,cluster_columns=F,cluster_rows=T,name_legend){
+
+
+  cluster_unique=unique(new_classification)
+  cluster_unique=sort(cluster_unique,decreasing = F)
+
+  index=as.list(rep(0,length(unique(new_classification))))
+  for (i in 1:length(cluster_unique)){
+    index[[i]]=which(new_classification==cluster_unique[i])
+  }
+
+  condition_unique=as.list(rep(0,length(unique(new_classification))))
+  for (i in 1:length(cluster_unique)){
+    condition_unique[[i]]=old_classification[index[[i]]]
+  }
+
+  cell_all_day=colnames(norm_es)
+  cell_unique=as.list(rep(0,length(unique(new_classification))))
+  for (i in 1:length(cluster_unique)){
+    cell_unique[[i]]=cell_all_day[index[[i]]]
+  }
+
+  cluster_unique_2=as.list(rep(0,length(unique(new_classification))))
+  for (i in 1:length(cluster_unique)){
+    cluster_unique_2[[i]]=new_classification[index[[i]]]
+  }
+
+  cluster_finale=unlist(cluster_unique_2)
+
+  good_finale=unlist(cell_unique)
+  medium_finale=unlist(condition_unique)
+
+  norm_es_plot=norm_es[marker_plot,good_finale]
+
+  row.names(norm_es_plot)<-marker_plot_plot
+
+  color_cluster=rep(0,length(unique(new_classification)))
+
+  for (i in 1:length(color_cluster) ){
+    color_cluster[i]=gg_color_hue(length(color_cluster))[i]
+  }
+  names(color_cluster)=as.character(cluster_unique)
+
+
+  color_condition=rep(0,length(unique(old_classification)))
+
+  for (i in 1:length(color_condition) ){
+    color_condition[i]=gg_color_hue(length(color_condition))[i]
+  }
+  names(color_condition)=as.character(unique(old_classification))
+
+  Condition_factor=factor(old_classification)
+
+  names(color_condition)=as.character(levels(Condition_factor))
+
+
+
+  data_heatmap=data.frame(New_classification = cluster_finale
+                          ,Old_classification = medium_finale)
+
+
+  haCol1 = HeatmapAnnotation(df= data_heatmap,col=list(New_classification=color_cluster,Old_classification=color_condition)
+
+                             , show_legend = T
+  )
+
+  ht21 = Heatmap(as.matrix(norm_es_plot)# heat.vals_Mutant_Paired #
+                 ,cluster_rows = cluster_rows
+                 , col= colorRamp2(c(0, (max(norm_es_plot))), c("white", "red"))
+                 , name = name_legend
+                 #, column_title = "Absolute values"
+                 #, cluster_columns = as.dendrogram(my.tree)
+                 ,cluster_columns = cluster_columns
+
+                 #, cluster_rows =as.dendrogram(as.numeric(row.names(log_data_tpm)[1:10]) )
+                 , top_annotation = haCol1
+                 , row_names_gp = gpar(fontsize = 6
+                                       #,col = geneColors
+                 )
+                 , show_column_names = F
+                 , show_row_names = T
+  )
+  #setwd("/Users/gabriele.lubatti/Desktop/Phd/Cell_Competition/methdo_text_paper")
+  #pdf("heatmap_no_time.pdf",useDingbats = F)
+  draw(ht21
+       #,column_title = "Absolute values", column_title_side = "top"
+  )
+
+
+
+}
+
+
+```
+
+
+
+
+
+
+
+
+```{r}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+
+```
+```{r}
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_bulk,allele_matrix_bulk,cluster_bulk,100,deepSplit_param=0,minClusterSize_param=2)
+old_new_classification=result_clustering_bulk[[1]]
+dist_matrix_bulk=result_clustering_bulk[[2]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+heatmap_plot(row.names(dist_matrix_bulk),row.names(dist_matrix_bulk),new_classification,old_classification,as.matrix(dist_matrix_bulk),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+```
+
+
+
+
+#Fasta file reference
+#BG=loser
+#HB=winner
+
+```{r}
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+fastaFile <- readDNAStringSet("bg.fasta.txt")
+seq_name = names(fastaFile)
+sequence = paste(fastaFile)
+df_bg <- data.frame(seq_name, sequence)
+
+bg_sequence=df_bg$sequence
+
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+fastaFile <- readDNAStringSet("hb.fasta.txt")
+seq_name = names(fastaFile)
+sequence = paste(fastaFile)
+df_hb <- data.frame(seq_name, sequence)
+
+hb_sequence=df_hb$sequence
+
+
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+fastaFile <- readDNAStringSet("Mus_musculus.GRCm38.dna.chromosome.MT.fa")
+seq_name = names(fastaFile)
+sequence = paste(fastaFile)
+df_ref <- data.frame(seq_name, sequence)
+
+ref_sequence=df_ref$sequence
+
+
+hb_sequence=unlist(strsplit(hb_sequence,split=NULL))
+ref_sequence=unlist(strsplit(ref_sequence,split=NULL))
+bg_sequence=unlist(strsplit(bg_sequence,split=NULL))
+
+```
+
+
+```{r }
+detect_insertion=function(ref_sequence,different_sequence,length_comparison=10){
+  max_length_insertion=length(different_sequence)-length(ref_sequence)
+  for (i in 1:(length(ref_sequence)-length_comparison)){
+  if (length(different_sequence)>length(ref_sequence)){
+    if(different_sequence[i]!=ref_sequence[i]){
+      for(k in 1:max_length_insertion){
+     if(all(different_sequence[(i+k):(i+k+length_comparison)]==ref_sequence[i:(i+length_comparison)])){
+      # print(k)
+       different_sequence=different_sequence[-seq(i,(i+k-1))]
+       break
+     }
+      }
+    }}
+    else{}
+    }
+  return(different_sequence)}
+```
+
+```{r }
+
+hb_sequence=detect_insertion(ref_sequence,hb_sequence)
+bg_sequence=detect_insertion(ref_sequence,bg_sequence)
+```
+
+```{r }
+position_kept=substr(colnames(heteroplasmy_matrix_bulk),1,nchar(colnames(heteroplasmy_matrix_bulk))-3)
+position_kept=as.numeric(position_kept)
+```
+
+
+
+###BG line (95%):Loser
+```{r }
+pos_diff_bg=bg_sequence[which(ref_sequence!=bg_sequence)]
+index_diff_bg=which(ref_sequence!=bg_sequence)
+pos_diff_bg=pos_diff_bg[index_diff_bg%in%position_kept]
+```
+
+
+```{r}
+index_loser=which(cluster_bulk=="Loser")
+heteroplasmy_matrix_bulk_bg=heteroplasmy_matrix_bulk[index_loser,]
+allele_matrix_bulk_bg=allele_matrix_bulk[index_loser,]
+cluster_bulk_bg=cluster_bulk[index_loser]
+mean_heteroplasmy=apply(heteroplasmy_matrix_bulk_bg,2,median)
+mean_heteroplasmy_diff=mean_heteroplasmy[position_kept%in%index_diff_bg]
+mean_heteroplasmy_equal=mean_heteroplasmy[!position_kept%in%index_diff_bg]
+diff_pos=rep('Different Position',length(mean_heteroplasmy_diff))
+equal_pos=rep('Equal Position',length(mean_heteroplasmy_equal))
+cond_pos=c(diff_pos,equal_pos)
+mean_pos=c(mean_heteroplasmy_diff,mean_heteroplasmy_equal)
+
+```
+
+
+```{r}
+Plot_boxplot(mean_heteroplasmy_diff,mean_heteroplasmy_equal,diff_pos,equal_pos,"Condition Position","Mean Heteroplasmy","BG_strain")
+
+```
+
+
+```{r}
+
+
+position_name_diff_bg=colnames(heteroplasmy_matrix_bulk_bg)[position_kept%in%index_diff_bg]
+
+q=list()
+for ( i in 1:length(position_name_diff_bg)){
+p=plot_allele_frequency(position_name_diff_bg[i],heteroplasmy_matrix_bulk_bg,allele_matrix_bulk_bg,cluster_bulk_bg,name_position_qc,name_position_allele_qc,5,paste("Reference allele in the strain:",pos_diff_bg[i]))
+q=list(q,p)
+}
+q
+
+                                                            
+```
+
+##HB line (24%):Winner
+```{r }
+pos_diff_hb=hb_sequence[which(ref_sequence!=hb_sequence)]
+index_diff_hb=which(ref_sequence!=hb_sequence)
+pos_diff_hb=pos_diff_hb[index_diff_hb%in%position_kept]
+```
+
+
+```{r}
+index_winner=which(cluster_bulk=="Winner")
+heteroplasmy_matrix_bulk_hb=heteroplasmy_matrix_bulk[index_winner,]
+allele_matrix_bulk_hb=allele_matrix_bulk[index_winner,]
+cluster_bulk_hb=cluster_bulk[index_winner]
+mean_heteroplasmy=apply(heteroplasmy_matrix_bulk_hb,2,median)
+mean_heteroplasmy_diff=mean_heteroplasmy[position_kept%in%index_diff_hb]
+mean_heteroplasmy_equal=mean_heteroplasmy[!position_kept%in%index_diff_hb]
+diff_pos=rep('Different Position',length(mean_heteroplasmy_diff))
+equal_pos=rep('Equal Position',length(mean_heteroplasmy_equal))
+cond_pos=c(diff_pos,equal_pos)
+mean_pos=c(mean_heteroplasmy_diff,mean_heteroplasmy_equal)
+
+```
+
+
+```{r}
+Plot_boxplot(mean_heteroplasmy_diff,mean_heteroplasmy_equal,diff_pos,equal_pos,"Condition Position","Mean Heteroplasmy","HB_strain")
+
+```
+
+```{r}
+
+
+position_name_diff_hb=colnames(heteroplasmy_matrix_bulk_hb)[position_kept%in%index_diff_hb]
+
+q=list()
+for ( i in 1:length(position_name_diff_hb)){
+p=plot_allele_frequency(position_name_diff_hb[i],heteroplasmy_matrix_bulk_hb,allele_matrix_bulk_hb,cluster_bulk_hb,name_position_qc,name_position_allele_qc,5,paste("Reference allele in the strain:",pos_diff_hb[i]))
+q=list(q,p)
+}
+q
+
+                                                            
+```
+
+```{r}
+all_position_name_diff=c(position_name_diff_bg,position_name_diff_hb)
+sum(unique(all_position_name_diff)%in%names(p_value_wilcox_test_sort)[1:50])/50
+```
+
+
+
+#Antonio data
+
+#server submit01: /home/ies/gabriele.lubatti/revision_heteroplasmy/Antonio_data
+#1) fastq_antonio
+#2) bam_file_antonio_sorted 
+
+```{r}
+setwd("/Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Input_data_R")
+load("output_SNP_antonio_mt.Rda")
+load(file="meta_data_antonio_final.Rda")
+load(file="raw_data_antonio.Rda")
+
+```
+
+
+```{r}
+matrix_allele_counts=output_SNP_antonio_mt[[1]]
+name_position_allele=output_SNP_antonio_mt[[2]]
+name_position=output_SNP_antonio_mt[[3]]
+
+```
+
+```{r}
+row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Comment.ENA_RUN.
+meta_data_antonio_final=meta_data_antonio_final[row.names(matrix_allele_counts),]
+row.names(matrix_allele_counts)=meta_data_antonio_final$antonio_array.Source.Name
+row.names(meta_data_antonio_final)=meta_data_antonio_final$antonio_array.Source.Name
+```
+
+
+#Stage 2 cells
+```{r}
+stage_2_cells=row.names(matrix_allele_counts)[grep("2cell_",row.names(matrix_allele_counts))]
+stage_2_cells=stage_2_cells[!grepl("32cell_",stage_2_cells)]
+```
+
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts[stage_2_cells,],name_position_allele,name_position,50,2000,filtering = 1)
+
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("2cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("2cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("2cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("2cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+condition_sc[grep("2cell_5_",row.names(heteroplasmy_matrix_sc))]="5"
+condition_sc[grep("2cell_6_",row.names(heteroplasmy_matrix_sc))]="6"
+condition_sc[grep("2cell_7_",row.names(heteroplasmy_matrix_sc))]="7"
+condition_sc[grep("2cell_8_",row.names(heteroplasmy_matrix_sc))]="8"
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,2)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+variance_heteroplasmy=apply(heteroplasmy_matrix_sc,2,var)
+variance_hetreroplasmy_sort=sort(variance_heteroplasmy,decreasing = T)
+relevant_bases_heteroplasmy=names(variance_hetreroplasmy_sort)[1:50]
+```
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,condition_sc,100,deepSplit_param=0,minClusterSize_param=2)
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+```
+
+
+##All the 4 cells stage analsysi is not updated.
+
+#4 cells stage ME
+
+
+
+```{r}
+stage_4_cells_me=row.names(matrix_allele_counts)[grep("ME_4cell_",row.names(matrix_allele_counts))]
+
+```
+
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts,stage_4_cells_me,name_position_allele,name_position,50,2000,filtering = 1,selection = FALSE)
+
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("4cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("4cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("4cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("4cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+condition_sc[grep("4cell_5_",row.names(heteroplasmy_matrix_sc))]="5"
+condition_sc[grep("4cell_6_",row.names(heteroplasmy_matrix_sc))]="6"
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,4)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+```{r}
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+```
+#4 cells stage EM
+
+```{r}
+stage_4_cells_em=row.names(matrix_allele_counts)[grep("EM_4cell_",row.names(matrix_allele_counts))]
+
+```
+
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts,stage_4_cells_em,name_position_allele,name_position,50,2000,filtering = 1,selection = FALSE)
+
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("4cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("4cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("4cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("4cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+condition_sc[grep("4cell_5_",row.names(heteroplasmy_matrix_sc))]="5"
+condition_sc[grep("4cell_6_",row.names(heteroplasmy_matrix_sc))]="6"
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,4)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+
+
+```{r}
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+```
+
+
+#4 cells stage MM
+
+
+```{r}
+stage_4_cells_mm=row.names(matrix_allele_counts)[grep("MM_4cell_",row.names(matrix_allele_counts))]
+
+```
+
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts,stage_4_cells_mm,name_position_allele,name_position,50,2000,filtering = 1,selection = FALSE)
+
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("4cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("4cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("4cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,4)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+variance_heteroplasmy=apply(heteroplasmy_matrix_sc,2,var)
+variance_hetreroplasmy_sort=sort(variance_heteroplasmy,decreasing = T)
+relevant_bases_heteroplasmy=names(variance_hetreroplasmy_sort)[1:50]
+```
+
+
+```{r}
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases_heteroplasmy)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+```
+
+
+#4 cells stage EE
+
+
+```{r}
+stage_4_cells_ee=row.names(matrix_allele_counts)[grep("EE_4cell_",row.names(matrix_allele_counts))]
+
+```
+
+
+```{r}
+
+sc_data=get_heteroplasmy(matrix_allele_counts,stage_4_cells_ee,name_position_allele,name_position,50,2000,filtering = 1,selection = FALSE)
+
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("4cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,1)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+variance_heteroplasmy=apply(heteroplasmy_matrix_sc,2,var)
+variance_hetreroplasmy_sort=sort(variance_heteroplasmy,decreasing = T)
+relevant_bases_heteroplasmy=names(variance_hetreroplasmy_sort)[1:50]
+```
+
+
+```{r}
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+result_clustering_bulk=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,100,relevant_bases_heteroplasmy)
+comparison_old_new_cluster=result_clustering_bulk[[1]]
+dist_matrix_sc=result_clustering_bulk[[2]]
+
+
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),cluster_sc,condition_sc,as.matrix(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+
+
+```
+
+
+
+
+#8 cells stage
+
+```{r}
+stage_8_cells=row.names(matrix_allele_counts)[grep("8cell_",row.names(matrix_allele_counts))]
+
+```
+
+
+```{r}
+sc_data=get_heteroplasmy(matrix_allele_counts[stage_8_cells,],name_position_allele,name_position,50,2000,filtering = 1)
+```
+
+
+
+
+```{r}
+sum_matrix=sc_data[[1]]
+sum_matrix_qc=sc_data[[2]]
+heteroplasmy_matrix_sc=sc_data[[3]]
+allele_matrix_sc=sc_data[[4]]
+cluster_sc=as.character(meta_data_antonio_final[row.names(heteroplasmy_matrix_sc),]$antonio_array.Characteristics.developmental.stage.)
+condition_sc=rep(0,length(cluster_sc))
+condition_sc[grep("8cell_1_",row.names(heteroplasmy_matrix_sc))]="1"
+condition_sc[grep("8cell_2_",row.names(heteroplasmy_matrix_sc))]="2"
+condition_sc[grep("8cell_3_",row.names(heteroplasmy_matrix_sc))]="3"
+condition_sc[grep("8cell_4_",row.names(heteroplasmy_matrix_sc))]="4"
+
+index_bulk=sc_data[[5]]
+```
+
+
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_sc,0.01,8)
+```
+
+```{r}
+
+max_entropy_base=get_distribution(heteroplasmy_matrix_sc[,relevant_bases],"max")
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean")
+
+```
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+
+```{r}
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p=plot_heteroplasmy(i,heteroplasmy_matrix_sc,cluster_sc)
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(sort(max_entropy_base,decreasing = T)[1:10])){
+p= plot_allele_frequency(i,heteroplasmy_matrix_sc,allele_matrix_sc,cluster_sc,name_position_qc,name_position_allele_qc,5,title="Allele frequencies") 
+q=list(q,p)
+}
+q
+
+
+                                                              
+
+```
+
+```{r}
+variance_heteroplasmy=apply(heteroplasmy_matrix_sc,2,var)
+variance_hetreroplasmy_sort=sort(variance_heteroplasmy,decreasing = T)
+relevant_bases_heteroplasmy=names(variance_hetreroplasmy_sort)[1:50]
+```
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_sc,allele_matrix_sc,condition_sc,100,deepSplit_param=0,minClusterSize_param=2)
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+heatmap_plot(row.names(dist_matrix_sc),row.names(dist_matrix_sc),new_classification,old_classification,(dist_matrix_sc),cluster_columns=T,cluster_rows=T,"Euclidean distance")
+```
+
+
+
+

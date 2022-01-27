@@ -1,0 +1,4 @@
+"0",""
+"0","name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]"
+"0","name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]"
+"0",""

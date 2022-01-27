@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643208728499.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "83F48204",
+    "lastKnownWriteTime" : 1643210045,
+    "last_content_update" : 1643210045,
+    "path" : "~/MitoHEAR/man/plot_batch.Rd",
+    "project_path" : "man/plot_batch.Rd",
+    "properties" : {
+        "cursorPosition" : "2,15",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 16,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_doc"
+}

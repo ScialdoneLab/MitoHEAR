@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643190023834.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A9059F60",
+    "lastKnownWriteTime" : 1643271011,
+    "last_content_update" : 1643271011719,
+    "path" : "~/MitoHEAR/R/get_raw_counts_allele.R",
+    "project_path" : "R/get_raw_counts_allele.R",
+    "properties" : {
+        "cursorPosition" : "259,29",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

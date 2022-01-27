@@ -1,0 +1,405 @@
+---
+title: "cell_competition_mt_example_notebook"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cell_competition_mt_example_notebook}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=7, 
+  fig.height=5
+)
+
+
+```
+
+```{r setup}
+library(JossNuovo)
+```
+
+
+In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.nature.com/articles/s42255-021-00422-7>.
+
+
+## Get counts for the four alleles in each base-cell pair
+
+The first step of the library JossNuovo is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
+The matrix *after_qc* contains meta data information about the cells (i.e. cell names, cell types, batch).
+
+
+
+```{r}
+load(system.file("extdata", "after_qc.Rda", package = "JossNuovo"))
+cell_names=as.vector(after_qc$new_name)
+```
+
+We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
+A command line implementation of the function *get_raw_counts_allele* is also available (see github README file for info).
+
+```{r}
+load(system.file("extdata", "output_SNP_mt.Rda", package = "JossNuovo"))
+
+```
+
+
+The output of *get_raw_counts_allele* is a list with three elements (see *?get_raw_counts_allele* for more info). The first element is the matrix of counts (n_rows = number of cells, n_cols= 4*number of bases) of the four alleles in each base. The row names are equal to cell_names.
+
+
+
+```{r}
+matrix_allele_counts=output_SNP_mt[[1]]
+name_position_allele=output_SNP_mt[[2]]
+name_position=output_SNP_mt[[3]]
+```
+
+We select only the CI-treated epiblast cells for the down-stream analysis. 
+```{r}
+row.names(after_qc)=after_qc$new_name
+cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+
+after_qc_fmk_epi=after_qc[cells_fmk_epi,]
+my.clusters=after_qc_fmk_epi$cluster
+
+```
+
+The next step is to obtain a matrix with allele frequencies and a matrix with heteroplasmy values for each pair of cell-base. This is obtained with the function *get_heteroplasmy*. 
+This function performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than *number_reads* counts in more than *number_positions* bases and to keep only the bases that are covered by more than *number_reads* counts in all the cells (*filtering*=1)  or in at least 50% of cells in each cluster (*filtering*=2).
+
+
+
+
+```{r}
+
+
+epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 2,my.clusters)
+
+
+```
+
+
+Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
+For more info about the ouput see *?get_geteroplasmy*.
+
+```{r}
+sum_matrix=epiblast_ci[[1]]
+sum_matrix_qc=epiblast_ci[[2]]
+heteroplasmy_matrix_ci=epiblast_ci[[3]]
+allele_matrix_ci=epiblast_ci[[4]]
+cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
+cluster_ci[cluster_ci=="1"]="Winner Epiblast"
+cluster_ci[cluster_ci=="3"]="Intermediate"
+cluster_ci[cluster_ci=="4"]="Loser Epiblast"
+condition_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$condition)
+index_ci=epiblast_ci[[5]]
+
+```
+
+
+
+Below the customized function *plot_cells_coverage_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
+For general use, please use function *plot_cells_coverage*.
+
+```{r}
+
+
+JossNuovo:::plot_cells_coverage_epiblast(sum_matrix_qc,row.names(sum_matrix_qc),cluster_ci,interactive=FALSE)
+JossNuovo:::plot_cells_coverage_epiblast(sum_matrix_qc,row.names(sum_matrix_qc),cluster_ci,interactive=TRUE)
+
+```
+
+```{r}
+
+
+
+
+plot_base_coverage(sum_matrix,sum_matrix_qc,row.names(sum_matrix_qc),interactive=FALSE,text_size=10)
+
+plot_base_coverage(sum_matrix,sum_matrix_qc,row.names(sum_matrix_qc)[1],interactive=FALSE,text_size=10)
+
+
+```
+
+```{r}
+
+plot_base_coverage(sum_matrix,sum_matrix_qc,row.names(sum_matrix_qc)[1],interactive=TRUE,text_size=10)
+```
+
+We can visualize the mitochondrial genome showing in red the positions that passed our filtering based on coverage and were considered for the heteroplasmy analysis. The plot is based on the R package *karyoploteR*.
+
+```{r}
+
+chr_name="MT"
+heteroplasmy_matrix=heteroplasmy_matrix_ci
+biomart_file=system.file("extdata", "mt_start_end.txt", package = "JossNuovo")
+biomart_file=read.table(biomart_file,sep="\t",header = T)
+fastaFile=system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "JossNuovo")
+fastaFile <- Biostrings::readDNAStringSet(fastaFile)
+plot_coverage(biomart_file,fastaFile,chr_name,heteroplasmy_matrix)
+```
+
+
+```{r}
+
+name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+
+```
+
+It is possible to perform an additional filtering step on the bases keeping only the ones with an heteroplasmy value above *min_heteroplasmy* in more than *min_cells*.
+
+
+
+```{r}
+relevant_bases=filter_bases(heteroplasmy_matrix_ci,min_heteroplasmy=0.01,min_cells=10,index_ci)
+```
+
+
+
+We can compute and visualize the distribution of the average coverage of the bases.
+
+
+
+```{r}
+mean_counts_base=get_distribution(sum_matrix_qc[,relevant_bases],"mean",index_ci)
+```
+
+
+
+
+```{r}
+Plot_distribution(mean_counts_base,"mean counts/base","Distribution mean counts/base")
+
+```
+
+## Identification of most different bases according to heteroplasmy between clusters
+For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters *Winner Epiblast* and *Loser Epiblast*. As output, for each base, there is the adjusted p valued (FDR).
+
+
+```{r}
+p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
+```
+
+We sort the bases according to the adjusted p value in order to identify the bases where the heteroplasmy is most different between the two clusters.
+```{r}
+p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+```
+
+The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. We can notice that the top 10 relevant bases belong to the genes mt-Rnr1 and mt-Rnr1 and in these positions the heteroplasmy is always higher in the *Loser Epiblast*.
+Below the customized functions *plot_heteroplasmy_epiblast* and *plot_allele_frequency_epiblast* are used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
+For general use, please use functions *plot_heteroplasmy* and *plot_allele_frequency*
+
+```{r}
+q=list()
+for ( i in 1:length(p_value_wilcox_test_sort[1:2])){
+p=JossNuovo:::plot_heteroplasmy_epiblast(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
+q=list(q,p)
+}
+q
+
+
+
+q=list()
+for ( i in names(p_value_wilcox_test_sort)[1:2]){
+p=JossNuovo:::plot_allele_frequency_epiblast(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
+q=list(q,p)
+}
+q
+
+```
+
+
+
+## Identification of most different bases according to heteroplasmy along pseudo-time
+
+If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and diffusion pseudo-time is assigned to each base). For more info see *?dpt_test*
+
+
+
+
+
+
+```{r}
+time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time
+
+dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method="GAM")
+
+dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
+```
+
+The heteroplasmy level for the top 2 relevant bases (according to GAM fit) is shown along pseudo time, with the black line denoting the GAM fit. We can notice that the top bases belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy increases with the diffusion pseudo time. 
+The top 10 positions identified with the diffusion pseudo time analysis are equal to the top 10 positions detected with the Wilcoxon test based on clustering partition.
+Below the customized function *plot_dpt_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
+For general use, please use function *plot_dpt*.
+
+```{r}
+q=list()
+for ( i in dpt_analysis$Position[1:2]){
+p=JossNuovo:::plot_dpt_epiblast(i,heteroplasmy_matrix_ci,cluster_ci,time,dpt_analysis,index_ci)
+q=list(q,p)
+}
+q
+```
+
+### Plotting options for top bases according to heteroplasmy
+
+```{r}
+
+
+bases_example=c("326_MT","327_MT","303_MT")
+plot_correlation_bases(bases_example,index_ci,heteroplasmy_matrix_ci)
+
+```
+
+
+```{r}
+
+
+
+
+
+plot_spider_chart(colnames(sum_matrix_qc)[1],cluster_ci,heteroplasmy_matrix_ci,index_ci)
+
+plot_spider_chart("326_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
+plot_spider_chart("327_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
+plot_spider_chart("303_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
+
+
+
+
+
+
+
+```
+
+```{r}
+
+
+
+
+
+load(system.file("extdata", "coordinate_dm.Rda", package = "JossNuovo"))
+
+
+
+cluster=after_qc[row.names(sum_matrix),]$cluster
+
+JossNuovo:::plot_coordinate_cluster_epiblast(coordinate_dm ,cluster)
+
+plot_coordinate_heteroplasmy(coordinate_dm,heteroplasmy_matrix_ci,index_ci,"327_MT")
+
+
+
+
+
+
+```
+
+
+
+
+
+
+We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the heteroplasmy levels are higher among all cells in the *Loser Epiblast* clusters and not only in a specific batch.
+Below the customized function *plot_batch_epiblast* is used in order to keep the same colour assignment and notation used in <https://www.nature.com/articles/s42255-021-00422-7>.
+For general use  please use function *plot_batch*.
+
+
+
+```{r}
+
+after_qc_qc=after_qc[row.names(heteroplasmy_matrix_ci),]
+batch=rep(0,length(after_qc_qc$cluster))
+batch[after_qc_qc$cluster==1&after_qc_qc$batch=="1"]="a)Win 1"
+batch[after_qc_qc$cluster==1&after_qc_qc$batch=="5"]="a)Win 5"
+batch[after_qc_qc$cluster==1&after_qc_qc$batch=="4"]="a)Win 4"
+batch[after_qc_qc$cluster==1&after_qc_qc$batch=="2"]="a)Win 2"
+batch[after_qc_qc$cluster==1&after_qc_qc$batch=="3"]="a)Win 3"
+batch[after_qc_qc$cluster==3&after_qc_qc$batch=="1"]="b)Int 1"
+batch[after_qc_qc$cluster==3&after_qc_qc$batch=="5"]="b)Int 5"
+batch[after_qc_qc$cluster==3&after_qc_qc$batch=="4"]="b)Int 4"
+batch[after_qc_qc$cluster==3&after_qc_qc$batch=="2"]="b)Int 2"
+batch[after_qc_qc$cluster==3&after_qc_qc$batch=="3"]="b)Int 3"
+batch[after_qc_qc$cluster==4&after_qc_qc$batch=="1"]="c)Los 1"
+batch[after_qc_qc$cluster==4&after_qc_qc$batch=="5"]="c)Los 5"
+batch[after_qc_qc$cluster==4&after_qc_qc$batch=="4"]="c)Los 4"
+batch[after_qc_qc$cluster==4&after_qc_qc$batch=="2"]="c)Los 2"
+batch[after_qc_qc$cluster==4&after_qc_qc$batch=="3"]="c)Los 3"
+
+
+
+
+
+colour=rep(0,length(batch))
+colour[grep("Int",batch)]="#0000FF"
+colour[grep("Los",batch)]="#006400"
+colour[grep("Win",batch)]="#DD6400"
+
+
+
+JossNuovo:::plot_batch_epiblast(dpt_analysis$Position[1],heteroplasmy_matrix_ci,batch,colour,cluster_ci,6,index_ci)
+
+JossNuovo:::plot_batch_epiblast(dpt_analysis$Position[2],heteroplasmy_matrix_ci,batch,colour,cluster_ci,6,index_ci)
+
+
+
+```
+
+
+### Unsupervised cluster analysis among cells based on allele frequency values
+JossNuovo offers the possibility to perform an unsupervised hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cells is the angular distance of the allele frequencies.
+Given a base, the variance of the distance values between two cells is also computed.
+Top bases with highest variance are selected for down stream analysis.
+We can represent the difference between two cells as a vector whose cordinates are the angular distances of the top bases.
+The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
+The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
+The third element is a vector with the top bases according to variance.
+
+It is also possible to run *clustering_dist_ang* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
+The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
+The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
+See *?clustering_dist_ang* for more info.
+
+```{r}
+result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(row.names(heteroplasmy_matrix_ci)),deepSplit_param=0,minClusterSize_param=50,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+
+
+old_new_classification=result_clustering_sc[[1]]
+dist_matrix_sc=result_clustering_sc[[2]]
+top_dist=result_clustering_sc[[3]]
+common_idx=result_clustering_sc[[4]]
+
+old_classification=as.vector(old_new_classification[,1])
+new_classification=as.vector(old_new_classification[,2])
+
+Plot_distance_matrix(dist_matrix_sc,old_classification)
+```
+
+
+
+
+Below the top 2 bases selected for the unsupervised cluster analysis. Consistenly these are the same top 2 bases according to GAM fit.
+
+```{r}
+q=list()
+for ( i in 1:length(top_dist[1:2])){
+p=JossNuovo:::plot_heteroplasmy_epiblast(top_dist[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)
+q=list(q,p)
+}
+q
+
+
+
+```
+
+
+```{r}
+#library(utils)
+#utils::sessionInfo()
+```

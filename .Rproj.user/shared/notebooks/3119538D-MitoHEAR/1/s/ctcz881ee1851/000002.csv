@@ -1,0 +1,2 @@
+"0","load(system.file(""extdata"", ""after_qc.Rda"", package = ""MitoHEAR""))"
+"0","cell_names=as.vector(after_qc$new_name)"

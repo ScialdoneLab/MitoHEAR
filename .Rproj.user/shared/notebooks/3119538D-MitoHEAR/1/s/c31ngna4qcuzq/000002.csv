@@ -1,0 +1,24 @@
+"0","q=list()"
+"0","for ( i in dpt_analysis$Position[1:2]){"
+"0","p=plot_dpt(i,heteroplasmy_matrix_ci,cluster_ci,time,dpt_analysis,index_ci)"
+"0","q=list(q,p)"
+"0","}"
+"0","q"
+"1","[[1]]
+"
+"1","[[1]][[1]]
+"
+"1","list()
+"
+"1","
+"
+"1","[[1]][[2]]
+"
+"1","
+"
+"1","
+"
+"1","[[2]]
+"
+"1","
+"

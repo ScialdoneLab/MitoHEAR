@@ -1,0 +1,5 @@
+"0","time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time"
+"0",""
+"0","dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method=""GAM"")"
+"0",""
+"0","dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]"

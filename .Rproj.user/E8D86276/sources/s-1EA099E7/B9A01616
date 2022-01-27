@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643130002066.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "697564625",
+    "id" : "B9A01616",
+    "lastKnownWriteTime" : 1643294462,
+    "last_content_update" : 1643294462291,
+    "path" : "~/MitoHEAR/R/plotting_functions.R",
+    "project_path" : "R/plotting_functions.R",
+    "properties" : {
+        "cursorPosition" : "995,0",
+        "scrollLine" : "976"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

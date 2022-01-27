@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1643183774978.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "59BBBF9",
+    "lastKnownWriteTime" : 1643191500,
+    "last_content_update" : 1643191500816,
+    "path" : "~/JossNuovo/vignette/Ludwig_et_al_example_notebook.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "18,3",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
