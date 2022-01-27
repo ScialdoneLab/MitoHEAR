@@ -336,6 +336,11 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
                                      minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
 {
 
+  if (!(requireNamespace("clustree", quietly = TRUE))) {
+    stop("Package clustree needed for this function to work. Please install it:
+        install.packages('clustree')")
+  }
+
 
 
 

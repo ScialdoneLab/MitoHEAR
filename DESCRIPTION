@@ -12,7 +12,6 @@ Depends:
 Imports:
     Biostrings,
     circlize,
-    clustree,
     ComplexHeatmap,
     data.table,
     dynamicTreeCut,
@@ -26,6 +25,7 @@ Imports:
     rlist,
     Rsamtools,
 Suggests:
+    clustree,
     fmsb (>= 0.7.2),
     gam (>= 1.20),
     karyoploteR (>= 1.14.1),

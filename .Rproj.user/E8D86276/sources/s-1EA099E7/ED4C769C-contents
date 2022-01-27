@@ -336,6 +336,11 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
                                      minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
 {
 
+  if (!(requireNamespace("clustree", quietly = TRUE))) {
+    stop("Package clustree needed for this function to work. Please install it:
+        install.packages('clustree')")
+  }
+
 
 
 
@@ -662,12 +667,12 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
 
   color_cluster = rep(0, length(unique(new_classification)))
   for (i in 1:length(color_cluster)) {
-    color_cluster[i] = JossNuovo:::gg_color_hue(length(color_cluster))[i]
+    color_cluster[i] = MitoHEAR:::gg_color_hue(length(color_cluster))[i]
   }
   names(color_cluster) = as.character(cluster_unique)
   color_condition = rep(0, length(unique(old_classification)))
   for (i in 1:length(color_condition)) {
-    color_condition[i] = JossNuovo:::gg_color_hue(length(color_condition))[i]
+    color_condition[i] = MitoHEAR:::gg_color_hue(length(color_condition))[i]
   }
   names(color_condition) = as.character(unique(old_classification))
   Condition_factor = factor(old_classification)
@@ -703,7 +708,7 @@ Plot_distance_matrix=function(dist_matrix_sc,cluster){
 
   color_cluster = rep(0, length(unique(cluster)))
   for (i in 1:length(color_cluster)) {
-    color_cluster[i] = JossNuovo:::gg_color_hue(length(color_cluster))[i]
+    color_cluster[i] = MitoHEAR:::gg_color_hue(length(color_cluster))[i]
   }
   names(color_cluster) = as.character(unique(cluster))
 
