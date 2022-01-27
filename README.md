@@ -127,13 +127,13 @@ If for each sample a diffusion pseudo time information is available, then it is 
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
 For more exaustive information about the functions offered by **MitoHEAR** see **Tutorials** section below and the help page of the single functions. (**?function_name**).
 
-## Tutorials
+## Tutorial
 
 The following tutorial is completely reproducible within the package **MitoHEAR**:
 
 ### **[MitoHEAR.Rmd](https://github.com/ScialdoneLab/MitoHEAR/tree/master/vignettes/MitoHEAR.Rmd):**
 ```
-vignette("MitoHEAR")
+utils::vignette("MitoHEAR")
 ```
 This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for the mouse mitochondrial genome.
