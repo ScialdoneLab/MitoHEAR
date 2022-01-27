@@ -132,6 +132,9 @@ For more exaustive information about the functions offered by **MitoHEAR** see *
 The following tutorial is completely reproducible within the package **MitoHEAR**:
 
 ### **[MitoHEAR.Rmd](https://github.com/ScialdoneLab/MitoHEAR/tree/master/vignettes/MitoHEAR.Rmd):**
+```
+vignette("MitoHEAR")
+```
 This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for the mouse mitochondrial genome.
 Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
