@@ -139,4 +139,5 @@ This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](
 The heteroplasmy is computed for the mouse mitochondrial genome.
 Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
 The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo time. 
+Full tutorials avaliable locally at /Users/gabriele.lubatti/Desktop/Phd/Heteroplasmy_library_R/Github/JossNuovo/vignettes
 
