@@ -26,14 +26,14 @@ Imports:
     Rsamtools,
 Suggests:
     clustree,
-    fmsb (>= 0.7.2),
-    gam (>= 1.20),
-    karyoploteR (>= 1.14.1),
+    fmsb,
+    gam,
+    karyoploteR,
     knitr,
-    plotly (>= 4.10.0),
-    regioneR (>= 1.20.1),
+    plotly,
+    regioneR,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat
 VignetteBuilder: 
     knitr
 biocViews: software
