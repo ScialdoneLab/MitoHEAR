@@ -1,15 +1,13 @@
 #' plot_heteroplasmy
 #' @param position Character name of the base to plot.
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Charachter vector specifying a partition of the samples, with
-#' length equal to n_row of heteroplasmy_matrix.
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
+#' @param heteroplasmy_matrix Third element returned by \emph{get_heteroplasmy}.
+#' @param cluster Vector specifying a partition of the samples.
+#' @param index Fifth element returned by \emph{get_heteroplasmy}.
 #' @return ggplot object of the heteroplasmy level of a specific base across
 #' samples divided according to cluster.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_heteroplasmy
-plot_heteroplasmy=function (position, heteroplasmy_matrix, cluster, index = NULL)
+plot_heteroplasmy=function (position, heteroplasmy_matrix, cluster, index)
 {
   position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
                                              position]
@@ -41,27 +39,21 @@ plot_heteroplasmy=function (position, heteroplasmy_matrix, cluster, index = NULL
 
 
 #' plot_allele_frequency
-#' @param position Character name of the base to plot.
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param allele_matrix Matrix with allele frequencies values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Characher vector specifying a partition of the samples, with
-#' length equal to n_row of allele_matrix.
+#' @param allele_matrix Fourth element returned by \emph{get_heteroplasmy}.
 #' @param names_allele_qc Character vector with length equal to n_col of
-#' allele_matrix. Each element specifies the name of the base and the allele.
+#' \emph{allele_matrix}. Each element specifies the name of the base and the allele.
 #' @param names_position_qc Character vector with length equal to n_col of
-#' allele_matrix. Each element specifies the name of the base.
-#' @param size_text Character specifying the size of the text for ggplot
+#' \emph{allele_matrix}. Each element specifies the name of the base.
+#' @param size_text Character specifying the size of the text for \emph{gridExtra} function
 #' \emph{grid.arrange})
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
 #' @return \emph{grid.arrange} plot of allele frequencies of a specific base
 #' across samples divided according to cluster.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html]
+#' @inheritParams plot_heteroplasmy
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html}
 #' @export plot_allele_frequency
 plot_allele_frequency=function (position, heteroplasmy_matrix, allele_matrix, cluster,
-                                names_allele_qc, names_position_qc, size_text, index = NULL)
+                                names_allele_qc, names_position_qc, size_text, index )
 {
   position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
                                              position]
@@ -134,23 +126,18 @@ plot_allele_frequency=function (position, heteroplasmy_matrix, allele_matrix, cl
 
 
 #' plot_dpt
-#' @param position Character name of the base to plot.
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Charachter vector specifying a partition of the samples, with
-#' length equal to n_row of heteroplasmy_matrix.
 #' @param time Vector of diffusion pseudo time,with length equal to n_row of
-#' heteroplasmy_matrix.
+#' \emph{heteroplasmy_matrix}.
 #' @param gam_fit_result Data frame returned by \emph{dpt_test}.
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
 #' @return ggplot object of the heteroplasmy level of a specific base across
 #' samples and the GAM fitted curve. The title shows the adjusted p value (FDR)
 #' for the position obtained from \emph{get_heteroplasmy}.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://cran.r-project.org/web/packages/gam/gam.pdf]
+#' @inheritParams plot_heteroplasmy
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://cran.r-project.org/web/packages/gam/gam.pdf}
 #' @export plot_dpt
 plot_dpt=function (position, heteroplasmy_matrix, cluster, time, gam_fit_result,
-                            index = NULL)
+                            index)
 {
   if (is.null(index)) {
     position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
@@ -188,7 +175,7 @@ plot_dpt=function (position, heteroplasmy_matrix, cluster, time, gam_fit_result,
 #' @noRd
 
 plot_batch_epiblast=function (position, heteroplasmy_matrix, batch, cluster,
-                              text_size, index = NULL)
+                              text_size, index)
 {
   if (is.null(index)) {
     position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
@@ -225,21 +212,16 @@ plot_batch_epiblast=function (position, heteroplasmy_matrix, batch, cluster,
 
 
 #' plot_batch
-#' @param position Character name of the base to plot.
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
 #' @param batch Vector of batch names,with length equal to n_row of
-#' heteroplasmy_matrix.
-#' @param cluster Vector of partition, with length equal to n_row of
-#' heteroplasmy_matrix.
-#' @param text_size Character specifying the size of the text for ggplot.
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
-#' @return ggplot object of the heteroplasmy level of a specific base across
+#' \emph{heteroplasmy_matrix}.
+#' @param text_size Character specifying the size of the text for ggplot2.
+#' @inheritParams plot_heteroplasmy
+#' @return \emph{ggplot2} object of the heteroplasmy level of a specific base across
 #' samples divided according to batch.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_batch
 plot_batch=function (position, heteroplasmy_matrix, batch, cluster,
-                     text_size, index = NULL)
+                     text_size, index)
 {
   if (is.null(index)) {
     position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
@@ -270,19 +252,19 @@ plot_batch=function (position, heteroplasmy_matrix, batch, cluster,
 
 
 
-#' Plot_distribution
-#' @param quantity_counts_cell numeric vector returned by
-#' \emph{get_distribution.}
-#' @param x_name Character name specifyng the xlab argument in ggplot.
-#' @param title_name Character name specifyng the ggplot2::ggtitle argument in ggplot..
-#' @return ggplot density plot of the numeric vector quantity_counts_cell.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @export Plot_distribution
-Plot_distribution=function (quantity_counts_cell, x_name, title_name)
+#' plot_distribution
+#' @param quantity_counts_cell Vector returned by
+#' \emph{get_distribution}
+#' @param name_x Character name specifyng the xlab argument in \emph{ggplot2}.
+#' @param name_title Character name specifyng the ggtitle argument in \emph{ggplot2}.
+#' @return \emph{ggplot2} density plot of the Vector quantity_counts_cell.
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @export plot_distribution
+plot_distribution=function (quantity_counts_cell, name_x, name_title)
 {
   data_plot = data.frame(quantity_counts_cell)
   ggplot2::ggplot(data_plot, ggplot2::aes(x = quantity_counts_cell)) + ggplot2::geom_density(color = "darkblue",
-                                                                                    fill = "lightblue") + ggplot2::xlab(x_name) + ggplot2::ggtitle(title_name)
+                                                                                    fill = "lightblue") + ggplot2::xlab(name_x) + ggplot2::ggtitle(name_title)
 }
 
 
@@ -292,19 +274,18 @@ Plot_distribution=function (quantity_counts_cell, x_name, title_name)
 
 
 
-#' Plot_boxplot
+#' plot_condition
 #' @param distribution_1,distribution_2 Numeric vector
 #' @param label_1 Character vector of length equal to distribution_1
 #' @param label_2 Character vector of length equal to distribution_2
-#' @param name_x Character name specifyng the xlab argument in ggplot.
-#' @param name_y Character name specifyng the ylab argument in ggplot.
-#' @param name_title Character name specifyng the ggplot2::ggtitle argument in ggplot.
-#' @return ggplot boxplot of the quantities specified by \emph{distribution_1}
-#' and \emph{distribution_2}, divided by the conditions denoted by
+#' @param name_y Character name specifyng the ylab argument in ggplot2.
+#' @inheritParams plot_distribution
+#' @return \emph{ggplot2} boxplot of the quantities specified by \emph{distribution_1}
+#' and \emph{distribution_2}, separated by the conditions denoted by
 #' \emph{label_1} and \emph{label_2}.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @export Plot_boxplot
-Plot_boxplot=function (distribution_1, distribution_2, label_1, label_2, name_x,
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @export plot_condition
+plot_condition=function (distribution_1, distribution_2, label_1, label_2, name_x,
                        name_y, name_title)
 {
   distribution_all = c(distribution_1, distribution_2)
@@ -329,7 +310,7 @@ Plot_boxplot=function (distribution_1, distribution_2, label_1, label_2, name_x,
 #' plot_heteroplasmy_epiblast
 #' @noRd
 
-plot_heteroplasmy_epiblast=function (position, heteroplasmy_matrix, cluster, index = NULL)
+plot_heteroplasmy_epiblast=function (position, heteroplasmy_matrix, cluster, index)
 {
   position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
                                              position]
@@ -362,7 +343,7 @@ plot_heteroplasmy_epiblast=function (position, heteroplasmy_matrix, cluster, ind
 #' plot_allele_frequency_epiblast
 #' @noRd
 plot_allele_frequency_epiblast=function (position, heteroplasmy_matrix, allele_matrix, cluster,
-                                         names_allele_qc, names_position_qc, size_text, index = NULL)
+                                         names_allele_qc, names_position_qc, size_text, index)
 {
   position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
                                              position]
@@ -448,7 +429,7 @@ plot_allele_frequency_epiblast=function (position, heteroplasmy_matrix, allele_m
 #' plot_dpt_epiblast
 #' @noRd
 plot_dpt_epiblast=function (position, heteroplasmy_matrix, cluster, time, gam_fit_result,
-                                     index = NULL)
+                                     index)
 {
   if (is.null(index)) {
     position = colnames(heteroplasmy_matrix)[colnames(heteroplasmy_matrix) ==
@@ -492,24 +473,24 @@ plot_dpt_epiblast=function (position, heteroplasmy_matrix, cluster, time, gam_fi
 
 
 
-#' plot_coverage
+#' plot_genome_coverage
 #' @param biomart_file Character string with full path to the txt file
-#' downloaded from BioMart [https://m.ensembl.org/info/data/biomart/index.html] . It must have
+#' downloaded from BioMart \url{https://m.ensembl.org/info/data/biomart/index.html} . It must have
 #' the following five columns:Gene.stable.ID, Gene.name, Gene.start..bp.,
 #' Gene.end..bp., Chromosome.scaffold.name
-#' @param fastaFile Character string with full path to the fasta file of the
+#' @param path_fasta Character string with full path to the fasta file of the
 #' genomic region of interest. It should be the same file used in
 #' \emph{get_raw_counts_allele}.
 #' @param chr_name Character specifyng the name of the chromosome of interest.
 #' It must be one of the names in the \emph{Chromosome.scaffold.name} column
 #' from the \emph{biomart_file}.
-#' @param heteroplasmy_matrix heteroplasmy_matrix as returned by
-#' \emph{get_heteroplasmy}.
+#' @inheritParams plot_heteroplasmy
+#' @inheritParams get_raw_counts_allele
 #' @return Plot as returned by \emph{karyoploteR} package.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [http://bioconductor.org/packages/release/bioc/html/karyoploteR.html]
-#' @export plot_coverage
-plot_coverage=function(biomart_file,fastaFile,chr_name,heteroplasmy_matrix){
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{http://bioconductor.org/packages/release/bioc/html/karyoploteR.html}
+#' @export plot_genome_coverage
+plot_genome_coverage=function(biomart_file,path_fasta,chr_name,heteroplasmy_matrix){
   if (!(requireNamespace("karyoploteR", quietly = TRUE) & requireNamespace("regioneR", quietly = TRUE) )) {
     stop("Package karyoploteR and regioneR needed for this function to work. Please install them:
          BiocManager::install('karyoploteR') and BiocManager::install('regioneR') ")
@@ -520,8 +501,8 @@ plot_coverage=function(biomart_file,fastaFile,chr_name,heteroplasmy_matrix){
     base_name[i]=strsplit(colnames(heteroplasmy_matrix),"_")[[i]][1]
   }
   colnames(heteroplasmy_matrix)=base_name
-  seq_name = names(fastaFile)
-  sequence = paste(fastaFile)
+  seq_name = names(path_fasta)
+  sequence = paste(path_fasta)
   df_bg <- data.frame(seq_name, sequence)
   name_sequences=rep(0,length(df_bg$seq_name))
   for (i in 1:length(df_bg$seq_name)){
@@ -611,11 +592,11 @@ plot_coverage=function(biomart_file,fastaFile,chr_name,heteroplasmy_matrix){
 
 #' plot_cells_coverage_epiblast
 #' @noRd
-plot_cells_coverage_epiblast=function(sum_matrix,cells_selected,cluster_ci,interactive=FALSE){
+plot_cells_coverage_epiblast=function(sum_matrix,cells_selected,cluster,interactive=FALSE){
   cells_sum=apply(sum_matrix[cells_selected,],1,sum)
   cells_sum=cells_sum/1000
   cell_id=names(cells_sum)
-  df=data.frame(cell_id,cells_sum,cluster_ci)
+  df=data.frame(cell_id,cells_sum,cluster)
   row.names(df)=cell_id
   df=df[order(cells_sum,decreasing = T),]
   cell_id_plot=factor(row.names(df),levels=row.names(df))
@@ -669,19 +650,19 @@ plot_cells_coverage_epiblast=function(sum_matrix,cells_selected,cluster_ci,inter
 #' \emph{get_heteroplasmy}.
 #' @param cells_selected Character vector of cells for which the coverage is
 #' computed.
-#' @param cluster_ci Character vector with partition information for cells
+#' @param cluster Character vector with partition information for cells
 #' specified in \emph{cells_selected}
 #' @param interactive Logical. If TRUE an interactive plot is produced.
-#' @return ggplot2 object (if interactive=FALSE) or plotly object (if
-#' interactive=TRUE)
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://plotly.com/r/]
+#' @return ggplot2 object (if \emph{interactive}=FALSE) or plotly object (if
+#' \emph{interactive}=TRUE)
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://plotly.com/r/}
 #' @export plot_cells_coverage
-plot_cells_coverage=function(sum_matrix,cells_selected,cluster_ci,interactive=FALSE){
+plot_cells_coverage=function(sum_matrix,cells_selected,cluster,interactive=FALSE){
   cells_sum=apply(sum_matrix[cells_selected,],1,sum)
   cells_sum=cells_sum/1000
   cell_id=names(cells_sum)
-  df=data.frame(cell_id,cells_sum,cluster_ci)
+  df=data.frame(cell_id,cells_sum,cluster)
   row.names(df)=cell_id
   df=df[order(cells_sum,decreasing = T),]
   cell_id_plot=factor(row.names(df),levels=row.names(df))
@@ -727,20 +708,19 @@ plot_cells_coverage=function(sum_matrix,cells_selected,cluster_ci,interactive=FA
 
 
 #' plot_base_coverage
-#' @param sum_matrix First element returned by the function
-#' \emph{get_heteroplasmy}.
 #' @param sum_matrix_qc Second element returned by the function
 #' \emph{get_heteroplasmy}.
 #' @param selected_cells Character vector with cells used fro plotting the
 #' coverage.
 #' @param interactive Logical. If TRUE an interactive plot is produced.
-#' @param text_size Integer value specifying the size of the text in the plot.
-#' @return ggplot2 object (if interactive=FALSE) or plotly object (if
-#' interactive=TRUE)
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://plotly.com/r/]
+#' @return \emph{ggplot2} object (if \emph{interactive}=FALSE) or plotly object (if
+#' (if \emph{interactive}=TRUE)
+#' @inheritParams plot_cells_coverage
+#' @inheritParams plot_batch
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://plotly.com/r/}
 #' @export plot_base_coverage
-plot_base_coverage=function(sum_matrix,sum_matrix_qc,selected_cells,interactive=FALSE,text_size=10){
+plot_base_coverage=function(sum_matrix,sum_matrix_qc,selected_cells,interactive = FALSE,text_size=10){
   condition_base=rep("Removed",length(colnames(sum_matrix)))
   condition_base[colnames(sum_matrix)%in%colnames(sum_matrix_qc)]="Kept"
   if (length(selected_cells)>1){
@@ -809,34 +789,32 @@ plot_base_coverage=function(sum_matrix,sum_matrix_qc,selected_cells,interactive=
 
 
 #' plot_correlation_bases
-#' @param bases_example Character vector specyfing the bases for which the
-#' spearman correlation across samples is computed
-#' @param index_ci Fifth element returned by \emph{get_heteroplasmy}.
-#' @param heteroplasmy_matrix_ci Third element returned by
-#' \emph{get_heteroplasmy}.
+#' @param bases_vector Character vector specyfing the bases for which the
+#' spearman correlation across samples is computed.
+#' @inheritParams plot_heteroplasmy
 #' @return Heatmap plot produced by function \emph{Heatmap}
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap}
 #' @export plot_correlation_bases
-plot_correlation_bases=function(bases_example,index_ci,heteroplasmy_matrix_ci){
-  if (is.null(index_ci)){
+plot_correlation_bases=function(bases_vector,index,heteroplasmy_matrix){
+  if (is.null(index)){
 
-    dat=heteroplasmy_matrix_ci[,bases_example]
+    dat=heteroplasmy_matrix[,bases_vector]
 
-    common_idx=seq(1,length(row.names(heteroplasmy_matrix_ci)))
+    common_idx=seq(1,length(row.names(heteroplasmy_matrix)))
   }
 
-  if (!is.null(index_ci)){
-  common_idx=rep(list(0),length(bases_example))
-  for (i in 1:length(bases_example)){
+  if (!is.null(index)){
+  common_idx=rep(list(0),length(bases_vector))
+  for (i in 1:length(bases_vector)){
 
-    common_idx[[i]]=as.numeric(index_ci[[bases_example[i]]])
+    common_idx[[i]]=as.numeric(index[[bases_vector[i]]])
   }
 
 
   common_idx=Reduce(intersect, common_idx)
 
-  dat=heteroplasmy_matrix_ci[common_idx,bases_example]}
+  dat=heteroplasmy_matrix[common_idx,bases_vector]}
 
 
   correlation=cor(dat,method="spearman")
@@ -873,41 +851,36 @@ plot_correlation_bases=function(bases_example,index_ci,heteroplasmy_matrix_ci){
 
 
 #' plot_spider_chart
-#' @param name_base Character name specyfing the base for which the spider
-#' chart is computed.
-#' @param cluster_ci Character vector specyfing the partition for samples in
-#' \emph{heteroplasmy_matrix_ci}.
-#' @param heteroplasmy_matrix_ci Third element returned by
-#' \emph{get_heteroplasmy}.
-#' @param index_ci Fifth element returned by \emph{get_heteroplasmy}.
+#' @param name_base Character name specyfing the base.
+#' @inheritParams plot_heteroplasmy
 #' @return radarchart plot produced by function \emph{radarchart}.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://rdrr.io/cran/fmsb/man/radarchart.html]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://rdrr.io/cran/fmsb/man/radarchart.html}
 #' @export plot_spider_chart
-plot_spider_chart=function(name_base,cluster_ci,heteroplasmy_matrix_ci,index_ci){
+plot_spider_chart=function(name_base,cluster,heteroplasmy_matrix,index){
 
   if (! requireNamespace("fmsb", quietly = TRUE)) {
     stop("Package fmsb needed for this function. Please install it: install.packages('fmsb')")
   }
 
-  levels_cluster=levels(factor(cluster_ci))
+  levels_cluster=levels(factor(cluster))
   score_base=rep(1,length(levels_cluster))
-  if (is.null(index_ci)){
-    cluster_ci_small=cluster_ci
-    heteroplasmy_matrix_ci_small=heteroplasmy_matrix_ci
+  if (is.null(index)){
+    cluster_small=cluster
+    heteroplasmy_matrix_small=heteroplasmy_matrix
 
   }
-  if (!is.null(index_ci)){
-  cluster_ci_small=cluster_ci[as.numeric(index_ci[[name_base]])]
-  heteroplasmy_matrix_ci_small=heteroplasmy_matrix_ci[as.numeric(index_ci[[name_base]]),]}
+  if (!is.null(index)){
+  cluster_small=cluster[as.numeric(index[[name_base]])]
+  heteroplasmy_matrix_small=heteroplasmy_matrix[as.numeric(index[[name_base]]),]}
   for (i in 1:length(levels_cluster)){
-    score_base[i]=mean(heteroplasmy_matrix_ci_small[cluster_ci_small==levels_cluster[i],name_base])
+    score_base[i]=mean(heteroplasmy_matrix_small[cluster_small==levels_cluster[i],name_base])
     score_base[i]=round(score_base[i],3)
   }
 
   score_base_max=rep(0,length(levels_cluster))
   for (i in 1:length(levels_cluster)){
-    score_base_max[i]=max(apply(heteroplasmy_matrix_ci_small[cluster_ci_small==levels_cluster[i],],2,mean))
+    score_base_max[i]=max(apply(heteroplasmy_matrix_small[cluster_small==levels_cluster[i],],2,mean))
 
   }
 
@@ -967,18 +940,15 @@ plot_spider_chart=function(name_base,cluster_ci,heteroplasmy_matrix_ci,index_ci)
 #' plot_coordinate_heteroplasmy
 #' @param coordinate_dm Dataframe whit samples on the rows and coordinates
 #' names on the columns.
-#' @param heteroplasmy_matrix_ci Third element returned by
-#' \emph{get_heteroplasmy}.
-#' @param index_ci Fifth element returned by \emph{get_heteroplasmy}.
-#' @param name_base Character name for the base for which we want to plot the
-#' expression level.
-#' @return ggplot2 object.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' @inheritParams plot_heteroplasmy
+#' @inheritParams plot_spider_chart
+#' @return \emph{ggplot2} object.
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_coordinate_heteroplasmy
-plot_coordinate_heteroplasmy=function(coordinate_dm,heteroplasmy_matrix_ci,index_ci,name_base){
-  if (is.null(index_ci)){
-    base_col=heteroplasmy_matrix_ci[,name_base]
-    row.names(coordinate_dm)=row.names(heteroplasmy_matrix_ci)
+plot_coordinate_heteroplasmy=function(coordinate_dm,heteroplasmy_matrix,index,name_base){
+  if (is.null(index)){
+    base_col=heteroplasmy_matrix[,name_base]
+    row.names(coordinate_dm)=row.names(heteroplasmy_matrix)
     dat=cbind(coordinate_dm,base_col)
     dat=dat[order(dat[,3],decreasing = F),]
 
@@ -989,9 +959,9 @@ plot_coordinate_heteroplasmy=function(coordinate_dm,heteroplasmy_matrix_ci,index
 
   }
 
-  if(!is.null(index_ci)){
-  base_col=heteroplasmy_matrix_ci[as.numeric(index_ci[[name_base]]),name_base]
-  coordinate_dm=coordinate_dm[as.numeric(index_ci[[name_base]]),]
+  if(!is.null(index)){
+  base_col=heteroplasmy_matrix[as.numeric(index[[name_base]]),name_base]
+  coordinate_dm=coordinate_dm[as.numeric(index[[name_base]]),]
   dat=cbind(coordinate_dm,base_col)
 
 
@@ -1027,12 +997,10 @@ plot_coordinate_cluster_epiblast=function(coordinate_dm,cluster){
 
 
 #' plot_coordinate_cluster
-#' @param coordinate_dm Dataframe whit samples on the rows and coordinates
-#' names on the columns.
-#' @param cluster Character vector specyfing the partition for the samples in
-#' \emph{coordinate_dm}.
-#' @return ggplot2 object.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' @inheritParams plot_coordinate_heteroplasmy
+#' @inheritParams plot_heteroplasmy
+#' @return \emph{ggplot2} object.
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_coordinate_cluster
 plot_coordinate_cluster=function(coordinate_dm,cluster){
   Cluster_col=cluster
@@ -1053,20 +1021,17 @@ plot_coordinate_cluster=function(coordinate_dm,cluster){
 
 
 #' plot_heteroplasmy_variability
-#' @param heteroplasmy_matrix_sc Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster_sc Charachter vector specifying a partition of the samples.
 #' @param threshold Numeric value.
 #' @param frac Logical. If FALSE the absolute number of cells that have at
-#' least one base with heteroplasmy above \emph{threshold} are shown divided by
-#' \emph{cluster_sc}. If TRUE, then the fraction of cells are shown.
-#' @param index Fifth element returned by function \emph{get_heteroplasmy}.
-#' @return ggplot2 object
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' least one base with heteroplasmy above \emph{threshold} are shown separated by
+#' \emph{cluster}. If TRUE, then the fraction of cells are shown.
+#' @inheritParams plot_heteroplasmy
+#' @return \emph{ggplot2} object
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_heteroplasmy_variability
-plot_heteroplasmy_variability=function(heteroplasmy_matrix_sc,cluster_sc,threshold=0.1,frac=FALSE,index){
+plot_heteroplasmy_variability=function(heteroplasmy_matrix,cluster,threshold=0.1,frac=FALSE,index){
   if (is.null(index)){
-  number_het=apply(heteroplasmy_matrix_sc,1,function(x){
+  number_het=apply(heteroplasmy_matrix,1,function(x){
     threshold=threshold
     x=x[x>threshold]
     return(length(x))
@@ -1074,24 +1039,24 @@ plot_heteroplasmy_variability=function(heteroplasmy_matrix_sc,cluster_sc,thresho
   }
 
   if (!is.null(index)){
-    number_het=rep(0,length(row.names(heteroplasmy_matrix_sc)))
+    number_het=rep(0,length(row.names(heteroplasmy_matrix)))
 
-    for ( i in 1:length(row.names(heteroplasmy_matrix_sc))){
-      base_covered=rep(0,length(colnames(heteroplasmy_matrix_sc)))
-      for (j in 1:length(colnames(heteroplasmy_matrix_sc))){
-      if (sum(index[[colnames(heteroplasmy_matrix_sc)[j]]]%in%i)>0){
+    for ( i in 1:length(row.names(heteroplasmy_matrix))){
+      base_covered=rep(0,length(colnames(heteroplasmy_matrix)))
+      for (j in 1:length(colnames(heteroplasmy_matrix))){
+      if (sum(index[[colnames(heteroplasmy_matrix)[j]]]%in%i)>0){
         base_covered[j]=names(index)[j]
       }}
       base_covered=base_covered[base_covered!=0]
-      x=heteroplasmy_matrix_sc[i,base_covered]
+      x=heteroplasmy_matrix[i,base_covered]
       x=x[x>threshold]
       number_het[i]=length(x)
     }
   }
 
   if(frac==FALSE){
-    stages=names(table(cluster_sc[number_het>0]))
-    number=as.vector((table(cluster_sc[number_het>0])))
+    stages=names(table(cluster[number_het>0]))
+    number=as.vector((table(cluster[number_het>0])))
     df <- data.frame(stage=stages,
                      number=number)
     p=ggplot2::ggplot(data=df, ggplot2::aes(x=stages, y=number)) +
@@ -1100,8 +1065,8 @@ plot_heteroplasmy_variability=function(heteroplasmy_matrix_sc,cluster_sc,thresho
   }
 
   if(frac==TRUE){
-    stages=names(table(cluster_sc[number_het>0]))
-    number=as.vector((table(cluster_sc[number_het>0])))/as.vector((table(cluster_sc[(cluster_sc)%in%stages])))
+    stages=names(table(cluster[number_het>0]))
+    number=as.vector((table(cluster[number_het>0])))/as.vector((table(cluster[(cluster)%in%stages])))
     df <- data.frame(stage=stages,
                      number=number)
     p=ggplot2::ggplot(data=df, ggplot2::aes(x=stages, y=number)) +

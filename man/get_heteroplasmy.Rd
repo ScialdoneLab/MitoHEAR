@@ -29,13 +29,13 @@ coordinate of the base (obtained from \emph{get_raw_counts_allele}).}
 which we consider the base covered by the sample.}
 
 \item{number_positions}{Integer specifying the minimun number of bases that
-must be covered by the sample (with counts>number_reads), in order to keep
+must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 the sample for down-stream analysis.}
 
 \item{filtering}{Numeric value equal to 1 or 2. If 1 then only the bases
 that are covered by all the samples are kept for the downstream analysis. If
 2 then all the bases that are covered by more than 50\% of the the samples
-in each cluster (specified by my.clusters) are kept for the down-stream
+in each cluster (specified by \emph{my.clusters}) are kept for the down-stream
 analysis. Default is 1.}
 
 \item{my.clusters}{Charachter vector specifying a partition of the samples.
@@ -46,16 +46,16 @@ It returns a list with 5 elements:
 
 \item{sum_matrix}{A matrix (n_row=number of sample, n_col=number of bases)
 with the counts for each sample/base, for all the initial samples and bases
-included in the raw counts allele matrix.}
+included in the \emph{raw counts allele matrix}.}
 
 \item{sum_matrix_qc}{A matrix (n_row=number of sample, n_col=number of
 bases) with the counts for each sample/base, for all the samples and bases
 that pass the two consequentially filtering steps.}
 
-\item{heteroplasmy_matrix}{A matrix with the same dimension of sum_matrix_qc
+\item{heteroplasmy_matrix}{A matrix with the same dimension of \emph{sum_matrix_qc}
 where each entry (i,j) is the heteroplasmy for sample i in base j.}
 
-\item{norm_counts_allele_filter_qc}{A matrix (n_row=number of sample,
+\item{allele_matrix}{A matrix (n_row=number of sample,
 n_col=4*number of bases) with allele frequencies, for all the samples and
 bases that pass the two consequentially filtering steps.}
 
@@ -70,7 +70,7 @@ frequencies and the heteroplasmy matrix starting from the counts matrix
 obtained with \emph{get_raw_counts_allele}.
 }
 \details{
-Starting from raw counts allele matrix, the function performed two
+Starting from \emph{raw counts allele matrix}, the function performed two
 consequentially filtering steps. The first one is on the samples, keeping
 only the ones that cover a number of bases above number_positions. The
 second one is on the bases, defined by the parameter filtering. The
@@ -103,5 +103,5 @@ index=epiblast_ci[[5]]
 
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

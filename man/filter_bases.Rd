@@ -7,22 +7,21 @@
 filter_bases(heteroplasmy_matrix, min_heteroplasmy, min_cells, index = NULL)
 }
 \arguments{
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
 \item{min_heteroplasmy}{Numeric value.}
 
 \item{min_cells}{Numeric value.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 Character vector of bases that have an heteroplasmy greater than
-min_heteroplasmy in more than min_cells.
+\emph{min_heteroplasmy} in more than \emph{min_cells}.
 }
 \description{
 filter_bases
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

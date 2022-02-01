@@ -7,13 +7,11 @@
 dpt_test(heteroplasmy_matrix, time, index = NULL, method = "GAM")
 }
 \arguments{
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{time}{Vector of diffusion pseudo time,with length equal to n_row of
-heteroplasmy_matrix.}
+\item{time}{Vector of diffusion pseudo time.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{index returned by \emph{get_heteroplasmy}.}
 
 \item{method}{Character name denoting the method to choose for assigning an
 adjusted p value to each of the bases. Can be one of GAM,pearson and
@@ -27,15 +25,15 @@ possible methods, all the p values are then corrected with the method FDR.}
 }
 \value{
 A data frame with 2 columns and number of rows equal to n_col in
-heteroplasmy_matrix. In the first column there are the names of the bases
+\emph{heteroplasmy_matrix}. In the first column there are the names of the bases
 while in the second column there are the adjusted p value.
 }
 \description{
 dpt_test
 }
 \seealso{
-[https://www.rdocumentation.org/packages/gam/versions/1.20/topics/gam]
+\url{https://www.rdocumentation.org/packages/gam/versions/1.20/topics/gam}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

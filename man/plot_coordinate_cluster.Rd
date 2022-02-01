@@ -10,15 +10,14 @@ plot_coordinate_cluster(coordinate_dm, cluster)
 \item{coordinate_dm}{Dataframe whit samples on the rows and coordinates
 names on the columns.}
 
-\item{cluster}{Character vector specyfing the partition for the samples in
-\emph{coordinate_dm}.}
+\item{cluster}{Vector specifying a partition of the samples.}
 }
 \value{
-ggplot2 object.
+\emph{ggplot2} object.
 }
 \description{
 plot_coordinate_cluster
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

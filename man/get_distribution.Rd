@@ -4,16 +4,16 @@
 \alias{get_distribution}
 \title{get_distribution}
 \usage{
-get_distribution(matrix, FUNCTION, index = NULL)
+get_distribution(heteroplasmy_matrix, FUNCTION, index = NULL)
 }
 \arguments{
-\item{matrix}{A matrix with samples on the rows and bases on the columns.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
 \item{FUNCTION}{A character specifyng the function to be applied on each
 column of \emph{matrix}. The possible values are:
 \emph{mean},\emph{max},\emph{min},\emph{median} and \emph{sum}.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{index returned by \emph{get_heteroplasmy}.}
 }
 \value{
 It returns a vector with length equal to n_col of \emph{matrix}

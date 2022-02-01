@@ -4,38 +4,29 @@
 \alias{plot_batch}
 \title{plot_batch}
 \usage{
-plot_batch(
-  position,
-  heteroplasmy_matrix,
-  batch,
-  cluster,
-  text_size,
-  index = NULL
-)
+plot_batch(position, heteroplasmy_matrix, batch, cluster, text_size, index)
 }
 \arguments{
 \item{position}{Character name of the base to plot.}
 
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
 \item{batch}{Vector of batch names,with length equal to n_row of
-heteroplasmy_matrix.}
+\emph{heteroplasmy_matrix}.}
 
-\item{cluster}{Vector of partition, with length equal to n_row of
-heteroplasmy_matrix.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
-\item{text_size}{Character specifying the size of the text for ggplot.}
+\item{text_size}{Character specifying the size of the text for ggplot2.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
-ggplot object of the heteroplasmy level of a specific base across
+\emph{ggplot2} object of the heteroplasmy level of a specific base across
 samples divided according to batch.
 }
 \description{
 plot_batch
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

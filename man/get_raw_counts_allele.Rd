@@ -19,7 +19,7 @@ genomic region of interest.}
 \item{cores_number}{Number of cores to use.}
 }
 \value{
-A list with three elements
+A list with three elements:
 
 \item{matrix_allele_counts }{Matrix of counts (n_row = number of sample,
 n_col= 4*number of bases) of the four alleles in each base, for every
@@ -40,8 +40,8 @@ region of interest. It is based on the \emph{pileup} function of the package
 Rsamtools.
 }
 \seealso{
-[https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup]
+\url{https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

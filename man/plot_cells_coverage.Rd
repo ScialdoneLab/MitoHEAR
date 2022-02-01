@@ -4,12 +4,7 @@
 \alias{plot_cells_coverage}
 \title{plot_cells_coverage}
 \usage{
-plot_cells_coverage(
-  sum_matrix,
-  cells_selected,
-  cluster_ci,
-  interactive = FALSE
-)
+plot_cells_coverage(sum_matrix, cells_selected, cluster, interactive = FALSE)
 }
 \arguments{
 \item{sum_matrix}{First element returned by the function
@@ -18,21 +13,21 @@ plot_cells_coverage(
 \item{cells_selected}{Character vector of cells for which the coverage is
 computed.}
 
-\item{cluster_ci}{Character vector with partition information for cells
+\item{cluster}{Character vector with partition information for cells
 specified in \emph{cells_selected}}
 
 \item{interactive}{Logical. If TRUE an interactive plot is produced.}
 }
 \value{
-ggplot2 object (if interactive=FALSE) or plotly object (if
-interactive=TRUE)
+ggplot2 object (if \emph{interactive}=FALSE) or plotly object (if
+\emph{interactive}=TRUE)
 }
 \description{
 plot_cells_coverage
 }
 \seealso{
-[https://plotly.com/r/]
+\url{https://plotly.com/r/}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

@@ -24,3 +24,6 @@ ref_sequence, after having removed the insertions.
 \description{
 detect_insertion
 }
+\author{
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
+}

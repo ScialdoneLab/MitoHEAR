@@ -4,16 +4,15 @@
 \alias{plot_correlation_bases}
 \title{plot_correlation_bases}
 \usage{
-plot_correlation_bases(bases_example, index_ci, heteroplasmy_matrix_ci)
+plot_correlation_bases(bases_vector, index, heteroplasmy_matrix)
 }
 \arguments{
-\item{bases_example}{Character vector specyfing the bases for which the
-spearman correlation across samples is computed}
+\item{bases_vector}{Character vector specyfing the bases for which the
+spearman correlation across samples is computed.}
 
-\item{index_ci}{Fifth element returned by \emph{get_heteroplasmy}.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 
-\item{heteroplasmy_matrix_ci}{Third element returned by
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 Heatmap plot produced by function \emph{Heatmap}
@@ -22,8 +21,8 @@ Heatmap plot produced by function \emph{Heatmap}
 plot_correlation_bases
 }
 \seealso{
-[https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap]
+\url{https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

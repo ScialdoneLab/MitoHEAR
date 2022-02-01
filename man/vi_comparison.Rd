@@ -15,11 +15,11 @@ vi_comparison(old_classification, new_classification, number_iter)
 }
 \arguments{
 \item{old_classification}{Character vector. First column of the dataframe
-returned by function \emph{clustering_dist_ang} (first element of the
+returned by function \emph{clustering_angular_distance} (first element of the
 output).}
 
 \item{new_classification}{Character vector.Second column of the dataframe
-returned by function \emph{clustering_dist_ang} (first element of the
+returned by function \emph{clustering_angular_distance} (first element of the
 output).}
 
 \item{number_iter}{Integer value. Specify how many random partition are
@@ -39,8 +39,8 @@ comparison with this distribution, an empirical p value is given to the VI
 of the unsupervised cluster analysis.
 }
 \seealso{
-[https://www.rdocumentation.org/packages/mcclust/versions/1.0/topics/vi.dist]
+\url{https://www.rdocumentation.org/packages/mcclust/versions/1.0/topics/vi.dist}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

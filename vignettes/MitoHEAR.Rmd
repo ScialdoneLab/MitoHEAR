@@ -29,7 +29,7 @@ In this notebook it is shown the heteroplasmy analysis performed on mouse CI-tre
 ## Get counts for the four alleles in each base-cell pair
 
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
-This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interested and the cell names.
+This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
 The matrix *after_qc* contains meta data information about the cells (i.e. cell names, cell types, batch).
 
 
@@ -290,21 +290,21 @@ plot_batch(dpt_analysis$Position[2],heteroplasmy_matrix_ci,batch,cluster_ci,6,in
 
 
 ### Unsupervised cluster analysis among cells based on allele frequency values
-MitoHEAR offers the possibility to perform an unsupervised hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cells is the angular distance of the allele frequencies.
+MitoHEAR offers the possibility to perform an unsupervised hierarchical clustering on the cells based on a distance matrix with the function *clustering_angular_distance*. Given a base, the distance between two cells is the angular distance of the allele frequencies.
 Given a base, the variance of the distance values between two cells is also computed.
 Top bases with highest variance are selected for down stream analysis.
 We can represent the difference between two cells as a vector whose cordinates are the angular distances of the top bases.
 The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
-The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
+The output of *clustering_angular_distance* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
 The third element is a vector with the top bases according to variance.
 
-It is also possible to run *clustering_dist_ang* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
+It is also possible to run *clustering_angular_distance* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
 The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
 The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
-See *?clustering_dist_ang* for more info.
+See *?clustering_angular_distance* for more info.
 
 ```{r}
-result_clustering_sc=clustering_dist_ang(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(row.names(heteroplasmy_matrix_ci)),deepSplit_param=0,minClusterSize_param=50,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+result_clustering_sc=clustering_angular_distance(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(row.names(heteroplasmy_matrix_ci)),deepSplit_param=0,minClusterSize_param=50,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
 
 
 old_new_classification=result_clustering_sc[[1]]
@@ -315,7 +315,7 @@ common_idx=result_clustering_sc[[4]]
 old_classification=as.vector(old_new_classification[,1])
 new_classification=as.vector(old_new_classification[,2])
 
-Plot_distance_matrix(dist_matrix_sc,old_classification)
+plot_distance_matrix(dist_matrix_sc,old_classification)
 ```
 
 

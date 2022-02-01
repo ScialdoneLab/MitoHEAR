@@ -6,8 +6,8 @@
 \usage{
 plot_coordinate_heteroplasmy(
   coordinate_dm,
-  heteroplasmy_matrix_ci,
-  index_ci,
+  heteroplasmy_matrix,
+  index,
   name_base
 )
 }
@@ -15,20 +15,18 @@ plot_coordinate_heteroplasmy(
 \item{coordinate_dm}{Dataframe whit samples on the rows and coordinates
 names on the columns.}
 
-\item{heteroplasmy_matrix_ci}{Third element returned by
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{index_ci}{Fifth element returned by \emph{get_heteroplasmy}.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 
-\item{name_base}{Character name for the base for which we want to plot the
-expression level.}
+\item{name_base}{Character name specyfing the base.}
 }
 \value{
-ggplot2 object.
+\emph{ggplot2} object.
 }
 \description{
 plot_coordinate_heteroplasmy
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

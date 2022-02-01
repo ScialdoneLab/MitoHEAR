@@ -2,9 +2,7 @@
 % Please edit documentation in R/lineage_tracing.R
 \name{choose_features_clustering}
 \alias{choose_features_clustering}
-\title{choose_features_clustering(heteroplasmy_matrix, allele_matrix, cluster,
-top_pos,
-deepSplit_param,minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)}
+\title{choose_features_clustering}
 \usage{
 choose_features_clustering(
   heteroplasmy_matrix,
@@ -13,45 +11,42 @@ choose_features_clustering(
   top_pos,
   deepSplit_param,
   minClusterSize_param,
-  min_value,
-  threshold,
-  index = NULL,
+  min_value_vector,
+  threshold = 0.2,
+  index,
   max_frac = 0.7
 )
 }
 \arguments{
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{allele_matrix}{Matrix with allele frequencies values obtained from
-\emph{get_heteroplasmy}.}
+\item{allele_matrix}{Fourth element returned by \emph{get_heteroplasmy}.}
 
-\item{cluster}{Charachter vector specifying a partition of the samples, with
-length equal to n_row of allele_matrix.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
 \item{top_pos}{Numeric value. Number of bases sorted with decreasing values
 of distance variance (see section \emph{Details} below) among samples. If
-relevant_bases=NULL, then the bases for performing hierarchical clustering
+\emph{relevant_bases}=NULL, then the bases for performing hierarchical clustering
 are the ones whose relative variance (variance of the base divided sum of
 variance among \emph{top_pos} bases) is above \emph{min_value}.}
 
-\item{deepSplit_param}{Integer value between 0 and 4 for the deepSplit
+\item{deepSplit_param}{Integer value between 0 and 4 for the \emph{deepSplit}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
-\item{minClusterSize_param}{Integer value specifyng the minClusterSize
+\item{minClusterSize_param}{Integer value specifyng the \emph{minClusterSize}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
-\item{min_value}{Numeric vector. For each value in the vector, the function
-\emph{clustering_dist_ang} is run with parameter \emph{min_value} equal to
-one element of the vector \emph{min_value}.}
+\item{min_value_vector}{Numeric vector. For each value in the vector, the function
+\emph{clustering_angular_distance} is run with parameter \emph{min_value} equal to
+one element of the vector \emph{min_value_vector}.}
 
 \item{threshold}{Numeric value. If a base has heteroplasmy greater or equal
 to \emph{threshold} in more than \emph{max_frac} of cells, then the base is
 not considered for down stream analysis.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 
 \item{max_frac}{Numeric value.If a base has heteroplasmy greater or equal to
 \emph{threshold} in more than \emph{max_frac} of cells, then the base is not
@@ -61,13 +56,11 @@ considered for down stream analysis.}
 Clustree plot.
 }
 \description{
-choose_features_clustering(heteroplasmy_matrix, allele_matrix, cluster,
-top_pos,
-deepSplit_param,minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
+choose_features_clustering
 }
 \seealso{
-[https://cran.r-project.org/web/packages/clustree/clustree.pdf]
+\url{https://cran.r-project.org/web/packages/clustree/clustree.pdf}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

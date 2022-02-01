@@ -1,9 +1,6 @@
 #' dpt_test
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param time Vector of diffusion pseudo time,with length equal to n_row of
-#' heteroplasmy_matrix.
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
+#' @param time Vector of diffusion pseudo time.
+#' @param index index returned by \emph{get_heteroplasmy}.
 #' @param method Character name denoting the method to choose for assigning an
 #' adjusted p value to each of the bases. Can be one of GAM,pearson and
 #' spearman. GAM: For each base, a GAM fit with formula z ~ lo(t) is performed
@@ -13,11 +10,12 @@
 #' performed between the heteroplasmy values and the time . The p value
 #' obtained from the test is then assigned to the base. In all the three
 #' possible methods, all the p values are then corrected with the method FDR.
+#' @inheritParams plot_heteroplasmy
 #' @return A data frame with 2 columns and number of rows equal to n_col in
-#' heteroplasmy_matrix. In the first column there are the names of the bases
+#' \emph{heteroplasmy_matrix}. In the first column there are the names of the bases
 #' while in the second column there are the adjusted p value.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/gam/versions/1.20/topics/gam]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/gam/versions/1.20/topics/gam}
 #' @export dpt_test
 dpt_test=function (heteroplasmy_matrix, time, index = NULL, method = "GAM")
 {
@@ -110,29 +108,25 @@ dpt_test=function (heteroplasmy_matrix, time, index = NULL, method = "GAM")
 
 
 #' get_wilcox_test
-#' @param matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Charachter vector specifying a partition of the samples, with
-#' length equal to n_row of matrix.
 #' @param label_1 Character name of a first label included in cluster. It
 #' denotes the first group used for the Wilcoxon test
 #' @param label_2 Character name of a second label included in cluster and
 #' different from label_1. it denotes the second group used for the Wilcoxon
 #' test.
-#' @param index index returned by \emph{get_heteroplasmy}. Default=NULL.
+#' @inheritParams plot_heteroplasmy
 #' @return It returns a vector of length equal to n_row in matrix. Each element
 #' stands for a base and it contains the adjusted p-value (FDR), obtained in
 #' unpaired two-samples Wilcoxon test from the comparison of the heteroplasmy
 #' between the label_1 and label_2 group.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/wilcox.test]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/wilcox.test}
 #' @export get_wilcox_test
-get_wilcox_test=function(matrix,cluster,label_1,label_2,index=NULL){
-  base=colnames(matrix)
+get_wilcox_test=function(heteroplasmy_matrix,cluster,label_1,label_2,index=NULL){
+  base=colnames(heteroplasmy_matrix)
   distribution=rep(0,length(base))
   if(is.null(index)){
     for (i in 1:length(base)){
-      Y=as.vector(matrix[,base[i]])
+      Y=as.vector(heteroplasmy_matrix[,base[i]])
       Y_label_1=Y[cluster==label_1]
       Y_label_2=Y[cluster==label_2]
       Y_label_all=c(Y_label_1,Y_label_2)
@@ -162,7 +156,7 @@ get_wilcox_test=function(matrix,cluster,label_1,label_2,index=NULL){
       index_cell=index[[which(names(index)==base[i])]]
 
       cluster_index=cluster[index_cell]
-      Y=as.vector(matrix[index_cell,base[i]])
+      Y=as.vector(heteroplasmy_matrix[index_cell,base[i]])
       Y_label_1=Y[cluster_index==label_1]
       Y_label_2=Y[cluster_index==label_2]
       Y_label_all=c(Y_label_1,Y_label_2)

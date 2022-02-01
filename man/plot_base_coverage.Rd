@@ -24,18 +24,18 @@ coverage.}
 
 \item{interactive}{Logical. If TRUE an interactive plot is produced.}
 
-\item{text_size}{Integer value specifying the size of the text in the plot.}
+\item{text_size}{Character specifying the size of the text for ggplot2.}
 }
 \value{
-ggplot2 object (if interactive=FALSE) or plotly object (if
-interactive=TRUE)
+\emph{ggplot2} object (if \emph{interactive}=FALSE) or plotly object (if
+(if \emph{interactive}=TRUE)
 }
 \description{
 plot_base_coverage
 }
 \seealso{
-[https://plotly.com/r/]
+\url{https://plotly.com/r/}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

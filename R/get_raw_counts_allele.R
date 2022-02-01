@@ -16,7 +16,7 @@
 #' genomic region of interest.
 #' @param cell_names Character vector of sample names.
 #' @param cores_number Number of cores to use.
-#' @return A list with three elements
+#' @return A list with three elements:
 #'
 #' \item{matrix_allele_counts }{Matrix of counts (n_row = number of sample,
 #' n_col= 4*number of bases) of the four alleles in each base, for every
@@ -26,8 +26,8 @@
 #' position for a base and the allele.} \item{name_position}{Character vector
 #' with length equal to n_col of matrix_allele_counts. Each element specifies
 #' the coordinate of genomic position for a base.}
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup}
 #' @export get_raw_counts_allele
 get_raw_counts_allele=function(bam_input,path_fasta,cell_names,cores_number=1){
 
@@ -278,7 +278,7 @@ get_raw_counts_allele=function(bam_input,path_fasta,cell_names,cores_number=1){
 
 
 
-  return(list(matrix_allele_counts,colnames(matrix_allele_counts),name_position))
+  return(list(matrix_allele_counts,name_position_allele,name_position))
 
 }
 

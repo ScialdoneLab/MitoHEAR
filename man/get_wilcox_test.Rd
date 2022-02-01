@@ -4,14 +4,12 @@
 \alias{get_wilcox_test}
 \title{get_wilcox_test}
 \usage{
-get_wilcox_test(matrix, cluster, label_1, label_2, index = NULL)
+get_wilcox_test(heteroplasmy_matrix, cluster, label_1, label_2, index = NULL)
 }
 \arguments{
-\item{matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{cluster}{Charachter vector specifying a partition of the samples, with
-length equal to n_row of matrix.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
 \item{label_1}{Character name of a first label included in cluster. It
 denotes the first group used for the Wilcoxon test}
@@ -20,7 +18,7 @@ denotes the first group used for the Wilcoxon test}
 different from label_1. it denotes the second group used for the Wilcoxon
 test.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 It returns a vector of length equal to n_row in matrix. Each element
@@ -32,8 +30,8 @@ between the label_1 and label_2 group.
 get_wilcox_test
 }
 \seealso{
-[https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/wilcox.test]
+\url{https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/wilcox.test}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

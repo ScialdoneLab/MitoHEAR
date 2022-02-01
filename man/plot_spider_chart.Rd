@@ -4,19 +4,16 @@
 \alias{plot_spider_chart}
 \title{plot_spider_chart}
 \usage{
-plot_spider_chart(name_base, cluster_ci, heteroplasmy_matrix_ci, index_ci)
+plot_spider_chart(name_base, cluster, heteroplasmy_matrix, index)
 }
 \arguments{
-\item{name_base}{Character name specyfing the base for which the spider
-chart is computed.}
+\item{name_base}{Character name specyfing the base.}
 
-\item{cluster_ci}{Character vector specyfing the partition for samples in
-\emph{heteroplasmy_matrix_ci}.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
-\item{heteroplasmy_matrix_ci}{Third element returned by
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{index_ci}{Fifth element returned by \emph{get_heteroplasmy}.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 radarchart plot produced by function \emph{radarchart}.
@@ -25,8 +22,8 @@ radarchart plot produced by function \emph{radarchart}.
 plot_spider_chart
 }
 \seealso{
-[https://rdrr.io/cran/fmsb/man/radarchart.html]
+\url{https://rdrr.io/cran/fmsb/man/radarchart.html}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

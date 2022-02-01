@@ -5,7 +5,7 @@
 #' frequencies and the heteroplasmy matrix starting from the counts matrix
 #' obtained with \emph{get_raw_counts_allele}.
 #'
-#' Starting from raw counts allele matrix, the function performed two
+#' Starting from \emph{raw counts allele matrix}, the function performed two
 #' consequentially filtering steps. The first one is on the samples, keeping
 #' only the ones that cover a number of bases above number_positions. The
 #' second one is on the bases, defined by the parameter filtering. The
@@ -22,12 +22,12 @@
 #' @param number_reads Integer specifying the minimun number of counts above
 #' which we consider the base covered by the sample.
 #' @param number_positions Integer specifying the minimun number of bases that
-#' must be covered by the sample (with counts>number_reads), in order to keep
+#' must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 #' the sample for down-stream analysis.
 #' @param filtering Numeric value equal to 1 or 2. If 1 then only the bases
 #' that are covered by all the samples are kept for the downstream analysis. If
 #' 2 then all the bases that are covered by more than 50\% of the the samples
-#' in each cluster (specified by my.clusters) are kept for the down-stream
+#' in each cluster (specified by \emph{my.clusters}) are kept for the down-stream
 #' analysis. Default is 1.
 #' @param my.clusters Charachter vector specifying a partition of the samples.
 #' It is only used when filtering is equal to 2. Deafult is NULL
@@ -35,23 +35,23 @@
 #'
 #' \item{sum_matrix}{A matrix (n_row=number of sample, n_col=number of bases)
 #' with the counts for each sample/base, for all the initial samples and bases
-#' included in the raw counts allele matrix.}
+#' included in the \emph{raw counts allele matrix}.}
 #'
 #' \item{sum_matrix_qc}{A matrix (n_row=number of sample, n_col=number of
 #' bases) with the counts for each sample/base, for all the samples and bases
 #' that pass the two consequentially filtering steps.}
 #'
-#' \item{heteroplasmy_matrix}{A matrix with the same dimension of sum_matrix_qc
+#' \item{heteroplasmy_matrix}{A matrix with the same dimension of \emph{sum_matrix_qc}
 #' where each entry (i,j) is the heteroplasmy for sample i in base j.}
 #'
-#' \item{norm_counts_allele_filter_qc}{A matrix (n_row=number of sample,
+#' \item{allele_matrix}{A matrix (n_row=number of sample,
 #' n_col=4*number of bases) with allele frequencies, for all the samples and
 #' bases that pass the two consequentially filtering steps.}
 #'
 #' \item{index}{If filtering is equal to 2: indices of all the samples that
 #' cover a base, for all bases and samples that pass the two consequentially
 #' filtering steps; if filtering equal to 1: NULL }
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @examples
 #'
 #' load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
@@ -145,32 +145,32 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
   }
   raw_counts_allele_filter_qc = raw_counts_allele_filter[row.names(sum_matrix_qc),
                                                          colnames(raw_counts_allele_filter) %in% colnames(sum_matrix_qc)]
-  norm_counts_allele_filter_qc = matrix(0, ncol = length(colnames(raw_counts_allele_filter_qc)),
+  allele_matrix = matrix(0, ncol = length(colnames(raw_counts_allele_filter_qc)),
                                         nrow = length(row.names(raw_counts_allele_filter_qc)))
-  colnames(norm_counts_allele_filter_qc) = name_position[colnames(raw_counts_allele_filter) %in%
+  colnames(allele_matrix) = name_position[colnames(raw_counts_allele_filter) %in%
                                                            colnames(sum_matrix_qc)]
-  row.names(norm_counts_allele_filter_qc) = row.names(sum_matrix_qc)
+  row.names(allele_matrix) = row.names(sum_matrix_qc)
   colnames(raw_counts_allele_filter_qc) = name_position[colnames(raw_counts_allele_filter) %in%
                                                           colnames(sum_matrix_qc)]
   for (i in 1:length(colnames(raw_counts_allele_filter_qc))) {
-    norm_counts_allele_filter_qc[, i] = raw_counts_allele_filter_qc[,
+    allele_matrix[, i] = raw_counts_allele_filter_qc[,
                                                                     i]/(sum_matrix_qc[, colnames(sum_matrix_qc) %in%
                                                                                         colnames(raw_counts_allele_filter_qc)[i]])
   }
-  norm_counts_allele_filter_qc[is.na(norm_counts_allele_filter_qc)] = 0
+  allele_matrix[is.na(allele_matrix)] = 0
   sum_allele = as.list(rep(0, length(colnames(sum_matrix_qc))))
   if (filtering == 1) {
     for (i in 1:length(colnames(sum_matrix_qc))) {
-      sum_allele[[i]] = apply(norm_counts_allele_filter_qc[,
-                                                           colnames(norm_counts_allele_filter_qc) %in% colnames(sum_matrix_qc)[i]],
+      sum_allele[[i]] = apply(allele_matrix[,
+                                                           colnames(allele_matrix) %in% colnames(sum_matrix_qc)[i]],
                               1, sum)
     }
   }
   if (filtering == 2) {
     for (i in 1:length(colnames(sum_matrix_qc))) {
       index_cell = index[[which(names(index) == colnames(sum_matrix_qc)[i])]]
-      sum_allele[[i]] = apply(norm_counts_allele_filter_qc[index_cell,
-                                                           colnames(norm_counts_allele_filter_qc) %in% colnames(sum_matrix_qc)[i]],
+      sum_allele[[i]] = apply(allele_matrix[index_cell,
+                                                           colnames(allele_matrix) %in% colnames(sum_matrix_qc)[i]],
                               1, sum)
     }
   }
@@ -181,14 +181,14 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
     }
   }
   heteroplasmy_matrix = matrix(0, ncol = length(colnames(sum_matrix_qc)),
-                               nrow = length(row.names(norm_counts_allele_filter_qc)))
+                               nrow = length(row.names(allele_matrix)))
   colnames(heteroplasmy_matrix) = colnames(sum_matrix_qc)
-  row.names(heteroplasmy_matrix) = row.names(norm_counts_allele_filter_qc)
-  colnames(norm_counts_allele_filter_qc) = name_position[name_position %in%
+  row.names(heteroplasmy_matrix) = row.names(allele_matrix)
+  colnames(allele_matrix) = name_position[name_position %in%
                                                            colnames(raw_counts_allele_filter_qc)]
   for (i in colnames(sum_matrix_qc)) {
-    heteroplasmy_matrix[, i] = apply(norm_counts_allele_filter_qc[,
-                                                                  colnames(norm_counts_allele_filter_qc) %in% i], 1,
+    heteroplasmy_matrix[, i] = apply(allele_matrix[,
+                                                                  colnames(allele_matrix) %in% i], 1,
                                      function(x) {
                                        x = as.numeric(as.vector(x))
                                        if (sum(x) == 0) {
@@ -199,10 +199,10 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
                                        }
                                      })
   }
-  colnames(norm_counts_allele_filter_qc) = name_position_allele[name_position %in%
+  colnames(allele_matrix) = name_position_allele[name_position %in%
                                                                   colnames(raw_counts_allele_filter_qc)]
   return(list(sum_matrix, sum_matrix_qc, heteroplasmy_matrix,
-              norm_counts_allele_filter_qc, index))
+              allele_matrix, index))
 }
 
 

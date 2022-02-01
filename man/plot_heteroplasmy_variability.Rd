@@ -5,33 +5,32 @@
 \title{plot_heteroplasmy_variability}
 \usage{
 plot_heteroplasmy_variability(
-  heteroplasmy_matrix_sc,
-  cluster_sc,
+  heteroplasmy_matrix,
+  cluster,
   threshold = 0.1,
   frac = FALSE,
   index
 )
 }
 \arguments{
-\item{heteroplasmy_matrix_sc}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{cluster_sc}{Charachter vector specifying a partition of the samples.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
 \item{threshold}{Numeric value.}
 
 \item{frac}{Logical. If FALSE the absolute number of cells that have at
-least one base with heteroplasmy above \emph{threshold} are shown divided by
-\emph{cluster_sc}. If TRUE, then the fraction of cells are shown.}
+least one base with heteroplasmy above \emph{threshold} are shown separated by
+\emph{cluster}. If TRUE, then the fraction of cells are shown.}
 
-\item{index}{Fifth element returned by function \emph{get_heteroplasmy}.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
-ggplot2 object
+\emph{ggplot2} object
 }
 \description{
 plot_heteroplasmy_variability
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

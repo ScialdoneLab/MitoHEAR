@@ -1,4 +1,0 @@
-library(testthat)
-library(JossNuovo)
-
-test_check("JossNuovo")

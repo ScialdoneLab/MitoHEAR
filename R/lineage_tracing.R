@@ -1,4 +1,5 @@
-#' clustering_dist_ang
+#'clustering_angular_distance
+#'
 #' For each pair of samples and for each base, an angular distance matrix is
 #' computed based on the four allele frequencies. Then only the angular
 #' distances corresponding to the relevant_bases are kept. If relevant bases is
@@ -9,38 +10,32 @@
 #' pass the previous filtering step. On this final distance matrix, a
 #' hierarchical clustering approach is performed using the function
 #' \emph{cutreeHybrid} of the package \emph{dynamicTreeCut}.
-#'
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param allele_matrix Matrix with allele frequencies values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Charachter vector specifying a partition of the samples, with
-#' length equal to n_row of allele_matrix.
 #' @param top_pos Numeric value. Number of bases sorted with decreasing values
 #' of distance variance (see section \emph{Details} below) among samples. If
-#' relevant_bases=NULL, then the bases for performing hierarchical clustering
+#' \emph{relevant_bases}=NULL, then the bases for performing hierarchical clustering
 #' are the ones whose relative variance (variance of the base divided sum of
 #' variance among \emph{top_pos} bases) is above \emph{min_value}.
-#' @param deepSplit_param Integer value between 0 and 4 for the deepSplit
+#' @param deepSplit_param Integer value between 0 and 4 for the \emph{deepSplit}
 #' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 #' below.
-#' @param minClusterSize_param Integer value specifyng the minClusterSize
+#' @param minClusterSize_param Integer value specifyng the \emph{minClusterSize}
 #' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 #' below.
 #' @param threshold Numeric value. If a base has heteroplasmy greater or equal
 #' to \emph{threshold} in more than \emph{max_frac} of cells, then the base is
 #' not considered for down stream analysis.
-#' @param min_value Numeric value. If relevant_bases=NULL, then the bases for
+#' @param min_value Numeric value. If \emph{relevant_bases}=NULL, then the bases for
 #' performing hierarchical clustering are the ones whose relative variance
 #' (variance of the base divided sum of variance among \emph{top_pos} bases) is
 #' above \emph{min_value}.
-#' @param index index returned by \emph{get_heteroplasmy}.
 #' @param relevant_bases Character vector of bases to consider as features for
 #' performing hierarchical clustering on samples.Default=NULL.
 #' @param max_frac Numeric value.If a base has heteroplasmy greater or equal to
 #' \emph{threshold} in more than \emph{max_frac} of cells, then the base is not
 #' considered for down stream analysis.
-#' @return It returns a list with 4 elements: \item{classe}{ Data frame with
+#' @inheritParams plot_heteroplasmy
+#' @inheritParams plot_allele_frequency
+#' @return It returns a list with 4 elements: \item{classification}{ Dataframe with
 #' two columns and n_row equal to n_row in heteroplasmy_matrix. The first
 #' column is the old cluster annotation provided by cluster. The second columns
 #' is the new cluster annotation obtained with hierarichal clustering on
@@ -48,24 +43,24 @@
 #'
 #' }
 #'
-#' \item{res_ang_sqrt}{ Distance matrix based on heteroplasmy values as defined
+#' \item{dist_ang_matrix}{ Distance matrix based on heteroplasmy values as defined
 #' in the section \emph{Details}
 #'
 #' }
 #'
-#' \item{top_dist}{ Vector of bases used for hierarchical clustering. If
-#' \emph{relevant_bases} is not NULL, then top_dist=NULL
+#' \item{top_bases_dist}{ Vector of bases used for hierarchical clustering. If
+#' \emph{relevant_bases} is not NULL, then \emph{top_bases_dist}=NULL
 #'
 #' }
 #'
 #' \item{common_idx}{ Vector of indeces of samples for which hierarchical
-#' clustering is performed. If \emph{index} is NULL, then common_idx=NULL
+#' clustering is performed. If \emph{index} is NULL, then \emph{common_idx}=NULL
 #'
 #' }
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/dynamicTreeCut/versions/1.63-1/topics/cutreeHybrid]
-#' @export clustering_dist_ang
-clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,threshold=0.20,min_value,index=NULL,relevant_bases= NULL,max_frac=0.70)
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/dynamicTreeCut/versions/1.63-1/topics/cutreeHybrid}
+#' @export clustering_angular_distance
+clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,threshold=0.20,min_value,index,relevant_bases= NULL,max_frac=0.70)
 {
 
 
@@ -74,12 +69,12 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
   if (is.null(index)){
 
 
-    entropia_matrix=heteroplasmy_matrix
-    res_ang = rep(0, length(colnames(entropia_matrix)))
+
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
     res_ang = as.list(res_ang)
-    names(res_ang) = colnames(entropia_matrix)
+    names(res_ang) = colnames(heteroplasmy_matrix)
     j = 1
-    for (i in 1:length(colnames(entropia_matrix))) {
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
       allele_matrix_2_1 = allele_matrix[, (j:(j + 3))]
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
@@ -113,7 +108,7 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
       var_dist = var_dist[order(var_dist, decreasing = T)]
 
 
-      mean_max=apply(entropia_matrix[,names(var_dist)],2,function(x){
+      mean_max=apply(heteroplasmy_matrix[,names(var_dist)],2,function(x){
         #x=mean(x)
         #x=x[x>=threshold]
 
@@ -149,37 +144,37 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
 
 
 
-      top_dist = names(var_dist_top)
+      top_bases_dist = names(var_dist_top)
       res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_dist)]
+                                           top_bases_dist)]
     }
 
 
 
     res_ang_sum = Reduce("+", res_ang_sel)
-    res_ang_sqrt = sqrt(res_ang_sum)
-    dist_ang_sqrt = as.dist(res_ang_sqrt)
+    dist_ang_matrix = sqrt(res_ang_sum)
+    dist_ang_sqrt = as.dist(dist_ang_matrix)
     my.tree <- hclust(dist_ang_sqrt)
     my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
                                                 deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
     length(unique(my.clusters))
-    classe <- data.frame(old_classification = cluster, new_classification = my.clusters)
+    classification <- data.frame(old_classification = cluster, new_classification = my.clusters)
     if (!is.null(relevant_bases)){
-      top_dist=NULL}
+      top_bases_dist=NULL}
     common_idx=NULL
-    return(list(classe, res_ang_sqrt,top_dist,common_idx))
+    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
   }
 
 
   if (!is.null(index)){
 
-    entropia_matrix=heteroplasmy_matrix
-    res_ang = rep(0, length(colnames(entropia_matrix)))
+
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
     res_ang = as.list(res_ang)
-    names(res_ang) = colnames(entropia_matrix)
+    names(res_ang) = colnames(heteroplasmy_matrix)
     j = 1
-    for (i in 1:length(colnames(entropia_matrix))) {
-      allele_matrix_2_1 = allele_matrix[index[[colnames(entropia_matrix)[i]]], (j:(j + 3))]
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
+      allele_matrix_2_1 = allele_matrix[index[[colnames(heteroplasmy_matrix)[i]]], (j:(j + 3))]
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
       res_ang[[i]][is.na(res_ang[[i]])]=0
@@ -215,7 +210,7 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
 
       mean_max=rep(0,length(names(var_dist)))
       for (i in 1:length(names(var_dist))){
-        x=entropia_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
+        x=heteroplasmy_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
         if (sum(x>=threshold)>max_frac*length(x)){mean_max[i]="FALSE"
         }
 
@@ -256,9 +251,9 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
 
 
 
-      top_dist = names(var_dist_top)
+      top_bases_dist = names(var_dist_top)
       res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_dist)]
+                                           top_bases_dist)]
     }
 
     bases_example=names(res_ang_sel)
@@ -271,23 +266,23 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
 
     }
     common_idx=Reduce(intersect, common_idx)
-    common_cells=row.names(entropia_matrix)[common_idx]
+    common_cells=row.names(heteroplasmy_matrix)[common_idx]
     res_ang_sel_com=res_ang_sel
     for (i in 1:length(res_ang_sel)){
       res_ang_sel_com[[i]]=res_ang_sel[[i]][common_cells,common_cells]
     }
     res_ang_sel=res_ang_sel_com
     res_ang_sum = Reduce("+", res_ang_sel)
-    res_ang_sqrt = sqrt(res_ang_sum)
-    dist_ang_sqrt = as.dist(res_ang_sqrt)
+    dist_ang_matrix = sqrt(res_ang_sum)
+    dist_ang_sqrt = as.dist(dist_ang_matrix)
     my.tree <- hclust(dist_ang_sqrt)
     my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
                                                 deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
     length(unique(my.clusters))
-    classe <- data.frame(old_classification = cluster[common_idx], new_classification = my.clusters)
+    classification <- data.frame(old_classification = cluster[common_idx], new_classification = my.clusters)
     if (!is.null(relevant_bases)){
-      top_dist=NULL}
-    return(list(classe, res_ang_sqrt,top_dist,common_idx))
+      top_bases_dist=NULL}
+    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
   }
 
 }
@@ -298,42 +293,19 @@ clustering_dist_ang=function (heteroplasmy_matrix, allele_matrix, cluster, top_p
 
 
 
-#' choose_features_clustering(heteroplasmy_matrix, allele_matrix, cluster,
-#' top_pos,
-#' deepSplit_param,minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
-#' @param heteroplasmy_matrix Matrix with heteroplasmy values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param allele_matrix Matrix with allele frequencies values obtained from
-#' \emph{get_heteroplasmy}.
-#' @param cluster Charachter vector specifying a partition of the samples, with
-#' length equal to n_row of allele_matrix.
-#' @param top_pos Numeric value. Number of bases sorted with decreasing values
-#' of distance variance (see section \emph{Details} below) among samples. If
-#' relevant_bases=NULL, then the bases for performing hierarchical clustering
-#' are the ones whose relative variance (variance of the base divided sum of
-#' variance among \emph{top_pos} bases) is above \emph{min_value}.
-#' @param deepSplit_param Integer value between 0 and 4 for the deepSplit
-#' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
-#' below.
-#' @param minClusterSize_param Integer value specifyng the minClusterSize
-#' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
-#' below.
-#' @param min_value Numeric vector. For each value in the vector, the function
-#' \emph{clustering_dist_ang} is run with parameter \emph{min_value} equal to
-#' one element of the vector \emph{min_value}.
-#' @param threshold Numeric value. If a base has heteroplasmy greater or equal
-#' to \emph{threshold} in more than \emph{max_frac} of cells, then the base is
-#' not considered for down stream analysis.
-#' @param index index returned by \emph{get_heteroplasmy}.
-#' @param max_frac Numeric value.If a base has heteroplasmy greater or equal to
-#' \emph{threshold} in more than \emph{max_frac} of cells, then the base is not
-#' considered for down stream analysis.
+#' choose_features_clustering
+#' @param min_value_vector Numeric vector. For each value in the vector, the function
+#' \emph{clustering_angular_distance} is run with parameter \emph{min_value} equal to
+#' one element of the vector \emph{min_value_vector}.
+#' @inheritParams plot_heteroplasmy
+#' @inheritParams plot_allele_frequency
+#' @inheritParams clustering_angular_distance
 #' @return Clustree plot.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://cran.r-project.org/web/packages/clustree/clustree.pdf]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://cran.r-project.org/web/packages/clustree/clustree.pdf}
 #' @export choose_features_clustering
 choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,
-                                     minClusterSize_param,min_value,threshold,index=NULL,max_frac=0.70)
+                                     minClusterSize_param,min_value_vector,threshold=0.20,index,max_frac=0.70)
 {
 
   if (!(requireNamespace("clustree", quietly = TRUE))) {
@@ -344,13 +316,13 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
 
 
-entropia_matrix=heteroplasmy_matrix
+
   if (is.null(index)){
-    res_ang = rep(0, length(colnames(entropia_matrix)))
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
     res_ang = as.list(res_ang)
-    names(res_ang) = colnames(entropia_matrix)
+    names(res_ang) = colnames(heteroplasmy_matrix)
     j = 1
-    for (i in 1:length(colnames(entropia_matrix))) {
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
       allele_matrix_2_1 = allele_matrix[, (j:(j + 3))]
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
@@ -378,7 +350,7 @@ entropia_matrix=heteroplasmy_matrix
     var_dist = var_dist[order(var_dist, decreasing = T)]
 
 
-    mean_max=apply(entropia_matrix[,names(var_dist)],2,function(x){
+    mean_max=apply(heteroplasmy_matrix[,names(var_dist)],2,function(x){
 
 
       if (sum(x>=threshold)>max_frac*length(x)){return(FALSE)
@@ -391,8 +363,8 @@ entropia_matrix=heteroplasmy_matrix
     var_dist=var_dist[as.vector(mean_max)]
 
 
-    number_pos=rep(list(0),length(min_value))
-    for (i in 1:length(min_value)) {
+    number_pos=rep(list(0),length(min_value_vector))
+    for (i in 1:length(min_value_vector)) {
 
       if(length(var_dist)>=top_pos){
 
@@ -401,11 +373,11 @@ entropia_matrix=heteroplasmy_matrix
         for ( j in 1:length(var_dist_top_all)){
           var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
         }
-        if(min_value[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value[i],".","Using all features"))
+        if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
           var_dist_top=var_dist_top_all }
 
-        if(min_value[i]<var_dist_sum[1]){
-          var_dist_top=var_dist_top_all[var_dist_sum>min_value[i]]
+        if(min_value_vector[i]<var_dist_sum[1]){
+          var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
         }}
@@ -415,22 +387,22 @@ entropia_matrix=heteroplasmy_matrix
       for ( j in 1:length(var_dist_top_all)){
         var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
       }
-      if(min_value[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value[i],".","Using all features"))
+      if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
         var_dist_top=var_dist_top_all  }
 
-      if(min_value[i]<var_dist_sum[1]){
-        var_dist_top=var_dist_top_all[var_dist_sum>min_value[i]]
+      if(min_value_vector[i]<var_dist_sum[1]){
+        var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
       }
       }
 
-      top_dist = names(var_dist_top)
+      top_bases_dist = names(var_dist_top)
       res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_dist)]
+                                           top_bases_dist)]
       res_ang_sum = Reduce("+", res_ang_sel)
-      res_ang_sqrt = sqrt(res_ang_sum)
-      dist_ang_sqrt = as.dist(res_ang_sqrt)
+      dist_ang_matrix = sqrt(res_ang_sum)
+      dist_ang_sqrt = as.dist(dist_ang_matrix)
       my.tree <- hclust(dist_ang_sqrt)
       my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
                                                   deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
@@ -457,12 +429,12 @@ entropia_matrix=heteroplasmy_matrix
 
   if(!is.null(index)){
 
-    res_ang = rep(0, length(colnames(entropia_matrix)))
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
     res_ang = as.list(res_ang)
-    names(res_ang) = colnames(entropia_matrix)
+    names(res_ang) = colnames(heteroplasmy_matrix)
     j = 1
-    for (i in 1:length(colnames(entropia_matrix))) {
-      allele_matrix_2_1 = allele_matrix[index[[colnames(entropia_matrix)[i]]], (j:(j + 3))]
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
+      allele_matrix_2_1 = allele_matrix[index[[colnames(heteroplasmy_matrix)[i]]], (j:(j + 3))]
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
       res_ang[[i]][is.na(res_ang[[i]])]=0
@@ -491,7 +463,7 @@ entropia_matrix=heteroplasmy_matrix
 
     mean_max=rep(0,length(names(var_dist)))
     for (i in 1:length(names(var_dist))){
-      x=entropia_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
+      x=heteroplasmy_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
       if (sum(x>=threshold)>max_frac*length(x)){mean_max[i]="FALSE"
       }
 
@@ -503,9 +475,9 @@ entropia_matrix=heteroplasmy_matrix
     var_dist=var_dist[as.logical(mean_max)]
 
 
-    number_pos=rep(list(0),length(min_value))
-    number_idx=rep(list(0),length(min_value))
-    for (i in 1:length(min_value)) {
+    number_pos=rep(list(0),length(min_value_vector))
+    number_idx=rep(list(0),length(min_value_vector))
+    for (i in 1:length(min_value_vector)) {
 
       if(length(var_dist)>=top_pos){
 
@@ -514,11 +486,11 @@ entropia_matrix=heteroplasmy_matrix
         for ( j in 1:length(var_dist_top_all)){
           var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
         }
-        if(min_value[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value[i],".","Using all features"))
+        if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
           var_dist_top=var_dist_top_all }
 
-        if(min_value[i]<var_dist_sum[1]){
-          var_dist_top=var_dist_top_all[var_dist_sum>min_value[i]]
+        if(min_value_vector[i]<var_dist_sum[1]){
+          var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
         }}
@@ -528,19 +500,19 @@ entropia_matrix=heteroplasmy_matrix
       for ( j in 1:length(var_dist_top_all)){
         var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
       }
-      if(min_value[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value[i],".","Using all features"))
+      if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
         var_dist_top=var_dist_top_all  }
 
-      if(min_value[i]<var_dist_sum[1]){
-        var_dist_top=var_dist_top_all[var_dist_sum>min_value[i]]
+      if(min_value_vector[i]<var_dist_sum[1]){
+        var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
       }
       }
 
-      top_dist = names(var_dist_top)
+      top_bases_dist = names(var_dist_top)
       res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_dist)]
+                                           top_bases_dist)]
 
 
 
@@ -554,15 +526,15 @@ entropia_matrix=heteroplasmy_matrix
 
       }
       common_idx=Reduce(intersect, common_idx)
-      common_cells=row.names(entropia_matrix)[common_idx]
+      common_cells=row.names(heteroplasmy_matrix)[common_idx]
       res_ang_sel_com=res_ang_sel
       for (k in 1:length(res_ang_sel)){
         res_ang_sel_com[[k]]=res_ang_sel[[k]][common_cells,common_cells]
       }
       res_ang_sel=res_ang_sel_com
       res_ang_sum = Reduce("+", res_ang_sel)
-      res_ang_sqrt = sqrt(res_ang_sum)
-      dist_ang_sqrt = as.dist(res_ang_sqrt)
+      dist_ang_matrix = sqrt(res_ang_sum)
+      dist_ang_sqrt = as.dist(dist_ang_matrix)
       my.tree <- hclust(dist_ang_sqrt)
       my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
                                                   deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
@@ -611,18 +583,15 @@ entropia_matrix=heteroplasmy_matrix
 
 
 
-#' heatmap_plot
-#' @param marker_plot Character vector. Samples to select for showing in the
-#' heatmap.
-#' @param marker_plot_plot Character vector. Selected samples will be labelled
-#' with the elements of this vector in the heatmap.
-#' @param new_classification Character vector with length equal to selected
-#' samples,corresponding to the clustering analysis based on heteroplasmy
-#' values. See \emph{clustering_dist_ang} for more info.
-#' @param old_classification Character vector with length equal to selected
-#' samples,corresponding to the partition available before clustering on
-#' heteroplasmy values.
-#' @param res_ang_sqrt Distance matrix obtained from \emph{clustering_dist_ang}
+#' plot_heatmap
+#' @param new_classification Character vector.Second column of the dataframe
+#' returned by function \emph{clustering_angular_distance} (first element of the
+#' output).
+#' @param old_classification Character vector. First column of the dataframe
+#' returned by function \emph{clustering_angular_distance} (first element of the
+#' output).
+#' @param dist_ang_matrix Distance matrix obtained from \emph{clustering_angular_distance}
+#' (second element of the output).
 #' @param cluster_columns Logical. Parameter for cluster_columns argument of
 #' the function \emph{Heatmap} in the package \emph{ComplexHeatmap}
 #' @param cluster_rows Logical. Parameter for cluster_rows argument of the
@@ -630,14 +599,14 @@ entropia_matrix=heteroplasmy_matrix
 #' @param name_legend Character value.Parameter for name argument of the
 #' function \emph{Heatmap}
 #' @return Heatmap plot produced by function \emph{Heatmap}
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap]
-#' @export heatmap_plot
-heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
-                       old_classification, res_ang_sqrt, cluster_columns = F, cluster_rows = T,
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap}
+#' @export plot_heatmap
+plot_heatmap=function (new_classification,
+                       old_classification, dist_ang_matrix, cluster_columns = F, cluster_rows = T,
                        name_legend)
 {
-  norm_es=res_ang_sqrt
+
   cluster_unique = unique(new_classification)
   cluster_unique = sort(cluster_unique, decreasing = F)
   index = as.list(rep(0, length(unique(new_classification))))
@@ -648,7 +617,7 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
   for (i in 1:length(cluster_unique)) {
     condition_unique[[i]] = old_classification[index[[i]]]
   }
-  cell_all_day = colnames(norm_es)
+  cell_all_day = colnames(dist_ang_matrix)
   cell_unique = as.list(rep(0, length(unique(new_classification))))
   for (i in 1:length(cluster_unique)) {
     cell_unique[[i]] = cell_all_day[index[[i]]]
@@ -663,7 +632,7 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
 
 
 
-  norm_es_plot = norm_es[good_finale, good_finale]
+  dist_ang_matrix_plot = dist_ang_matrix[good_finale, good_finale]
 
   color_cluster = rep(0, length(unique(new_classification)))
   for (i in 1:length(color_cluster)) {
@@ -681,8 +650,8 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
                             Old_classification = medium_finale)
   haCol1 = ComplexHeatmap::HeatmapAnnotation(df = data_heatmap, col = list(New_classification = color_cluster,
                                                                            Old_classification = color_condition), show_legend = T)
-  ht21 = ComplexHeatmap::Heatmap(as.matrix(norm_es_plot), cluster_rows =cluster_rows,
-                                 col = circlize::colorRamp2(c(0, (max(norm_es_plot))), c("white",
+  ht21 = ComplexHeatmap::Heatmap(as.matrix(dist_ang_matrix_plot), cluster_rows =cluster_rows,
+                                 col = circlize::colorRamp2(c(0, (max(dist_ang_matrix_plot))), c("white",
                                                                                          "red")), name = name_legend, cluster_columns = cluster_columns,
                                  top_annotation = haCol1, row_names_gp = gpar(fontsize = 6),
                                  show_column_names = F, show_row_names = T,clustering_method_rows = "complete",clustering_method_columns="complete")
@@ -695,16 +664,15 @@ heatmap_plot=function (marker_plot, marker_plot_plot, new_classification,
 
 
 
-#' Plot_distance_matrix
-#' @param dist_matrix_sc Distance matrix returned by function
-#' \emph{clustering_dist_ang} (second element of the output).
-#' @param cluster Character vector.Can be one of the two partitions returned by
-#' function \emph{clustering_dist_ang} (first element of the output).
+#' plot_distance_matrix
+#' @param cluster Vector.Can be one of the two partitions returned by
+#' function \emph{clustering_angular_distance} (first element of the output).
+#' @inheritParams plot_heatmap
 #' @return Heatmap plot produced by function \emph{Heatmap}
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap]
-#' @export Plot_distance_matrix
-Plot_distance_matrix=function(dist_matrix_sc,cluster){
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/ComplexHeatmap/versions/1.10.2/topics/Heatmap}
+#' @export plot_distance_matrix
+plot_distance_matrix=function(dist_ang_matrix,cluster){
 
   color_cluster = rep(0, length(unique(cluster)))
   for (i in 1:length(color_cluster)) {
@@ -717,8 +685,8 @@ Plot_distance_matrix=function(dist_matrix_sc,cluster){
   data_heatmap=data.frame(cluster=cluster)
 
   haCol1 = ComplexHeatmap::HeatmapAnnotation(df = data_heatmap, col = list(cluster = color_cluster), show_legend = T,show_annotation_name=F)
-  ht21 = ComplexHeatmap::Heatmap(dist_matrix_sc, cluster_rows =T,
-                                 col = circlize::colorRamp2(c(0, (max(dist_matrix_sc))), c("white",
+  ht21 = ComplexHeatmap::Heatmap(dist_ang_matrix, cluster_rows =T,
+                                 col = circlize::colorRamp2(c(0, (max(dist_ang_matrix))), c("white",
                                                                                            "red")), name = "Euclidean Distance", cluster_columns = T,
                                  top_annotation = haCol1, row_names_gp = gpar(fontsize = 6),
                                  show_column_names = F, show_row_names = F)
@@ -737,19 +705,14 @@ Plot_distance_matrix=function(dist_matrix_sc,cluster){
 #' distribution of VI values from random partitions is built. Finally, from the
 #' comparison with this distribution, an empirical p value is given to the VI
 #' of the unsupervised cluster analysis.
-#' @param old_classification Character vector. First column of the dataframe
-#' returned by function \emph{clustering_dist_ang} (first element of the
-#' output).
-#' @param new_classification Character vector.Second column of the dataframe
-#' returned by function \emph{clustering_dist_ang} (first element of the
-#' output).
 #' @param number_iter Integer value. Specify how many random partition are
 #' generated (starting from re-shuffle of labels in \emph{old_classification}).
+#' @inheritParams plot_heatmap
 #' @return
 #'
 #' Empirical p value.
-#' @author Gabriele Lubatti <gabriele.lubatti@@helmholtz-muenchen.de>
-#' @seealso [https://www.rdocumentation.org/packages/mcclust/versions/1.0/topics/vi.dist]
+#' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
+#' @seealso \url{https://www.rdocumentation.org/packages/mcclust/versions/1.0/topics/vi.dist}
 #' @export vi_comparison
 vi_comparison=function(old_classification,new_classification,number_iter){
   random_vi=rep(list(0),number_iter)

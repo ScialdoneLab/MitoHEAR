@@ -4,18 +4,16 @@
 \alias{plot_heteroplasmy}
 \title{plot_heteroplasmy}
 \usage{
-plot_heteroplasmy(position, heteroplasmy_matrix, cluster, index = NULL)
+plot_heteroplasmy(position, heteroplasmy_matrix, cluster, index)
 }
 \arguments{
 \item{position}{Character name of the base to plot.}
 
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{cluster}{Charachter vector specifying a partition of the samples, with
-length equal to n_row of heteroplasmy_matrix.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 ggplot object of the heteroplasmy level of a specific base across
@@ -25,5 +23,5 @@ samples divided according to cluster.
 plot_heteroplasmy
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }

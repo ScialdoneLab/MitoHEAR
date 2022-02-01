@@ -12,31 +12,28 @@ plot_allele_frequency(
   names_allele_qc,
   names_position_qc,
   size_text,
-  index = NULL
+  index
 )
 }
 \arguments{
 \item{position}{Character name of the base to plot.}
 
-\item{heteroplasmy_matrix}{Matrix with heteroplasmy values obtained from
-\emph{get_heteroplasmy}.}
+\item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{allele_matrix}{Matrix with allele frequencies values obtained from
-\emph{get_heteroplasmy}.}
+\item{allele_matrix}{Fourth element returned by \emph{get_heteroplasmy}.}
 
-\item{cluster}{Characher vector specifying a partition of the samples, with
-length equal to n_row of allele_matrix.}
+\item{cluster}{Vector specifying a partition of the samples.}
 
 \item{names_allele_qc}{Character vector with length equal to n_col of
-allele_matrix. Each element specifies the name of the base and the allele.}
+\emph{allele_matrix}. Each element specifies the name of the base and the allele.}
 
 \item{names_position_qc}{Character vector with length equal to n_col of
-allele_matrix. Each element specifies the name of the base.}
+\emph{allele_matrix}. Each element specifies the name of the base.}
 
-\item{size_text}{Character specifying the size of the text for ggplot
+\item{size_text}{Character specifying the size of the text for \emph{gridExtra} function
 \emph{grid.arrange})}
 
-\item{index}{index returned by \emph{get_heteroplasmy}. Default=NULL.}
+\item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 }
 \value{
 \emph{grid.arrange} plot of allele frequencies of a specific base
@@ -46,8 +43,8 @@ across samples divided according to cluster.
 plot_allele_frequency
 }
 \seealso{
-[https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html]
+\url{https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html}
 }
 \author{
-Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
 }
