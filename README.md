@@ -124,7 +124,7 @@ head(allele_matrix_ci[1:4,1:4])
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
-It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_dist_ang** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **heatmap_plot**. This approach could be usufel for lineage tracing analysis.
+It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be usufel for lineage tracing analysis.
 For more exaustive information about the functions offered by **MitoHEAR** see **Tutorials** section below and the help page of the single functions. (**?function_name**).
 
 ## Tutorial
