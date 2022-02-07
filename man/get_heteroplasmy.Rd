@@ -59,9 +59,9 @@ where each entry (i,j) is the heteroplasmy for sample i in base j.}
 n_col=4*number of bases) with allele frequencies, for all the samples and
 bases that pass the two consequentially filtering steps.}
 
-\item{index}{If filtering is equal to 2: indices of all the samples that
+\item{index}{Indices of the samples that
 cover a base, for all bases and samples that pass the two consequentially
-filtering steps; if filtering equal to 1: NULL }
+filtering steps; if all the samples cover all the bases, then \emph{index} is NULL }
 }
 \description{
 It is one of the two main functions of the \strong{MitoHEAR} package

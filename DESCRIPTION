@@ -13,7 +13,6 @@ Imports:
     Biostrings,
     circlize,
     ComplexHeatmap,
-    data.table,
     dynamicTreeCut,
     GenomicRanges,
     ggplot2,
@@ -22,6 +21,7 @@ Imports:
     magrittr,
     mcclust,
     rdist,
+    reshape2,
     rlist,
     Rsamtools,
 Suggests:

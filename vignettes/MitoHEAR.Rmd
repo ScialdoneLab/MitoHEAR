@@ -307,6 +307,8 @@ See *?clustering_angular_distance* for more info.
 result_clustering_sc=clustering_angular_distance(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(row.names(heteroplasmy_matrix_ci)),deepSplit_param=0,minClusterSize_param=50,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
 
 
+
+
 old_new_classification=result_clustering_sc[[1]]
 dist_matrix_sc=result_clustering_sc[[2]]
 top_dist=result_clustering_sc[[3]]
@@ -318,6 +320,315 @@ new_classification=as.vector(old_new_classification[,2])
 plot_distance_matrix(dist_matrix_sc,old_classification)
 ```
 
+```{r}
+sample1_A=c(1,0,0,0)
+sample1_B=c(1,0,0,0)
+sample1=c(sample1_A,sample1_B)
+sample2_A=c(1,0,0,0)
+sample2_B=c(1,0,0,0)
+sample2=c(sample2_A,sample2_B)
+
+
+names_A=rep("1_A",length(sample1_A))
+names_B=rep("2_C",length(sample1_B))
+allele=c("A","C","T","G")
+names_A_allele=paste(names_A,allele,sep=" ")
+names_B_allele=paste(names_B,allele,sep=" ")
+
+test_allele=matrix(c(sample1,sample2),byrow = T,ncol=8,nrow=2)
+colnames(test_allele)=c(names_A_allele,names_B_allele)
+row.names(test_allele)=c("sample1","sample2")
+
+
+name_position_allele_test=c(names_A_allele,names_B_allele)
+name_position_test=c(names_A,names_B)
+
+cluster_test=c("cluster_test","cluster_test")
+
+heteroplasmy_matrix_test=matrix(0,ncol=length(unique(name_position_test)),nrow=length(row.names(test_allele)))
+colnames(heteroplasmy_matrix_test)=unique(name_position_test)
+row.names(heteroplasmy_matrix_test)=c("sample1","sample2")
+
+
+allele_matrix_test=matrix(c(sample1,sample2),byrow = T,ncol=length(name_position_test),nrow=length(row.names(test_allele)))
+colnames(allele_matrix_test)=c(names_A_allele,names_B_allele)
+row.names(allele_matrix_test)=c("sample1","sample2")
+
+
+
+test_that("clustering_angular_distance gives error", {
+  expect_error(clustering_angular_distance(heteroplasmy_matrix_test,allele_matrix_test,cluster_test,length(row.names(heteroplasmy_matrix_test)),deepSplit_param=0
+  ,minClusterSize_param=1,0.2,min_value=0.001,index=NULL,relevant_bases = NULL),"All the bases has variance 0 across samples")
+
+})
+```
+
+```{r}
+clustering_angular_distance_here=function (heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,threshold=0.20,min_value,index,relevant_bases= NULL,max_frac=0.70)
+{
+
+
+heteroplasmy_matrix=heteroplasmy_matrix_test
+allele_matrix=allele_matrix_test
+cluster=cluster_test
+top_pos=length(row.names(heteroplasmy_matrix_test))
+deepSplit_param=0
+minClusterSize_param=10
+threshold=0.001
+min_value=0.5
+index=NULL
+relevant_bases = NULL
+max_frac=0.7
+
+  if (is.null(index)){
+
+
+
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
+    res_ang = as.list(res_ang)
+    names(res_ang) = colnames(heteroplasmy_matrix)
+    j = 1
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
+      allele_matrix_2_1 = allele_matrix[, (j:(j + 3))]
+      dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
+      res_ang[[i]] = dist_ang_pos
+      res_ang[[i]][is.na(res_ang[[i]])]=0
+      j = j + 4
+    }
+    res_ang_square = lapply(res_ang, FUN = function(x) {
+      return(x^2)
+    })
+    if (!is.null(relevant_bases)) {
+      res_ang_sel = res_ang_square[which(names(res_ang) %in%
+                                           relevant_bases)]
+    }
+
+    if (is.null(relevant_bases)) {
+      var_dist = lapply(res_ang_square, FUN = function(x) {
+        distance_vector=as.vector(as.dist(x))
+        if (length(distance_vector)==1){return(0)}
+        else{
+        return(var(distance_vector))
+        }
+      })
+
+      mean_dist = lapply(res_ang_square, FUN = function(x) {
+        return(mean(as.vector(as.dist(x))))
+      })
+
+
+      var_dist = as.numeric(var_dist)
+
+
+
+      names(var_dist) = names(res_ang)
+
+      var_dist = var_dist[order(var_dist, decreasing = T)]
+
+
+      mean_max=apply(heteroplasmy_matrix[,names(var_dist)],2,function(x){
+
+
+        if (sum(x>=threshold)>max_frac*length(x)){return(FALSE)
+        }
+
+
+        else(return(TRUE))
+      })
+
+      if (all(!as.vector(mean_max))){
+        percentage_frac=max_frac*100
+        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+      }
+
+      var_dist=var_dist[as.vector(mean_max)]
+
+
+
+
+      if (length(var_dist)>=top_pos){
+        var_dist_top_all = var_dist[1:top_pos]}
+      if (length(var_dist)<top_pos){
+        var_dist_top_all = var_dist
+        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
+      }
+      var_dist_sum=rep(0,length(var_dist_top_all))
+      
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+        
+      }
+      for ( i in 1:length(var_dist_top_all)){
+        var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
+      }
+
+      if (var_dist_sum[2]>min_value){
+        var_dist_top=var_dist_top_all[var_dist_sum>min_value]
+      }
+
+      if (var_dist_sum[2]<=min_value){warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
+        var_dist_top=var_dist_top_all
+      }
+
+
+
+      top_bases_dist = names(var_dist_top)
+      res_ang_sel = res_ang_square[which(names(res_ang) %in%
+                                           top_bases_dist)]
+    }
+
+
+
+    res_ang_sum = Reduce("+", res_ang_sel)
+    dist_ang_matrix = sqrt(res_ang_sum)
+    dist_ang_sqrt = as.dist(dist_ang_matrix)
+    my.tree <- hclust(dist_ang_sqrt)
+    my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
+                                                deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
+    length(unique(my.clusters))
+    classification <- data.frame(old_classification = cluster, new_classification = my.clusters)
+    if (!is.null(relevant_bases)){
+      top_bases_dist=NULL}
+    common_idx=NULL
+    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
+  }
+
+
+  if (!is.null(index)){
+
+
+    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
+    res_ang = as.list(res_ang)
+    names(res_ang) = colnames(heteroplasmy_matrix)
+    j = 1
+    for (i in 1:length(colnames(heteroplasmy_matrix))) {
+      allele_matrix_2_1 = allele_matrix[index[[colnames(heteroplasmy_matrix)[i]]], (j:(j + 3))]
+      dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
+      res_ang[[i]] = dist_ang_pos
+      res_ang[[i]][is.na(res_ang[[i]])]=0
+      j = j + 3 + 1
+    }
+    res_ang_square = lapply(res_ang, FUN = function(x) {
+      return(x^2)
+    })
+    if (!is.null(relevant_bases)) {
+      res_ang_sel = res_ang_square[which(names(res_ang) %in%
+                                           relevant_bases)]
+    }
+
+    if (is.null(relevant_bases)) {
+      var_dist = lapply(res_ang_square, FUN = function(x) {
+        return(var(as.vector(as.dist(x))))
+      })
+
+      mean_dist = lapply(res_ang_square, FUN = function(x) {
+        return(mean(as.vector(as.dist(x))))
+      })
+
+
+      var_dist = as.numeric(var_dist)
+
+
+
+      names(var_dist) = names(res_ang)
+
+      var_dist = var_dist[order(var_dist, decreasing = T)]
+
+
+
+      mean_max=rep(0,length(names(var_dist)))
+      for (i in 1:length(names(var_dist))){
+        x=heteroplasmy_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
+        if (sum(x>=threshold)>max_frac*length(x)){mean_max[i]="FALSE"
+        }
+
+
+        else(mean_max[i]="TRUE")
+      }
+
+
+      if (all(!as.logical(mean_max))){
+        percentage_frac=max_frac*100
+        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+      }
+
+
+      var_dist=var_dist[as.logical(mean_max)]
+
+
+
+
+      if (length(var_dist)>=top_pos){
+        var_dist_top_all = var_dist[1:top_pos]}
+
+      if (length(var_dist)<top_pos){
+        var_dist_top_all = var_dist
+        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
+      }
+      
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+      }
+
+      var_dist_sum=rep(0,length(var_dist_top_all))
+      for ( i in 1:length(var_dist_top_all)){
+        var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
+      }
+
+
+      if (var_dist_sum[2]>min_value){
+        var_dist_top=var_dist_top_all[var_dist_sum>min_value]
+      }
+
+      if (var_dist_sum[2]<=min_value){
+        var_dist_top=var_dist_top_all
+        warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
+      }
+
+
+
+
+
+
+      top_bases_dist = names(var_dist_top)
+      res_ang_sel = res_ang_square[which(names(res_ang) %in%
+                                           top_bases_dist)]
+    }
+
+    bases_example=names(res_ang_sel)
+    common_idx=rep(list(0),length(bases_example))
+
+
+    for (i in 1:length(bases_example)){
+
+      common_idx[[i]]=as.numeric(index[[bases_example[i]]])
+
+    }
+    common_idx=Reduce(intersect, common_idx)
+    if (length(common_idx)<2){
+      stop("There are not at least 2 samples that cover all the filtered bases")
+    }
+    common_cells=row.names(heteroplasmy_matrix)[common_idx]
+    res_ang_sel_com=res_ang_sel
+    for (i in 1:length(res_ang_sel)){
+      res_ang_sel_com[[i]]=res_ang_sel[[i]][common_cells,common_cells]
+    }
+    res_ang_sel=res_ang_sel_com
+    res_ang_sum = Reduce("+", res_ang_sel)
+    dist_ang_matrix = sqrt(res_ang_sum)
+    dist_ang_sqrt = as.dist(dist_ang_matrix)
+    my.tree <- hclust(dist_ang_sqrt)
+    my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
+                                                deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
+    length(unique(my.clusters))
+    classification <- data.frame(old_classification = cluster[common_idx], new_classification = my.clusters)
+    if (!is.null(relevant_bases)){
+      top_bases_dist=NULL}
+    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
+  }
+
+}
+```
 
 
 

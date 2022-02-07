@@ -79,7 +79,7 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
       res_ang[[i]][is.na(res_ang[[i]])]=0
-      j = j + 3 + 1
+      j = j + 4
     }
     res_ang_square = lapply(res_ang, FUN = function(x) {
       return(x^2)
@@ -91,7 +91,11 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
 
     if (is.null(relevant_bases)) {
       var_dist = lapply(res_ang_square, FUN = function(x) {
-        return(var(as.vector(as.dist(x))))
+        distance_vector=as.vector(as.dist(x))
+        if (length(distance_vector)==1){return(0)}
+        else{
+          return(var(distance_vector))
+        }
       })
 
       mean_dist = lapply(res_ang_square, FUN = function(x) {
@@ -109,8 +113,7 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
 
 
       mean_max=apply(heteroplasmy_matrix[,names(var_dist)],2,function(x){
-        #x=mean(x)
-        #x=x[x>=threshold]
+
 
         if (sum(x>=threshold)>max_frac*length(x)){return(FALSE)
         }
@@ -118,6 +121,11 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
 
         else(return(TRUE))
       })
+
+      if (all(!as.vector(mean_max))){
+        percentage_frac=max_frac*100
+        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+      }
 
       var_dist=var_dist[as.vector(mean_max)]
 
@@ -128,17 +136,22 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
         var_dist_top_all = var_dist[1:top_pos]}
       if (length(var_dist)<top_pos){
         var_dist_top_all = var_dist
+        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
       }
       var_dist_sum=rep(0,length(var_dist_top_all))
+
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+      }
       for ( i in 1:length(var_dist_top_all)){
         var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
       }
 
-      if (var_dist_sum[1]>min_value){
+      if (var_dist_sum[2]>min_value){
         var_dist_top=var_dist_top_all[var_dist_sum>min_value]
       }
 
-      if (var_dist_sum[1]<=min_value){print(paste0("No variance above ",min_value,".","Using all features."))
+      if (var_dist_sum[2]<=min_value){warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
         var_dist_top=var_dist_top_all
       }
 
@@ -190,7 +203,12 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
 
     if (is.null(relevant_bases)) {
       var_dist = lapply(res_ang_square, FUN = function(x) {
-        return(var(as.vector(as.dist(x))))
+        distance_vector=as.vector(as.dist(x))
+        if (length(distance_vector)==1){return(0)}
+        else{
+          return(var(distance_vector))
+        }
+
       })
 
       mean_dist = lapply(res_ang_square, FUN = function(x) {
@@ -219,6 +237,10 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
       }
 
 
+      if (all(!as.logical(mean_max))){
+        percentage_frac=max_frac*100
+        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+      }
 
 
       var_dist=var_dist[as.logical(mean_max)]
@@ -230,20 +252,27 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
         var_dist_top_all = var_dist[1:top_pos]}
 
       if (length(var_dist)<top_pos){
-        var_dist_top_all = var_dist}
+        var_dist_top_all = var_dist
+        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
+        }
 
       var_dist_sum=rep(0,length(var_dist_top_all))
+
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+      }
       for ( i in 1:length(var_dist_top_all)){
         var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
       }
 
 
-      if (var_dist_sum[1]>min_value){
+      if (var_dist_sum[2]>min_value){
         var_dist_top=var_dist_top_all[var_dist_sum>min_value]
       }
 
-      if (var_dist_sum[1]<=min_value){print(paste0("No variance above ",min_value,".","Using all features."))
+      if (var_dist_sum[2]<=min_value){
         var_dist_top=var_dist_top_all
+        warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
       }
 
 
@@ -266,6 +295,9 @@ clustering_angular_distance=function (heteroplasmy_matrix, allele_matrix, cluste
 
     }
     common_idx=Reduce(intersect, common_idx)
+    if (length(common_idx)<2){
+      stop("There are not at least 2 samples that cover all the filtered bases")
+    }
     common_cells=row.names(heteroplasmy_matrix)[common_idx]
     res_ang_sel_com=res_ang_sel
     for (i in 1:length(res_ang_sel)){
@@ -336,7 +368,12 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
 
     var_dist = lapply(res_ang_square, FUN = function(x) {
-      return(var(as.vector(as.dist(x))))
+      distance_vector=as.vector(as.dist(x))
+      if (length(distance_vector)==1){return(0)}
+      else{
+        return(var(distance_vector))
+      }
+
     })
 
     mean_dist = lapply(res_ang_square, FUN = function(x) {
@@ -360,6 +397,10 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
       else(return(TRUE))
     })
 
+    if (all(!as.vector(mean_max))){
+      percentage_frac=max_frac*100
+      stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+    }
     var_dist=var_dist[as.vector(mean_max)]
 
 
@@ -370,27 +411,41 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
         var_dist_top_all = var_dist[1:top_pos]
         var_dist_sum=rep(0,length(var_dist_top_all))
+        if (sum(var_dist_top_all)==0){
+          stop("All the bases has variance 0 across samples")
+        }
         for ( j in 1:length(var_dist_top_all)){
           var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
         }
-        if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
+        if(min_value_vector[i]>=var_dist_sum[2]){
+          warning(paste0("There are not at least two bases with variance above  ",min_value_vector[i],".","All the bases will be used."))
           var_dist_top=var_dist_top_all }
 
-        if(min_value_vector[i]<var_dist_sum[1]){
+        if(min_value_vector[i]<var_dist_sum[2]){
           var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
         }}
       if(length(var_dist)<top_pos)
       { var_dist_top_all = var_dist
+      warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
       var_dist_sum=rep(0,length(var_dist_top_all))
+
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+      }
+
       for ( j in 1:length(var_dist_top_all)){
         var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
       }
-      if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
+
+
+
+      if(min_value_vector[i]>=var_dist_sum[2]){
+        warning(paste0("There are not at least two bases with variance above  ",min_value_vector[i],".","All the bases will be used."))
         var_dist_top=var_dist_top_all  }
 
-      if(min_value_vector[i]<var_dist_sum[1]){
+      if(min_value_vector[i]<var_dist_sum[2]){
         var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
@@ -438,7 +493,7 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
       dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
       res_ang[[i]] = dist_ang_pos
       res_ang[[i]][is.na(res_ang[[i]])]=0
-      j = j + 3 + 1
+      j = j + 4
     }
     res_ang_square = lapply(res_ang, FUN = function(x) {
       return(x^2)
@@ -447,7 +502,11 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
 
     var_dist = lapply(res_ang_square, FUN = function(x) {
-      return(var(as.vector(as.dist(x))))
+      distance_vector=as.vector(as.dist(x))
+      if (length(distance_vector)==1){return(0)}
+      else{
+        return(var(distance_vector))
+      }
     })
 
     mean_dist = lapply(res_ang_square, FUN = function(x) {
@@ -471,7 +530,10 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
       else(mean_max[i]="TRUE")
     }
 
-
+    if (all(!as.logical(mean_max))){
+      percentage_frac=max_frac*100
+      stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
+    }
     var_dist=var_dist[as.logical(mean_max)]
 
 
@@ -483,27 +545,39 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
         var_dist_top_all = var_dist[1:top_pos]
         var_dist_sum=rep(0,length(var_dist_top_all))
+
+        if (sum(var_dist_top_all)==0){
+          stop("All the bases has variance 0 across samples")
+        }
+
         for ( j in 1:length(var_dist_top_all)){
           var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
         }
-        if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
+        if(min_value_vector[i]>=var_dist_sum[2]){
+          warning(paste0("There are not at least two bases with variance above  ",min_value_vector[i],".","All the bases will be used."))
           var_dist_top=var_dist_top_all }
 
-        if(min_value_vector[i]<var_dist_sum[1]){
+        if(min_value_vector[i]<var_dist_sum[2]){
           var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
         }}
       if(length(var_dist)<top_pos)
       { var_dist_top_all = var_dist
+      warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
       var_dist_sum=rep(0,length(var_dist_top_all))
+      if (sum(var_dist_top_all)==0){
+        stop("All the bases has variance 0 across samples")
+      }
+
       for ( j in 1:length(var_dist_top_all)){
         var_dist_sum[j]=var_dist_top_all[j]/sum(var_dist_top_all)
       }
-      if(min_value_vector[i]>=var_dist_sum[1]){print(paste0("No variance above ",min_value_vector[i],".","Using all features"))
+      if(min_value_vector[i]>=var_dist_sum[2]){
+        warning(paste0("There are not at least two bases with variance above  ",min_value_vector[i],".","All the bases will be used."))
         var_dist_top=var_dist_top_all  }
 
-      if(min_value_vector[i]<var_dist_sum[1]){
+      if(min_value_vector[i]<var_dist_sum[2]){
         var_dist_top=var_dist_top_all[var_dist_sum>min_value_vector[i]]
 
 
@@ -526,6 +600,8 @@ choose_features_clustering=function (heteroplasmy_matrix, allele_matrix, cluster
 
       }
       common_idx=Reduce(intersect, common_idx)
+      if (length(common_idx)<2){
+      stop("There are not at least 2 samples that cover all the filtered bases")}
       common_cells=row.names(heteroplasmy_matrix)[common_idx]
       res_ang_sel_com=res_ang_sel
       for (k in 1:length(res_ang_sel)){

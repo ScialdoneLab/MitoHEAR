@@ -48,9 +48,9 @@
 #' n_col=4*number of bases) with allele frequencies, for all the samples and
 #' bases that pass the two consequentially filtering steps.}
 #'
-#' \item{index}{If filtering is equal to 2: indices of all the samples that
+#' \item{index}{Indices of the samples that
 #' cover a base, for all bases and samples that pass the two consequentially
-#' filtering steps; if filtering equal to 1: NULL }
+#' filtering steps; if all the samples cover all the bases, then \emph{index} is NULL }
 #' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @examples
 #'
@@ -80,14 +80,14 @@
 get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_position,
                            number_reads, number_positions, filtering = 1, my.clusters = NULL)
 {
-  raw_counts_allele_filter = raw_counts_allele
-  sum_matrix = matrix(0, ncol = length(unique(name_position)),
-                      nrow = length(row.names(raw_counts_allele_filter)))
+  if (length(unique(name_position))<2|length(row.names(raw_counts_allele))<2){stop(paste0('There are not at least 2 samples and at least 2 bases as input'))}
+
+  sum_matrix = matrix(0, ncol = length(unique(name_position)), nrow = length(row.names(raw_counts_allele)))
   colnames(sum_matrix) = unique(name_position)
-  row.names(sum_matrix) = row.names(raw_counts_allele_filter)
-  colnames(raw_counts_allele_filter) = name_position
+  row.names(sum_matrix) = row.names(raw_counts_allele)
+  colnames(raw_counts_allele) = name_position
   for (i in unique(name_position)) {
-    sum_matrix[, i] = apply(raw_counts_allele_filter[, colnames(raw_counts_allele_filter) %in%
+    sum_matrix[, i] = apply(raw_counts_allele[, colnames(raw_counts_allele) %in%
                                                        i], 1, function(x) {
                                                          return(sum(x))
                                                        })
@@ -96,8 +96,10 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
   pos_cov = apply(sum_matrix, 1, function(x) {
     sum(x > number_reads)
   })
-  pos_cov_20000 = pos_cov[pos_cov > number_positions]
-  sum_matrix_qc = sum_matrix[pos_cov > number_positions, ]
+  if (sum(pos_cov > number_positions)<2){stop(paste0('There are not at least 2 samples that cover more at least 2 bases with more than ',number_reads," reads"))}
+
+   sum_matrix_qc = sum_matrix[pos_cov > number_positions, ]
+
   if (filtering == 1) {
     raw_counts_allele_update = apply(sum_matrix_qc, 2, function(x) {
       if (sum(x > number_reads) == length(row.names(sum_matrix_qc))) {
@@ -107,9 +109,12 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
         return(FALSE)
       }
     })
+    if (sum(raw_counts_allele_update)<2){stop(paste0('There are no at least 2 bases that are covered by all samples with more than ',number_reads,' reads'))}
+
     sum_matrix_qc = sum_matrix_qc[, raw_counts_allele_update]
     index = NULL
-  }
+
+    }
   if (filtering == 2) {
     my.clusters = my.clusters[pos_cov > number_positions]
     cluster_unique = unique(my.clusters)
@@ -137,25 +142,34 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
         return(FALSE)
       }
     })
+    if (sum(raw_counts_allele_update)<2){stop(paste0('There are not at least 2 bases that are covered by 50% of samples with more than ',number_reads,' reads'))}
+
     sum_matrix_qc = sum_matrix_qc[, raw_counts_allele_update]
-    index = apply(sum_matrix_qc, 2, function(x) {
-      logic = which(x > number_reads)
-      return((logic))
-    })
+    if (all(raw_counts_allele_update)){
+      filtering=1
+      index=NULL
+    }
+    else{
+      index = apply(sum_matrix_qc, 2, function(x) {
+        logic = which(x > number_reads)
+        return((logic))
+      })
+    }
+
   }
-  raw_counts_allele_filter_qc = raw_counts_allele_filter[row.names(sum_matrix_qc),
-                                                         colnames(raw_counts_allele_filter) %in% colnames(sum_matrix_qc)]
-  allele_matrix = matrix(0, ncol = length(colnames(raw_counts_allele_filter_qc)),
-                                        nrow = length(row.names(raw_counts_allele_filter_qc)))
-  colnames(allele_matrix) = name_position[colnames(raw_counts_allele_filter) %in%
+  raw_counts_allele_qc = raw_counts_allele[row.names(sum_matrix_qc),
+                                                         colnames(raw_counts_allele) %in% colnames(sum_matrix_qc)]
+  allele_matrix = matrix(0, ncol = length(colnames(raw_counts_allele_qc)),
+                                        nrow = length(row.names(raw_counts_allele_qc)))
+  colnames(allele_matrix) = name_position[colnames(raw_counts_allele) %in%
                                                            colnames(sum_matrix_qc)]
   row.names(allele_matrix) = row.names(sum_matrix_qc)
-  colnames(raw_counts_allele_filter_qc) = name_position[colnames(raw_counts_allele_filter) %in%
+  colnames(raw_counts_allele_qc) = name_position[colnames(raw_counts_allele) %in%
                                                           colnames(sum_matrix_qc)]
-  for (i in 1:length(colnames(raw_counts_allele_filter_qc))) {
-    allele_matrix[, i] = raw_counts_allele_filter_qc[,
+  for (i in 1:length(colnames(raw_counts_allele_qc))) {
+    allele_matrix[, i] = raw_counts_allele_qc[,
                                                                     i]/(sum_matrix_qc[, colnames(sum_matrix_qc) %in%
-                                                                                        colnames(raw_counts_allele_filter_qc)[i]])
+                                                                                        colnames(raw_counts_allele_qc)[i]])
   }
   allele_matrix[is.na(allele_matrix)] = 0
   sum_allele = as.list(rep(0, length(colnames(sum_matrix_qc))))
@@ -175,9 +189,9 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
     }
   }
   for (i in 1:length(colnames(sum_matrix_qc))) {
-    if (all(sum_allele[[i]] > 0.99) != TRUE) {
-      print(paste("Warning:sum of allele frequencies is not one for one or more cells in base ",
-                  i, sep = ""))
+    if (all(sum_allele[[i]]==1) != TRUE) {
+
+    warning(paste0('Sum of allele frequencies is not one for ',sum(sum_allele[[i]]!=1) ,' cells in base ',i))
     }
   }
   heteroplasmy_matrix = matrix(0, ncol = length(colnames(sum_matrix_qc)),
@@ -185,7 +199,7 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
   colnames(heteroplasmy_matrix) = colnames(sum_matrix_qc)
   row.names(heteroplasmy_matrix) = row.names(allele_matrix)
   colnames(allele_matrix) = name_position[name_position %in%
-                                                           colnames(raw_counts_allele_filter_qc)]
+                                                           colnames(raw_counts_allele_qc)]
   for (i in colnames(sum_matrix_qc)) {
     heteroplasmy_matrix[, i] = apply(allele_matrix[,
                                                                   colnames(allele_matrix) %in% i], 1,
@@ -200,7 +214,7 @@ get_heteroplasmy=function (raw_counts_allele, name_position_allele, name_positio
                                      })
   }
   colnames(allele_matrix) = name_position_allele[name_position %in%
-                                                                  colnames(raw_counts_allele_filter_qc)]
+                                                                  colnames(raw_counts_allele_qc)]
   return(list(sum_matrix, sum_matrix_qc, heteroplasmy_matrix,
               allele_matrix, index))
 }

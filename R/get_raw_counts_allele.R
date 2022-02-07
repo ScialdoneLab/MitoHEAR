@@ -29,106 +29,104 @@
 #' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @seealso \url{https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup}
 #' @export get_raw_counts_allele
-get_raw_counts_allele=function(bam_input,path_fasta,cell_names,cores_number=1){
+get_raw_counts_allele = function(bam_input, path_fasta, cell_names, cores_number = 1) {
 
 
   fastaFile <- Biostrings::readDNAStringSet(path_fasta)
-  seq_name = names(fastaFile)
-  sequence = paste(fastaFile)
+  seq_name <- names(fastaFile)
+  sequence <- paste(fastaFile)
   df_bg <- data.frame(seq_name, sequence)
-  name_sequences=rep(0,length(df_bg$seq_name))
-  for (i in 1:length(df_bg$seq_name)){
-    name_sequences[i]=strsplit(df_bg$seq_name[i],split=" ")[[1]][1]
-    print(name_sequences[i])
+  name_sequences <- rep(0, length(df_bg$seq_name))
+  for (i in 1:length(df_bg$seq_name)) {
+    name_sequences[i] <- strsplit(df_bg$seq_name[i], split = " ")[[1]][1]
+    message(paste0(name_sequences[i], " is in the provided fasta file"))
   }
-  df_bg$seq_name=name_sequences
-  length_sequence=rep(0,length(df_bg$seq_name))
-  for (q in 1:length(df_bg$seq_name)){
-    length_sequence[q]=length(unlist(strsplit(df_bg$sequence[q],split=NULL)))
-    print(length_sequence[q])
+  df_bg$seq_name <- name_sequences
+  length_sequence <- rep(0, length(df_bg$seq_name))
+  for (q in 1:length(df_bg$seq_name)) {
+    length_sequence[q] <- length(unlist(strsplit(df_bg$sequence[q], split = NULL)))
+
+    message(paste0(name_sequences[q], " has ", length_sequence[q], " bases"))
   }
 
 
 
 
 
-  run_first_loop=function(t){
+  run_first_loop = function(t) {
 
 
-    sbp <- Rsamtools::ScanBamParam(which=GenomicRanges::GRanges(name_sequences,IRanges::IRanges(rep(1,length(df_bg$seq_name)),length_sequence)))
+    sbp <- Rsamtools::ScanBamParam(which = GenomicRanges::GRanges(name_sequences, IRanges::IRanges(rep(1, length(df_bg$seq_name)), length_sequence)))
 
-    example_spikes=Rsamtools::pileup((bam_input[t]),scanBamParam=sbp,pileupParam=Rsamtools::PileupParam(min_nucleotide_depth=0,min_base_quality= 33, distinguish_strands=FALSE,include_insertions=FALSE,distinguish_nucleotides=TRUE,ignore_query_Ns=FALSE,include_deletions=FALSE))
-
-
-    matrix_example_spikes_2=data.table::dcast(example_spikes, seqnames+pos ~ nucleotide, value.var="count", fun.aggregate=sum)
-
-    ercc_name_full=df_bg$seq_name
-    list_all_allele=as.list(rep(0,length(ercc_name_full[ercc_name_full%in%as.vector(matrix_example_spikes_2$seqnames)]) ))
-
-    for ( k in 1:length(ercc_name_full[ercc_name_full%in%as.vector(matrix_example_spikes_2$seqnames)])){
+    chr_samtools <- Rsamtools::pileup((bam_input[t]), scanBamParam = sbp, pileupParam = Rsamtools::PileupParam(min_nucleotide_depth = 0, min_base_quality =  33, distinguish_strands = FALSE, include_insertions = FALSE, distinguish_nucleotides = TRUE, ignore_query_Ns = FALSE, include_deletions = FALSE))
 
 
-      ercc_name=ercc_name_full[ercc_name_full%in%as.vector(matrix_example_spikes_2$seqnames)][k]
-      new_matrix=matrix_example_spikes_2[grep(ercc_name,as.vector(matrix_example_spikes_2$seqnames)),]
-      spikes_1=unlist(strsplit(df_bg$sequence[df_bg$seq_name==ercc_name],split=NULL))
-      base_spikes=spikes_1
-      allele_1=rep(0,length(spikes_1))
-      allele_2=rep(0,length(spikes_1))
-      allele_3=rep(0,length(spikes_1))
-      allele_4=rep(0,length(spikes_1))
-      pos_new=seq(1:length(spikes_1))
-      for (i in new_matrix$pos){
-        allele_1[i]=new_matrix$A[new_matrix$pos==i]
-        allele_2[i]=new_matrix$C[new_matrix$pos==i]
-        allele_3[i]=new_matrix$G[new_matrix$pos==i]
-        allele_4[i]=new_matrix$T[new_matrix$pos==i]
+    counts_samtools <- reshape2::dcast(chr_samtools, seqnames + pos ~ nucleotide, value.var = "count", fun.aggregate = sum)
 
-      }
+    chr_names <- df_bg$seq_name
+    list_chr_all <- as.list(rep(0, length(chr_names[chr_names%in%as.vector(counts_samtools$seqnames)]) ))
 
-      final_matrix=data.frame(rep(ercc_name,length(spikes_1)),pos_new,allele_1,allele_2,allele_3,allele_4,base_spikes)
-      colnames(final_matrix)=c("seqnames","pos","A","C","G","T","Reference")
+    for ( k in 1:length(chr_names[chr_names%in%as.vector(counts_samtools$seqnames)])) {
+      chr_selected <- chr_names[chr_names%in%as.vector(counts_samtools$seqnames)][k]
+      counts_samtools_chr <- counts_samtools[grep(chr_selected, as.vector(counts_samtools$seqnames)), ]
+      chr_seq <- unlist(strsplit(df_bg$sequence[df_bg$seq_name==chr_selected], split = NULL))
+      base_spikes <- chr_seq
+      allele_1 <- rep(0, length(chr_seq))
+      allele_2 <- rep(0, length(chr_seq))
+      allele_3 <- rep(0, length(chr_seq))
+      allele_4 <- rep(0, length(chr_seq))
+      bases_chr <- seq(1:length(chr_seq))
+        for (i in counts_samtools_chr$pos) {
+          allele_1[i] <- counts_samtools_chr$A[counts_samtools_chr$pos==i]
+          allele_2[i] <- counts_samtools_chr$C[counts_samtools_chr$pos==i]
+          allele_3[i] <- counts_samtools_chr$G[counts_samtools_chr$pos==i]
+          allele_4[i] <- counts_samtools_chr$T[counts_samtools_chr$pos==i]
+        }
 
-      nuova_matrice=matrix(0,ncol = 4*length(row.names(new_matrix)),nrow = 1)
+      final_counts_samtools <- data.frame(rep(chr_selected, length(chr_seq)), bases_chr, allele_1, allele_2, allele_3, allele_4, base_spikes)
+      colnames(final_counts_samtools) <- c("seqnames", "pos", "A", "C", "G", "T", "Reference")
 
 
-      name_A=paste(final_matrix$pos,"A",final_matrix$Reference,final_matrix$seqnames,sep="_")
-      name_B=paste(final_matrix$pos,"C",final_matrix$Reference,final_matrix$seqnames,sep="_")
-      name_C=paste(final_matrix$pos,"G",final_matrix$Reference,final_matrix$seqnames,sep="_")
-      name_D=paste(final_matrix$pos,"T",final_matrix$Reference,final_matrix$seqnames,sep="_")
+      name_A <- paste(final_counts_samtools$pos, "A", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+      name_B <- paste(final_counts_samtools$pos, "C", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+      name_C <- paste(final_counts_samtools$pos, "G", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+      name_D <- paste(final_counts_samtools$pos, "T", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
 
-      spikes_1=unlist(strsplit(df_bg$sequence[df_bg$seq_name==ercc_name],split=NULL))
-      so=apply(final_matrix,1,function(x){
+      chr_seq <- unlist(strsplit(df_bg$sequence[df_bg$seq_name==chr_selected], split=NULL))
+      select_allele <- apply(final_counts_samtools, 1, function(x) {
 
-        x=x[3:6]
-        x=as.numeric(x)
+        x <- x[3:6]
+        x <- as.numeric(x)
         return(x)
       })
 
-      allele_matrix=matrix(0,ncol = 4*length(row.names(final_matrix)),nrow = 1)
-      j=1
-      for (i in 1:dim(so)[2]){
-        allele_matrix[,j:(j+3)]=so[,i]
+      allele_matrix <- matrix(0, ncol = 4*length(row.names(final_counts_samtools)), nrow = 1)
+      j <- 1
+      for (i in 1:dim(select_allele)[2]) {
+        allele_matrix[, j:(j + 3)] = select_allele[, i]
 
-        j=j+4}
-
-      j=1
-      name_full=rep(0,length(colnames(allele_matrix)))
-      for (i in 1:length(row.names(final_matrix))){
-        name_full[j:(j+3)]=c(name_A[i],name_B[i],name_C[i],name_D[i])
-        j=j+4
+        j <- j + 4
       }
 
-      colnames(allele_matrix)=name_full
-      row.names(allele_matrix)=cell_names[t]
-      list_all_allele[[k]]=allele_matrix
-      names(list_all_allele[[k]])=ercc_name
+      j <- 1
+      name_allele <- rep(0, length(colnames(allele_matrix)))
+      for (i in 1:length(row.names(final_counts_samtools))) {
+        name_allele[j:(j +  3)] = c(name_A[i], name_B[i], name_C[i], name_D[i])
+        j <- j +  4
+      }
 
-      print(paste(k,ercc_name,sep=""))
+      colnames(allele_matrix) <- name_allele
+      row.names(allele_matrix) <- cell_names[t]
+      list_chr_all[[k]] <- allele_matrix
+      names(list_chr_all[[k]]) <- chr_selected
+
+
 
     }
-    print(paste(t,cell_names[t]))
 
-    return(list_all_allele)
+    message(paste0("Sample ", cell_names[t]))
+
+    return(list_chr_all)
 
   }
 
@@ -136,149 +134,152 @@ get_raw_counts_allele=function(bam_input,path_fasta,cell_names,cores_number=1){
 
 
 
-  list_all_cell=mclapply(seq(1:length(bam_input)),run_first_loop , mc.cores = cores_number)
+  list_all_cell <- mclapply(seq(1:length(bam_input)), run_first_loop ,  mc.cores = cores_number)
 
 
 
-  list_all_cell_spikes=as.list(rep(0,length(bam_input)))
+  list_chr_names <- as.list(rep(0, length(bam_input)))
 
-  for (t in 1:length(bam_input)){
-    name_spikes_cell=rep(0,length(list_all_cell[[t]]))
-    for (k in 1:length(name_spikes_cell)){
+  for (t in 1:length(bam_input)) {
+    name_chr <- rep(0, length(list_all_cell[[t]]))
+    for (k in 1:length(name_chr)) {
 
 
-      name_spikes_cell[k]=names(list_all_cell[[t]][[k]][1])}
-    list_all_cell_spikes[[t]]=name_spikes_cell
+      name_chr[k] <- names(list_all_cell[[t]][[k]][1])}
+    list_chr_names[[t]] <- name_chr
   }
 
 
-  all_spikes=unlist(list_all_cell_spikes)
-  all_spikes=unique(all_spikes)
+  all_chr <- unlist(list_chr_names)
+  all_chr <- unique(all_chr)
 
 
 
 
 
-  run_second_loop=function(t){
+  run_second_loop = function(t) {
+
+    absent_chr <- all_chr[!all_chr%in%list_chr_names[[t]]]
+
+    list_chr_absent <- as.list(rep(0, length(absent_chr)))
+    if (length(absent_chr)>0) {
 
 
-    absent_spikes=all_spikes[!all_spikes%in%list_all_cell_spikes[[t]]]
-
-    list_all_allele=as.list(rep(0,length(absent_spikes)))
-    if (length(absent_spikes)>0){
-      print(absent_spikes)
-
-      for ( k in 1:length(absent_spikes)){
+      for ( k in 1:length(absent_chr)) {
 
 
-        ercc_name=absent_spikes[k]
-        print(ercc_name)
-        spikes_1=unlist(strsplit(df_bg$sequence[df_bg$seq_name==ercc_name],split=NULL))
-        base_spikes=spikes_1
-        allele_1=rep(0,length(spikes_1))
-        allele_2=rep(0,length(spikes_1))
-        allele_3=rep(0,length(spikes_1))
-        allele_4=rep(0,length(spikes_1))
-        pos_new=seq(1:length(spikes_1))
+        chr_selected <- absent_chr[k]
 
-        final_matrix=data.frame(rep(ercc_name,length(spikes_1)),pos_new,allele_1,allele_2,allele_3,allele_4,base_spikes)
-        colnames(final_matrix)=c("seqnames","pos","A","C","G","T","Reference")
+        warning(paste0("Chr ", absent_chr[k], "is not present in sample: ", cell_names[t]))
+        chr_seq <- unlist(strsplit(df_bg$sequence[df_bg$seq_name==chr_selected], split = NULL))
 
-        nuova_matrice=matrix(0,ncol = 4*length(row.names(final_matrix)),nrow = 1)
+        allele_1 <- rep(0, length(chr_seq))
+        allele_2 <- rep(0, length(chr_seq))
+        allele_3 <- rep(0, length(chr_seq))
+        allele_4 <- rep(0, length(chr_seq))
+        bases_chr <- seq(1:length(chr_seq))
+
+        final_counts_samtools <- data.frame(rep(chr_selected, length(chr_seq)), bases_chr, allele_1, allele_2, allele_3, allele_4, chr_seq)
+        colnames(final_counts_samtools) <- c("seqnames", "pos", "A", "C", "G", "T", "Reference")
 
 
-        name_A=paste(final_matrix$pos,"A",final_matrix$Reference,final_matrix$seqnames,sep="_")
-        name_B=paste(final_matrix$pos,"C",final_matrix$Reference,final_matrix$seqnames,sep="_")
-        name_C=paste(final_matrix$pos,"G",final_matrix$Reference,final_matrix$seqnames,sep="_")
-        name_D=paste(final_matrix$pos,"T",final_matrix$Reference,final_matrix$seqnames,sep="_")
 
-        spikes_1=unlist(strsplit(df_bg$sequence[df_bg$seq_name==ercc_name],split=NULL))
-        so=apply(final_matrix,1,function(x){
 
-          x=x[3:6]
-          x=as.numeric(x)
+        name_A <- paste(final_counts_samtools$pos, "A", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+        name_B <- paste(final_counts_samtools$pos, "C", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+        name_C <- paste(final_counts_samtools$pos, "G", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+        name_D <- paste(final_counts_samtools$pos, "T", final_counts_samtools$Reference, final_counts_samtools$seqnames, sep = "_")
+
+
+        select_allele <- apply(final_counts_samtools, 1, function(x) {
+
+          x <- x[3:6]
+          x <- as.numeric(x)
           return(x)
         })
 
-        allele_matrix=matrix(0,ncol = 4*length(row.names(final_matrix)),nrow = 1)
-        j=1
-        for (i in 1:dim(so)[2]){
-          allele_matrix[,j:(j+3)]=so[,i]
+        allele_matrix <- matrix(0, ncol = 4*length(row.names(final_counts_samtools)), nrow = 1)
+        j <- 1
+        for (i in 1:dim(select_allele)[2]) {
+          allele_matrix[, j:(j + 3)] <- select_allele[, i]
 
-          j=j+4}
-
-        j=1
-        name_full=rep(0,length(colnames(allele_matrix)))
-        for (i in 1:length(row.names(final_matrix))){
-          name_full[j:(j+3)]=c(name_A[i],name_B[i],name_C[i],name_D[i])
-          j=j+4
+          j <- j + 4
         }
 
-        colnames(allele_matrix)=name_full
-        row.names(allele_matrix)=cell_names[t]
-        list_all_allele[[k]]=allele_matrix
+        j <- 1
+        name_allele <- rep(0, length(colnames(allele_matrix)))
+        for (i in 1:length(row.names(final_counts_samtools))) {
+          name_allele[j:(j + 3)] <- c(name_A[i], name_B[i], name_C[i], name_D[i])
+          j <- j + 4
+        }
+
+        colnames(allele_matrix) <- name_allele
+        row.names(allele_matrix) <- cell_names[t]
+        list_chr_absent[[k]] <- allele_matrix
 
 
-      }}
-    else{}
+      }
+    }
 
-    print(paste(t,cell_names[t]))
+    else {}
 
-    return(list_all_allele)
+
+
+    return(list_chr_absent)
 
   }
 
 
 
-  list_all_cell_absent=mclapply(seq(1:length(bam_input)),run_second_loop , mc.cores = cores_number)
+  list_all_cell_absent <- mclapply(seq(1:length(bam_input)), run_second_loop ,  mc.cores = cores_number)
 
 
 
 
 
-  run_third_loop=function(t){
+  run_third_loop = function(t) {
 
 
 
-    list_all_complete_one=c(list_all_cell[[t]],list_all_cell_absent[[t]])
-    return(list_all_complete_one)
+    list_complete <- c(list_all_cell[[t]], list_all_cell_absent[[t]])
+    return(list_complete)
   }
-  list_all_complete=mclapply(seq(1:length(bam_input)),run_third_loop , mc.cores = cores_number)
+  list_all_complete <- mclapply(seq(1:length(bam_input)), run_third_loop ,  mc.cores = cores_number)
 
 
-  spikes_length=rep(0,length(all_spikes))
-  for (t in 1:length(all_spikes)){
-    spikes_length[t]=length(unlist(strsplit(df_bg$sequence[df_bg$seq_name==all_spikes[t]],split=NULL)))
-  }
-
-
-
-  matrix_allele_counts=matrix(0,ncol = sum(spikes_length)*4,nrow = length(bam_input))
-
-  for (i in 1:length(bam_input)){
-
-    matrix_allele_counts[i,]=rlist::list.cbind(list_all_complete[[i]])
-  }
-
-  colnames(matrix_allele_counts)=colnames(rlist::list.cbind(list_all_complete[[1]]))
-  row.names(matrix_allele_counts)=cell_names
-
-
-  name_position_allele=colnames(matrix_allele_counts)
-  name_position=rep(0,length(colnames(matrix_allele_counts)))
-  for (i in 1:length(colnames(matrix_allele_counts))){
-    part_1=strsplit(colnames(matrix_allele_counts)[i],split="_")[[1]][1]
-    part_2=strsplit(colnames(matrix_allele_counts)[i],split="_")[[1]][4]
-    name_position[i]=paste(part_1,part_2,sep="_")
-    print(i)
+  chr_length <- rep(0, length(all_chr))
+  for (t in 1:length(all_chr)) {
+    chr_length[t] <- length(unlist(strsplit(df_bg$sequence[df_bg$seq_name==all_chr[t]], split = NULL)))
   }
 
 
-  name_position_unique=unique(name_position)
+
+  matrix_allele_counts <- matrix(0, ncol = sum(chr_length)*4, nrow = length(bam_input))
+
+  for (i in 1:length(bam_input)) {
+
+    matrix_allele_counts[i, ] <- rlist::list.cbind(list_all_complete[[i]])
+  }
+
+  colnames(matrix_allele_counts) <- colnames(rlist::list.cbind(list_all_complete[[1]]))
+  row.names(matrix_allele_counts) <- cell_names
+
+
+  name_position_allele <- colnames(matrix_allele_counts)
+  name_position <- rep(0, length(colnames(matrix_allele_counts)))
+  for (i in 1:length(colnames(matrix_allele_counts))) {
+    part_1 <- strsplit(colnames(matrix_allele_counts)[i], split = "_")[[1]][1]
+    part_2 <- strsplit(colnames(matrix_allele_counts)[i], split = "_")[[1]][4]
+    name_position[i] <- paste(part_1, part_2, sep = "_")
+
+  }
+
+
+  name_position_unique <- unique(name_position)
 
 
 
-  return(list(matrix_allele_counts,name_position_allele,name_position))
+  return(list(matrix_allele_counts, name_position_allele, name_position))
 
 }
 
