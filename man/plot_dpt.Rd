@@ -29,7 +29,7 @@ for the position obtained from \emph{get_heteroplasmy}.
 plot_dpt
 }
 \seealso{
-\url{https://cran.r-project.org/web/packages/gam/gam.pdf}
+\url{https://cran.r-project.org/package=gam}
 }
 \author{
 Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}

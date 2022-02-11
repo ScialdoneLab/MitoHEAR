@@ -43,7 +43,7 @@ across samples divided according to cluster.
 plot_allele_frequency
 }
 \seealso{
-\url{https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html}
+\url{https://cran.r-project.org/package=gridExtra}
 }
 \author{
 Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}
