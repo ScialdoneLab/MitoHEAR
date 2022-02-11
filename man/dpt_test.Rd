@@ -14,7 +14,7 @@ dpt_test(heteroplasmy_matrix, time, index = NULL, method = "GAM")
 \item{index}{index returned by \emph{get_heteroplasmy}.}
 
 \item{method}{Character name denoting the method to choose for assigning an
-adjusted p value to each of the bases. Can be one of GAM,pearson and
+adjusted p value to each of the bases. Can be one of GAM, pearson and
 spearman. GAM: For each base, a GAM fit with formula z ~ lo(t) is performed
 between the heteroplasmy values (z) and the time (t). The p value from the
 table "Anova for Parametric Effects" is then assigned to the base.

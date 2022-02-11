@@ -23,10 +23,10 @@ library(MitoHEAR)
 ```
 
 
-In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from  <https://www.nature.com/articles/s42255-021-00422-7>.
+In this notebook it is shown the heteroplasmy analysis performed on mouse CI-treated epiblast cells from [Lima et al, 2021](https://www.nature.com/articles/s42255-021-00422-7).
 
 
-## Get counts for the four alleles in each base-cell pair
+### Get counts for the four alleles in each base-cell pair
 
 The first step of the library MitoHEAR is to generate a raw counts allele matrix with cells as rows and the four alleles for each base in the fasta file on the columns.
 This task is achieved with the function *get_raw_counts_allele*. As input we need to provide the sorted bam files (one for each cell, with full path), the fasta file of the genomic region of interest and the cell names.
@@ -36,7 +36,7 @@ The matrix *after_qc* contains meta data information about the cells (i.e. cell 
 
 ```{r}
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
-cell_names=as.vector(after_qc$new_name)
+cell_names <- as.vector(after_qc$new_name)
 ```
 
 We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
@@ -53,18 +53,18 @@ The output of *get_raw_counts_allele* is a list with three elements (see *?get_r
 
 
 ```{r}
-matrix_allele_counts=output_SNP_mt[[1]]
-name_position_allele=output_SNP_mt[[2]]
-name_position=output_SNP_mt[[3]]
+matrix_allele_counts <- output_SNP_mt[[1]]
+name_position_allele <- output_SNP_mt[[2]]
+name_position <- output_SNP_mt[[3]]
 ```
 
 We select only the CI-treated epiblast cells for the down-stream analysis. 
 ```{r}
-row.names(after_qc)=after_qc$new_name
-cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
+row.names(after_qc) <- after_qc$new_name
+cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF")&(after_qc$cluster == 1|after_qc$cluster == 3|after_qc$cluster == 4), "new_name"]
 
-after_qc_fmk_epi=after_qc[cells_fmk_epi,]
-my.clusters=after_qc_fmk_epi$cluster
+after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
+my.clusters <- after_qc_fmk_epi$cluster
 
 ```
 
@@ -77,27 +77,27 @@ This function performs a two step filtering procedure, the first on the cells an
 ```{r}
 
 
-epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 2,my.clusters)
+epiblast_ci <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads = 50, number_positions = 2000, filtering  =  2, my.clusters)
 
 
 ```
 
 
-Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+Among the outputof *get_heteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
 The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
-For more info about the ouput see *?get_geteroplasmy*.
+For more info about the outputsee *?get_geteroplasmy*.
 
 ```{r}
-sum_matrix=epiblast_ci[[1]]
-sum_matrix_qc=epiblast_ci[[2]]
-heteroplasmy_matrix_ci=epiblast_ci[[3]]
-allele_matrix_ci=epiblast_ci[[4]]
-cluster_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$cluster)
-cluster_ci[cluster_ci=="1"]="Winner Epiblast"
-cluster_ci[cluster_ci=="3"]="Intermediate"
-cluster_ci[cluster_ci=="4"]="Loser Epiblast"
-condition_ci=as.character(after_qc[row.names(heteroplasmy_matrix_ci),]$condition)
-index_ci=epiblast_ci[[5]]
+sum_matrix <- epiblast_ci[[1]]
+sum_matrix_qc <- epiblast_ci[[2]]
+heteroplasmy_matrix_ci <- epiblast_ci[[3]]
+allele_matrix_ci <- epiblast_ci[[4]]
+cluster_ci <- as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$cluster)
+cluster_ci[cluster_ci == "1"] <- "Winner Epiblast"
+cluster_ci[cluster_ci == "3"] <- "Intermediate"
+cluster_ci[cluster_ci == "4"] <- "Loser Epiblast"
+condition_ci <- as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$condition)
+index_ci <- epiblast_ci[[5]]
 
 ```
 
@@ -107,7 +107,7 @@ index_ci=epiblast_ci[[5]]
 ```{r}
 
 
-plot_cells_coverage(sum_matrix_qc,row.names(sum_matrix_qc),cluster_ci,interactive=FALSE)
+plot_cells_coverage(sum_matrix_qc, row.names(sum_matrix_qc), cluster_ci, interactive = FALSE)
 
 
 ```
@@ -115,7 +115,7 @@ plot_cells_coverage(sum_matrix_qc,row.names(sum_matrix_qc),cluster_ci,interactiv
 We can visualize the coverage of the mitochondrial genome for one or more cells.
 
 ```{r}
-plot_base_coverage(sum_matrix,sum_matrix_qc,row.names(sum_matrix_qc)[1],interactive=FALSE,text_size=10)
+plot_base_coverage(sum_matrix, sum_matrix_qc, row.names(sum_matrix_qc)[1], interactive = FALSE, text_size = 10)
 
 
 ```
@@ -124,8 +124,8 @@ plot_base_coverage(sum_matrix,sum_matrix_qc,row.names(sum_matrix_qc)[1],interact
 
 ```{r}
 
-name_position_allele_qc=name_position_allele[name_position%in%colnames(sum_matrix_qc)]
-name_position_qc=name_position[name_position%in%colnames(sum_matrix_qc)]
+name_position_allele_qc <- name_position_allele[name_position%in%colnames(sum_matrix_qc)]
+name_position_qc <- name_position[name_position%in%colnames(sum_matrix_qc)]
 
 ```
 
@@ -133,43 +133,43 @@ It is possible to perform an additional filtering step on the bases keeping only
 
 
 ```{r}
-relevant_bases=filter_bases(heteroplasmy_matrix_ci,min_heteroplasmy=0.01,min_cells=10,index_ci)
+relevant_bases <- filter_bases(heteroplasmy_matrix_ci, min_heteroplasmy = 0.01, min_cells = 10, index_ci)
 ```
 
 
 
 
 
-## Identification of most different bases according to heteroplasmy between clusters
+### Identification of most different bases according to heteroplasmy between clusters
 For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters *Winner Epiblast* and *Loser Epiblast*. As output, for each base, there is the adjusted p valued (FDR).
 
 
 ```{r}
-p_value_wilcox_test=get_wilcox_test(heteroplasmy_matrix_ci[,relevant_bases],cluster_ci,"Winner Epiblast","Loser Epiblast" ,index_ci)
+p_value_wilcox_test <- get_wilcox_test(heteroplasmy_matrix_ci[, relevant_bases], cluster_ci, "Winner Epiblast", "Loser Epiblast" , index_ci)
 ```
 
 We sort the bases according to the adjusted p value in order to identify the bases where the heteroplasmy is most different between the two clusters.
 ```{r}
-p_value_wilcox_test_sort=sort(p_value_wilcox_test,decreasing = F)
+p_value_wilcox_test_sort <- sort(p_value_wilcox_test, decreasing = F)
 ```
 
 The heteroplasmy and the corresponding allele frequencies for the most relevant bases (according to Wilcoxon test) are shown. We can notice that the top 10 relevant bases belong to the genes mt-Rnr1 and mt-Rnr1 and in these positions the heteroplasmy is always higher in the *Loser Epiblast*.
 
 
 ```{r}
-q=list()
+q <- list()
 for ( i in 1:length(p_value_wilcox_test_sort[1:2])){
-p=plot_heteroplasmy(names(p_value_wilcox_test_sort)[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)+ggplot2::ggtitle(paste(names(p_value_wilcox_test_sort)[i],round(p_value_wilcox_test_sort[i],4),sep="-"))
-q=list(q,p)
+p <- plot_heteroplasmy(names(p_value_wilcox_test_sort)[i], heteroplasmy_matrix_ci, cluster_ci, index_ci)+ggplot2::ggtitle(paste(names(p_value_wilcox_test_sort)[i], round(p_value_wilcox_test_sort[i], 4), sep = "-"))
+q <- list(q, p)
 }
 q
 
 
 
-q=list()
+q <- list()
 for ( i in names(p_value_wilcox_test_sort)[1:2]){
-p=plot_allele_frequency(i,heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,name_position_qc,name_position_allele_qc,5,index_ci)  
-q=list(q,p)
+p <- plot_allele_frequency(i, heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, name_position_qc, name_position_allele_qc, 5, index_ci)  
+q <- list(q, p)
 }
 q
 
@@ -177,7 +177,7 @@ q
 
 
 
-## Identification of most different bases according to heteroplasmy along pseudo-time
+### Identification of most different bases according to heteroplasmy along pseudo-time
 
 If for each cell the diffusion pseudo-time information is also available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time. To perform this task three different methods are available: *GAM* (the adjusted p value provided by the GAM fit is assigned to each base), *pearson* and *spearman* (the adjusted p value provided by the pearson or spearman correlation test between heteroplasmy and diffusion pseudo-time is assigned to each base). For more info see *?dpt_test*
 
@@ -187,11 +187,11 @@ If for each cell the diffusion pseudo-time information is also available, then i
 
 
 ```{r}
-time=after_qc[row.names(heteroplasmy_matrix_ci),]$pseudo_time
+time <- after_qc[row.names(heteroplasmy_matrix_ci), ]$pseudo_time
 
-dpt_analysis=dpt_test(heteroplasmy_matrix_ci[,relevant_bases],time,index_ci,method="GAM")
+dpt_analysis <- dpt_test(heteroplasmy_matrix_ci[, relevant_bases], time, index_ci, method = "GAM")
 
-dpt_analysis_result_final=dpt_analysis[dpt_analysis$FDR_value<0.001,]
+dpt_analysis_result_final <- dpt_analysis[dpt_analysis$FDR_value<0.001, ]
 ```
 
 The heteroplasmy level for the top 2 relevant bases (according to GAM fit) is shown along pseudo time, with the black line denoting the GAM fit. We can notice that the top bases belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy increases with the diffusion pseudo time. 
@@ -199,10 +199,10 @@ The top 10 positions identified with the diffusion pseudo time analysis are equa
 
 
 ```{r}
-q=list()
+q <- list()
 for ( i in dpt_analysis$Position[1:2]){
-p=plot_dpt(i,heteroplasmy_matrix_ci,cluster_ci,time,dpt_analysis,index_ci)
-q=list(q,p)
+p <- plot_dpt(i, heteroplasmy_matrix_ci, cluster_ci, time, dpt_analysis, index_ci)
+q <- list(q, p)
 }
 q
 ```
@@ -212,17 +212,17 @@ q
 ```{r}
 
 
-bases_example=c("326_MT","327_MT","303_MT")
-plot_correlation_bases(bases_example,index_ci,heteroplasmy_matrix_ci)
+bases_example <- c("326_MT", "327_MT", "303_MT")
+plot_correlation_bases(bases_example, index_ci, heteroplasmy_matrix_ci)
 
 ```
 
 
 ```{r}
 
-plot_spider_chart("326_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
-plot_spider_chart("327_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
-plot_spider_chart("303_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
+plot_spider_chart("326_MT", cluster_ci, heteroplasmy_matrix_ci, index_ci)
+plot_spider_chart("327_MT", cluster_ci, heteroplasmy_matrix_ci, index_ci)
+plot_spider_chart("303_MT", cluster_ci, heteroplasmy_matrix_ci, index_ci)
 
 ```
 
@@ -233,9 +233,9 @@ plot_spider_chart("303_MT",cluster_ci,heteroplasmy_matrix_ci,index_ci)
 
 
 load(system.file("extdata", "coordinate_dm.Rda", package = "MitoHEAR"))
-coordinate_dm=coordinate_dm[row.names(heteroplasmy_matrix_ci),]
+coordinate_dm <- coordinate_dm[row.names(heteroplasmy_matrix_ci), ]
 
-plot_coordinate_heteroplasmy(coordinate_dm,heteroplasmy_matrix_ci,index_ci,"327_MT")
+plot_coordinate_heteroplasmy(coordinate_dm, heteroplasmy_matrix_ci, index_ci, "327_MT")
 
 
 
@@ -250,39 +250,39 @@ plot_coordinate_heteroplasmy(coordinate_dm,heteroplasmy_matrix_ci,index_ci,"327_
 
 
 
-We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the heteroplasmy levels are higher among all cells in the *Loser Epiblast* clusters and not only in a specific batch.
+We can check if there is a batch effect in the most relevant positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the heteroplasmy levels are higher among all cells in the *Loser Epiblast* clusters and not only in a specific batch.
 
 
 
 
 ```{r}
 
-after_qc_qc=after_qc[row.names(heteroplasmy_matrix_ci),]
-batch=rep(0,length(after_qc_qc$cluster))
-batch[after_qc_qc$cluster==1&after_qc_qc$batch=="1"]="a)Win 1"
-batch[after_qc_qc$cluster==1&after_qc_qc$batch=="5"]="a)Win 5"
-batch[after_qc_qc$cluster==1&after_qc_qc$batch=="4"]="a)Win 4"
-batch[after_qc_qc$cluster==1&after_qc_qc$batch=="2"]="a)Win 2"
-batch[after_qc_qc$cluster==1&after_qc_qc$batch=="3"]="a)Win 3"
-batch[after_qc_qc$cluster==3&after_qc_qc$batch=="1"]="b)Int 1"
-batch[after_qc_qc$cluster==3&after_qc_qc$batch=="5"]="b)Int 5"
-batch[after_qc_qc$cluster==3&after_qc_qc$batch=="4"]="b)Int 4"
-batch[after_qc_qc$cluster==3&after_qc_qc$batch=="2"]="b)Int 2"
-batch[after_qc_qc$cluster==3&after_qc_qc$batch=="3"]="b)Int 3"
-batch[after_qc_qc$cluster==4&after_qc_qc$batch=="1"]="c)Los 1"
-batch[after_qc_qc$cluster==4&after_qc_qc$batch=="5"]="c)Los 5"
-batch[after_qc_qc$cluster==4&after_qc_qc$batch=="4"]="c)Los 4"
-batch[after_qc_qc$cluster==4&after_qc_qc$batch=="2"]="c)Los 2"
-batch[after_qc_qc$cluster==4&after_qc_qc$batch=="3"]="c)Los 3"
+after_qc_qc <- after_qc[row.names(heteroplasmy_matrix_ci), ]
+batch <- rep(0, length(after_qc_qc$cluster))
+batch[after_qc_qc$cluster == 1&after_qc_qc$batch == "1"] <- "a)Win 1"
+batch[after_qc_qc$cluster == 1&after_qc_qc$batch == "5"] <- "a)Win 5"
+batch[after_qc_qc$cluster == 1&after_qc_qc$batch == "4"] <- "a)Win 4"
+batch[after_qc_qc$cluster == 1&after_qc_qc$batch == "2"] <- "a)Win 2"
+batch[after_qc_qc$cluster == 1&after_qc_qc$batch == "3"] <- "a)Win 3"
+batch[after_qc_qc$cluster == 3&after_qc_qc$batch == "1"] <- "b)Int 1"
+batch[after_qc_qc$cluster == 3&after_qc_qc$batch == "5"] <- "b)Int 5"
+batch[after_qc_qc$cluster == 3&after_qc_qc$batch == "4"] <- "b)Int 4"
+batch[after_qc_qc$cluster == 3&after_qc_qc$batch == "2"] <- "b)Int 2"
+batch[after_qc_qc$cluster == 3&after_qc_qc$batch == "3"] <- "b)Int 3"
+batch[after_qc_qc$cluster == 4&after_qc_qc$batch == "1"] <- "c)Los 1"
+batch[after_qc_qc$cluster == 4&after_qc_qc$batch == "5"] <- "c)Los 5"
+batch[after_qc_qc$cluster == 4&after_qc_qc$batch == "4"] <- "c)Los 4"
+batch[after_qc_qc$cluster == 4&after_qc_qc$batch == "2"] <- "c)Los 2"
+batch[after_qc_qc$cluster == 4&after_qc_qc$batch == "3"] <- "c)Los 3"
 
 
 
 
 
 
-plot_batch(dpt_analysis$Position[1],heteroplasmy_matrix_ci,batch,cluster_ci,6,index_ci)
+plot_batch(dpt_analysis$Position[1], heteroplasmy_matrix_ci, batch, cluster_ci, 6, index_ci)
 
-plot_batch(dpt_analysis$Position[2],heteroplasmy_matrix_ci,batch,cluster_ci,6,index_ci)
+plot_batch(dpt_analysis$Position[2], heteroplasmy_matrix_ci, batch, cluster_ci, 6, index_ci)
 
 
 
@@ -293,352 +293,46 @@ plot_batch(dpt_analysis$Position[2],heteroplasmy_matrix_ci,batch,cluster_ci,6,in
 MitoHEAR offers the possibility to perform an unsupervised hierarchical clustering on the cells based on a distance matrix with the function *clustering_angular_distance*. Given a base, the distance between two cells is the angular distance of the allele frequencies.
 Given a base, the variance of the distance values between two cells is also computed.
 Top bases with highest variance are selected for down stream analysis.
-We can represent the difference between two cells as a vector whose cordinates are the angular distances of the top bases.
+We can represent the difference between two cells as a vector whose coordinates are the angular distances of the top bases.
 The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
 The output of *clustering_angular_distance* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
 The third element is a vector with the top bases according to variance.
 
-It is also possible to run *clustering_angular_distance* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
+It is also possible to run *clustering_angular_distance* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are directly provided with the parameter *relevant_bases*.
 The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
 The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 See *?clustering_angular_distance* for more info.
 
 ```{r}
-result_clustering_sc=clustering_angular_distance(heteroplasmy_matrix_ci,allele_matrix_ci,cluster_ci,length(row.names(heteroplasmy_matrix_ci)),deepSplit_param=0,minClusterSize_param=50,0.2,min_value=0.001,index=index_ci,relevant_bases = NULL)
+result_clustering_sc <- clustering_angular_distance(heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, length(row.names(heteroplasmy_matrix_ci)), deepSplit_param = 0, minClusterSize_param = 50, 0.2, min_value = 0.001, index = index_ci, relevant_bases = NULL)
 
 
 
 
-old_new_classification=result_clustering_sc[[1]]
-dist_matrix_sc=result_clustering_sc[[2]]
-top_dist=result_clustering_sc[[3]]
-common_idx=result_clustering_sc[[4]]
+old_new_classification <- result_clustering_sc[[1]]
+dist_matrix_sc <- result_clustering_sc[[2]]
+top_dist <- result_clustering_sc[[3]]
+common_idx <- result_clustering_sc[[4]]
 
-old_classification=as.vector(old_new_classification[,1])
-new_classification=as.vector(old_new_classification[,2])
+old_classification <- as.vector(old_new_classification[, 1])
+new_classification <- as.vector(old_new_classification[, 2])
 
-plot_distance_matrix(dist_matrix_sc,old_classification)
-```
-
-```{r}
-sample1_A=c(1,0,0,0)
-sample1_B=c(1,0,0,0)
-sample1=c(sample1_A,sample1_B)
-sample2_A=c(1,0,0,0)
-sample2_B=c(1,0,0,0)
-sample2=c(sample2_A,sample2_B)
-
-
-names_A=rep("1_A",length(sample1_A))
-names_B=rep("2_C",length(sample1_B))
-allele=c("A","C","T","G")
-names_A_allele=paste(names_A,allele,sep=" ")
-names_B_allele=paste(names_B,allele,sep=" ")
-
-test_allele=matrix(c(sample1,sample2),byrow = T,ncol=8,nrow=2)
-colnames(test_allele)=c(names_A_allele,names_B_allele)
-row.names(test_allele)=c("sample1","sample2")
-
-
-name_position_allele_test=c(names_A_allele,names_B_allele)
-name_position_test=c(names_A,names_B)
-
-cluster_test=c("cluster_test","cluster_test")
-
-heteroplasmy_matrix_test=matrix(0,ncol=length(unique(name_position_test)),nrow=length(row.names(test_allele)))
-colnames(heteroplasmy_matrix_test)=unique(name_position_test)
-row.names(heteroplasmy_matrix_test)=c("sample1","sample2")
-
-
-allele_matrix_test=matrix(c(sample1,sample2),byrow = T,ncol=length(name_position_test),nrow=length(row.names(test_allele)))
-colnames(allele_matrix_test)=c(names_A_allele,names_B_allele)
-row.names(allele_matrix_test)=c("sample1","sample2")
-
-
-
-test_that("clustering_angular_distance gives error", {
-  expect_error(clustering_angular_distance(heteroplasmy_matrix_test,allele_matrix_test,cluster_test,length(row.names(heteroplasmy_matrix_test)),deepSplit_param=0
-  ,minClusterSize_param=1,0.2,min_value=0.001,index=NULL,relevant_bases = NULL),"All the bases has variance 0 across samples")
-
-})
-```
-
-```{r}
-clustering_angular_distance_here=function (heteroplasmy_matrix, allele_matrix, cluster, top_pos, deepSplit_param,minClusterSize_param,threshold=0.20,min_value,index,relevant_bases= NULL,max_frac=0.70)
-{
-
-
-heteroplasmy_matrix=heteroplasmy_matrix_test
-allele_matrix=allele_matrix_test
-cluster=cluster_test
-top_pos=length(row.names(heteroplasmy_matrix_test))
-deepSplit_param=0
-minClusterSize_param=10
-threshold=0.001
-min_value=0.5
-index=NULL
-relevant_bases = NULL
-max_frac=0.7
-
-  if (is.null(index)){
-
-
-
-    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
-    res_ang = as.list(res_ang)
-    names(res_ang) = colnames(heteroplasmy_matrix)
-    j = 1
-    for (i in 1:length(colnames(heteroplasmy_matrix))) {
-      allele_matrix_2_1 = allele_matrix[, (j:(j + 3))]
-      dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
-      res_ang[[i]] = dist_ang_pos
-      res_ang[[i]][is.na(res_ang[[i]])]=0
-      j = j + 4
-    }
-    res_ang_square = lapply(res_ang, FUN = function(x) {
-      return(x^2)
-    })
-    if (!is.null(relevant_bases)) {
-      res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           relevant_bases)]
-    }
-
-    if (is.null(relevant_bases)) {
-      var_dist = lapply(res_ang_square, FUN = function(x) {
-        distance_vector=as.vector(as.dist(x))
-        if (length(distance_vector)==1){return(0)}
-        else{
-        return(var(distance_vector))
-        }
-      })
-
-      mean_dist = lapply(res_ang_square, FUN = function(x) {
-        return(mean(as.vector(as.dist(x))))
-      })
-
-
-      var_dist = as.numeric(var_dist)
-
-
-
-      names(var_dist) = names(res_ang)
-
-      var_dist = var_dist[order(var_dist, decreasing = T)]
-
-
-      mean_max=apply(heteroplasmy_matrix[,names(var_dist)],2,function(x){
-
-
-        if (sum(x>=threshold)>max_frac*length(x)){return(FALSE)
-        }
-
-
-        else(return(TRUE))
-      })
-
-      if (all(!as.vector(mean_max))){
-        percentage_frac=max_frac*100
-        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
-      }
-
-      var_dist=var_dist[as.vector(mean_max)]
-
-
-
-
-      if (length(var_dist)>=top_pos){
-        var_dist_top_all = var_dist[1:top_pos]}
-      if (length(var_dist)<top_pos){
-        var_dist_top_all = var_dist
-        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
-      }
-      var_dist_sum=rep(0,length(var_dist_top_all))
-      
-      if (sum(var_dist_top_all)==0){
-        stop("All the bases has variance 0 across samples")
-        
-      }
-      for ( i in 1:length(var_dist_top_all)){
-        var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
-      }
-
-      if (var_dist_sum[2]>min_value){
-        var_dist_top=var_dist_top_all[var_dist_sum>min_value]
-      }
-
-      if (var_dist_sum[2]<=min_value){warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
-        var_dist_top=var_dist_top_all
-      }
-
-
-
-      top_bases_dist = names(var_dist_top)
-      res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_bases_dist)]
-    }
-
-
-
-    res_ang_sum = Reduce("+", res_ang_sel)
-    dist_ang_matrix = sqrt(res_ang_sum)
-    dist_ang_sqrt = as.dist(dist_ang_matrix)
-    my.tree <- hclust(dist_ang_sqrt)
-    my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
-                                                deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
-    length(unique(my.clusters))
-    classification <- data.frame(old_classification = cluster, new_classification = my.clusters)
-    if (!is.null(relevant_bases)){
-      top_bases_dist=NULL}
-    common_idx=NULL
-    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
-  }
-
-
-  if (!is.null(index)){
-
-
-    res_ang = rep(0, length(colnames(heteroplasmy_matrix)))
-    res_ang = as.list(res_ang)
-    names(res_ang) = colnames(heteroplasmy_matrix)
-    j = 1
-    for (i in 1:length(colnames(heteroplasmy_matrix))) {
-      allele_matrix_2_1 = allele_matrix[index[[colnames(heteroplasmy_matrix)[i]]], (j:(j + 3))]
-      dist_ang_pos = rdist::pdist(allele_matrix_2_1, metric = "angular")
-      res_ang[[i]] = dist_ang_pos
-      res_ang[[i]][is.na(res_ang[[i]])]=0
-      j = j + 3 + 1
-    }
-    res_ang_square = lapply(res_ang, FUN = function(x) {
-      return(x^2)
-    })
-    if (!is.null(relevant_bases)) {
-      res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           relevant_bases)]
-    }
-
-    if (is.null(relevant_bases)) {
-      var_dist = lapply(res_ang_square, FUN = function(x) {
-        return(var(as.vector(as.dist(x))))
-      })
-
-      mean_dist = lapply(res_ang_square, FUN = function(x) {
-        return(mean(as.vector(as.dist(x))))
-      })
-
-
-      var_dist = as.numeric(var_dist)
-
-
-
-      names(var_dist) = names(res_ang)
-
-      var_dist = var_dist[order(var_dist, decreasing = T)]
-
-
-
-      mean_max=rep(0,length(names(var_dist)))
-      for (i in 1:length(names(var_dist))){
-        x=heteroplasmy_matrix[index[[names(var_dist)[i]]],names(var_dist)[i]]
-        if (sum(x>=threshold)>max_frac*length(x)){mean_max[i]="FALSE"
-        }
-
-
-        else(mean_max[i]="TRUE")
-      }
-
-
-      if (all(!as.logical(mean_max))){
-        percentage_frac=max_frac*100
-        stop(paste0("All the bases have heteroplasmy greater than ",threshold," in more than",percentage_frac,"% of cells"))
-      }
-
-
-      var_dist=var_dist[as.logical(mean_max)]
-
-
-
-
-      if (length(var_dist)>=top_pos){
-        var_dist_top_all = var_dist[1:top_pos]}
-
-      if (length(var_dist)<top_pos){
-        var_dist_top_all = var_dist
-        warning(paste0("Less than ",top_pos," bases present. All the bases will be used."))
-      }
-      
-      if (sum(var_dist_top_all)==0){
-        stop("All the bases has variance 0 across samples")
-      }
-
-      var_dist_sum=rep(0,length(var_dist_top_all))
-      for ( i in 1:length(var_dist_top_all)){
-        var_dist_sum[i]=var_dist_top_all[i]/sum(var_dist_top_all)
-      }
-
-
-      if (var_dist_sum[2]>min_value){
-        var_dist_top=var_dist_top_all[var_dist_sum>min_value]
-      }
-
-      if (var_dist_sum[2]<=min_value){
-        var_dist_top=var_dist_top_all
-        warning(paste0("There are not at least two bases with variance above  ",min_value,".","All the bases will be used."))
-      }
-
-
-
-
-
-
-      top_bases_dist = names(var_dist_top)
-      res_ang_sel = res_ang_square[which(names(res_ang) %in%
-                                           top_bases_dist)]
-    }
-
-    bases_example=names(res_ang_sel)
-    common_idx=rep(list(0),length(bases_example))
-
-
-    for (i in 1:length(bases_example)){
-
-      common_idx[[i]]=as.numeric(index[[bases_example[i]]])
-
-    }
-    common_idx=Reduce(intersect, common_idx)
-    if (length(common_idx)<2){
-      stop("There are not at least 2 samples that cover all the filtered bases")
-    }
-    common_cells=row.names(heteroplasmy_matrix)[common_idx]
-    res_ang_sel_com=res_ang_sel
-    for (i in 1:length(res_ang_sel)){
-      res_ang_sel_com[[i]]=res_ang_sel[[i]][common_cells,common_cells]
-    }
-    res_ang_sel=res_ang_sel_com
-    res_ang_sum = Reduce("+", res_ang_sel)
-    dist_ang_matrix = sqrt(res_ang_sum)
-    dist_ang_sqrt = as.dist(dist_ang_matrix)
-    my.tree <- hclust(dist_ang_sqrt)
-    my.clusters <- dynamicTreeCut::cutreeHybrid(my.tree, distM = as.matrix(dist_ang_sqrt),
-                                                deepSplit = deepSplit_param, minClusterSize = minClusterSize_param)$label
-    length(unique(my.clusters))
-    classification <- data.frame(old_classification = cluster[common_idx], new_classification = my.clusters)
-    if (!is.null(relevant_bases)){
-      top_bases_dist=NULL}
-    return(list(classification, dist_ang_matrix,top_bases_dist,common_idx))
-  }
-
-}
+plot_distance_matrix(dist_matrix_sc, old_classification)
 ```
 
 
 
-Below the top 2 bases selected for the unsupervised cluster analysis. Consistenly these are the same top 2 bases according to GAM fit.
+
+
+
+
+Below the top 2 bases selected for the unsupervised cluster analysis. Consistently these are the same top 2 bases according to GAM fit.
 
 ```{r}
-q=list()
+q <- list()
 for ( i in 1:length(top_dist[1:2])){
-p=plot_heteroplasmy(top_dist[i],heteroplasmy_matrix_ci,cluster_ci,index_ci)
-q=list(q,p)
+p <- plot_heteroplasmy(top_dist[i], heteroplasmy_matrix_ci, cluster_ci, index_ci)
+q <- list(q, p)
 }
 q
 

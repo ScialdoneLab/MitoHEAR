@@ -5,7 +5,7 @@
 \title{vi_comparison
 We compute the variation of information (VI) between the partition provided
 by \emph{new_classification} and \emph{old_classification}. The VI between a
-random partitions (obtained wth re-shuflle from original labels in
+random partitions (obtained with re-shuffle from original labels in
 \emph{old_classification}) and \emph{old_classification} is also computed. A
 distribution of VI values from random partitions is built. Finally, from the
 comparison with this distribution, an empirical p value is given to the VI
@@ -32,7 +32,7 @@ Empirical p value.
 vi_comparison
 We compute the variation of information (VI) between the partition provided
 by \emph{new_classification} and \emph{old_classification}. The VI between a
-random partitions (obtained wth re-shuflle from original labels in
+random partitions (obtained with re-shuffle from original labels in
 \emph{old_classification}) and \emph{old_classification} is also computed. A
 distribution of VI values from random partitions is built. Finally, from the
 comparison with this distribution, an empirical p value is given to the VI

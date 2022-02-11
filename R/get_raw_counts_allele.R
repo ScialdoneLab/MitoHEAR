@@ -29,7 +29,7 @@
 #' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @seealso \url{https://www.rdocumentation.org/packages/Rsamtools/versions/1.24.0/topics/pileup}
 #' @export get_raw_counts_allele
-get_raw_counts_allele = function(bam_input, path_fasta, cell_names, cores_number = 1) {
+get_raw_counts_allele <- function(bam_input, path_fasta, cell_names, cores_number = 1) {
 
 
   fastaFile <- Biostrings::readDNAStringSet(path_fasta)

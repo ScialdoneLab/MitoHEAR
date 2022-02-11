@@ -1,11 +1,10 @@
 Type: Package
 Package: MitoHEAR
-Title: MitoHEAR
+Title: Quantification of mitochondrial DNA Heteroplasmy
 Version: 0.1.0
 Author: Gabriele Lubatti
-Maintainer: Gabriele Lubatti
-    <gabriele.lubatti@helmholtz-muenchen.de>
-Description: Heteroplasmy analysis from RNA seq data.
+Maintainer: Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
+Description: R package that allows the estimation and downstream statistical analysis of the mitochondrial DNA Heteroplasmy calculated from single-cell datasets.
 License: Artistic-2.0
 Depends:
     R (>= 4.0)

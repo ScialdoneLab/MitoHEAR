@@ -19,7 +19,7 @@ names on the columns.}
 
 \item{index}{Fifth element returned by \emph{get_heteroplasmy}.}
 
-\item{name_base}{Character name specyfing the base.}
+\item{name_base}{Character name specifying the base.}
 }
 \value{
 \emph{ggplot2} object.

@@ -34,7 +34,7 @@ variance among \emph{top_pos} bases) is above \emph{min_value}.}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
-\item{minClusterSize_param}{Integer value specifyng the \emph{minClusterSize}
+\item{minClusterSize_param}{Integer value specifying the \emph{minClusterSize}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
@@ -59,7 +59,7 @@ Clustree plot.
 choose_features_clustering
 }
 \seealso{
-\url{https://cran.r-project.org/web/packages/clustree/clustree.pdf}
+\url{https://cran.r-project.org/package=clustree}
 }
 \author{
 Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}

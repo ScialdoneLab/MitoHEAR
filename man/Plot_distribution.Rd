@@ -10,9 +10,9 @@ plot_distribution(quantity_counts_cell, name_x, name_title)
 \item{quantity_counts_cell}{Vector returned by
 \emph{get_distribution}}
 
-\item{name_x}{Character name specifyng the xlab argument in \emph{ggplot2}.}
+\item{name_x}{Character name specifying the xlab argument in \emph{ggplot2}.}
 
-\item{name_title}{Character name specifyng the ggtitle argument in \emph{ggplot2}.}
+\item{name_title}{Character name specifying the ggtitle argument in \emph{ggplot2}.}
 }
 \value{
 \emph{ggplot2} density plot of the Vector quantity_counts_cell.

@@ -9,7 +9,7 @@ get_distribution(heteroplasmy_matrix, FUNCTION, index = NULL)
 \arguments{
 \item{heteroplasmy_matrix}{Third element returned by \emph{get_heteroplasmy}.}
 
-\item{FUNCTION}{A character specifyng the function to be applied on each
+\item{FUNCTION}{A character specifying the function to be applied on each
 column of \emph{matrix}. The possible values are:
 \emph{mean},\emph{max},\emph{min},\emph{median} and \emph{sum}.}
 
