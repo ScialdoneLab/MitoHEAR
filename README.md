@@ -8,6 +8,11 @@ if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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")
 library(MitoHEAR)
 ```
+For installing also the vignettes provided within the package, please run the following:
+```
+devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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", build_vignettes = TRUE)
+library(MitoHEAR)
+```
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
 
 ## Getting started
@@ -130,7 +135,7 @@ For more exaustive information about the functions offered by **MitoHEAR** see *
 
 ## Vignettes
 
-The following vignettes are provided within the package **MitoHEAR**:
+The following vignettes are provided within the package **MitoHEAR** and are accessible within R:
 
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
