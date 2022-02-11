@@ -159,7 +159,7 @@ There are embryos at different stages from 2-cells to 8-cells stage. At each sta
 We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with **clustering_angular_distance**) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 
 
-### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/master/vignettes/Ludwig_et_al_example_notebook.Rmd):**
+### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/bloob/master/vignettes/Ludwig_et_al_example_notebook.Rmd):**
 ```
 utils::vignette("Ludwig_et_al_example_notebook")
 ```
