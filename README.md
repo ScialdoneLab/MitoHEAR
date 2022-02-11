@@ -5,13 +5,13 @@ MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package t
 To install MitoHEAR, please run the following:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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")
+devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master")
 library(MitoHEAR)
 ```
 For installing also the vignettes provided within the package, please run the following:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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", build_vignettes = TRUE)
+devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master", build_vignettes = TRUE)
 library(MitoHEAR)
 ```
 
