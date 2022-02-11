@@ -10,7 +10,8 @@ library(MitoHEAR)
 ```
 The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
 
-## get_raw_counts_allele
+## Getting started
+### get_raw_counts_allele
 
 ```
 get_raw_counts_allele(bam_input,path_fasta,cell_names,cores_number=1) 
@@ -65,7 +66,7 @@ name_position[1:8]
 ```
 
 
-## get_heteroplasmy
+### get_heteroplasmy
 ```
 get_heteroplasmy(matrix_allele_counts,name_position_allele,name_position,number_reads,number_positions,filtering=1,my.clusters=NULL) 
 ``` 
@@ -120,7 +121,7 @@ head(allele_matrix_ci[1:4,1:4])
 
 
 ```
-## Down-stream analysis
+### Down-stream analysis
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
