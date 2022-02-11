@@ -10,12 +10,16 @@ library(MitoHEAR)
 ```
 For installing also the vignettes provided within the package, please run the following:
 ```
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("https://github.com/ScialdoneLab/MitoHEAR/tree/master",auth_token="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", build_vignettes = TRUE)
 library(MitoHEAR)
 ```
-The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
+
 
 ## Getting started
+
+The package has two main functions: **get_raw_counts_allele** and **get_heteroplasmy**.
+
 ### get_raw_counts_allele
 
 ```
