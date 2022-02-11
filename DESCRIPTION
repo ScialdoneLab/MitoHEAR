@@ -1,35 +1,42 @@
-Package: MitoHEAR
 Type: Package
-Title: MitoHEAR
+Package: MitoHEAR
+Title: MitoHEAR (Mitochondrial HEteroplasmy AnalyzeR)
 Version: 0.1.0
 Author: Gabriele Lubatti
 Maintainer: Gabriele Lubatti <gabriele.lubatti@helmholtz-muenchen.de>
-Description: Heteroplasmy analysis from RNA seq data.
-    Use four spaces when indenting paragraphs within the Description.
-Depends:
-    R (>= 4.0.2),
-    ggplot2 (>= 3.3.2),
-    Rsamtools (>= 2.4.0),
-    grid (>= 4.0.2),
-    data.table (>= 1.13.0),
-    gam (>= 1.20),
-    rdist (>= 0.0.5),
-    dynamicTreeCut (>= 1.63-1),
-    ComplexHeatmap (>= 2.4.3),
-    circlize (>= 0.4.10),
-    Biostrings (>= 2.56.0),
-    rlist (>= 0.4.6.1),
-    gridExtra (>= 2.3),
-    parallel (>= 4.0.2),
-    GenomicRanges (>= 1.42.0),
-    IRanges (>= 2.24.1),
-    karyoploteR (>= 1.14.1),
-    regioneR (>= 1.20.1),
-    clustree (>= 0.4.4),
-    mcclust (>= 1.0),
-    fmsb (>= 0.7.2),
-    plotly (>= 4.10.0)
+Description: R package that allows the estimation and downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets.
 License: Artistic-2.0
+Depends:
+    R (>= 4.0)
+Imports:
+    Biostrings,
+    circlize,
+    ComplexHeatmap,
+    dynamicTreeCut,
+    GenomicRanges,
+    ggplot2,
+    gridExtra,
+    IRanges,
+    magrittr,
+    mcclust,
+    rdist,
+    reshape2,
+    rlist,
+    Rsamtools,
+Suggests:
+    clustree,
+    fmsb,
+    gam,
+    karyoploteR,
+    knitr,
+    plotly,
+    regioneR,
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
+biocViews: software
 Encoding: UTF-8
 LazyData: true
-biocViews: software
+Config/testthat/edition: 3
+RoxygenNote: 7.1.1
