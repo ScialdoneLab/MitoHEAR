@@ -132,7 +132,7 @@ For more exaustive information about the functions offered by **MitoHEAR** see *
 The following vignettes are provided within the package **MitoHEAR**:
 
 
-### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/tree/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
+### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
 ```
 utils::vignette("cell_competition_mt_example_notebook")
 ```
@@ -142,7 +142,7 @@ Identification and plotting of most different bases according to heteroplasmy be
 The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo time. 
 
 
-### **[cell_competition_bulk_data_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/tree/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
+### **[cell_competition_bulk_data_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd):**
 ```
 utils::vignette("cell_competition_bulk_data_mt_example_notebook")
 ```
@@ -150,7 +150,7 @@ This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima 
 Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
 
 
-### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/tree/master/vignettes/lineage_tracing_example_notebook.Rmd):**
+### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/lineage_tracing_example_notebook.Rmd):**
 ```
 utils::vignette("lineage_tracing_example_notebook")
 ```
@@ -159,7 +159,7 @@ There are embryos at different stages from 2-cells to 8-cells stage. At each sta
 We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with **clustering_angular_distance**) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 
 
-### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/bloob/master/vignettes/Ludwig_et_al_example_notebook.Rmd):**
+### **[Ludwig_et_al_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/Ludwig_et_al_example_notebook.Rmd):**
 ```
 utils::vignette("Ludwig_et_al_example_notebook")
 ```
