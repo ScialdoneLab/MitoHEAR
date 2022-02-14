@@ -90,9 +90,9 @@ bulk_data_competition <- get_heteroplasmy(matrix_allele_counts[bulk_sample,],nam
 
 ```
 
-Among the ouptut of *get_geteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
+Among the output of *get_heteroplasmy* there are the matrix with heteroplasmy values and the matrix with allele frequencies, for all the cells and bases that pass the two step filtering procedure. 
 The heteroplasmy is computed as *1-max(f)*, where *f* are the frequencies of the four alleles for every cell-base pair.
-For more info about the ouput see *?get_geteroplasmy*.
+For more info about the output see *?get_heteroplasmy*.
 
 ```{r}
 sum_matrix <- bulk_data_competition[[1]]
@@ -161,7 +161,7 @@ q
                                                             
 ```
 
-We can check if there is a batch effect in the most relevan positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the difference in  heteroplasmy levels are driven by group (Winner and Loser) and not by batch (co cultured-CO or separate culture-Sep).
+We can check if there is a batch effect in the most relevant positions (i.e. the heteroplasmy levels are constantly higher only in a specific batch). For the top 2 positions defined with the GAM fit there is not a batch effect, since the difference in  heteroplasmy levels are driven by group (Winner and Loser) and not by batch (co cultured-CO or separate culture-Sep).
 
 
 ```{r}
@@ -192,12 +192,12 @@ q
 MitoHEAR offers the possibility to perform an unsupervised hierarchical clustering on the cells based on a distance matrix with the function *clustering_dist_ang*. Given a base, the distance between two cells is the angular distance of the allele frequencies.
 Given a base, the variance of the distance values between two cells is also computed.
 Top bases with highest variance are selected for down stream analysis.
-We can represent the difference between two cells as a vector whose cordinates are the angular distances of the top bases.
+We can represent the difference between two cells as a vector whose coordinates are the angular distances of the top bases.
 The total distance between two cell is the euclidean norm of the vector of difference between the two cells.
-The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partion available before the cluster analysis based on allele frequencies) and the new classification (partion provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
+The output of *clustering_dist_ang* is a list. The first element is a data frame which contains the old classification (partition available before the cluster analysis based on allele frequencies) and the new classification (partition provided by the cluster analysis based on allele frequencies ). The second element is the distance matrix, on which the hierarchical clustering is done.
 The third element is a vector with the top bases according to variance.
 
-It is also possible to run *clustering_dist_ang* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are direcly provided with the parameter *relevant_bases*.
+It is also possible to run *clustering_dist_ang* in a supervised approach. In this case the bases used for hierarchical clustering are not selected according to variance, but are directly provided with the parameter *relevant_bases*.
 The heatmap of the distance matrix with cells sorted according to the new classification is shown below.
 The cluster analysis based on allele frequencies information can be a powerful way to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.
 See *?clustering_dist_ang* for more info.
