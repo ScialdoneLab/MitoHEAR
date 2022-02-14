@@ -7,7 +7,7 @@
 plot_spider_chart(name_base, cluster, heteroplasmy_matrix, index)
 }
 \arguments{
-\item{name_base}{Character name specyfing the base.}
+\item{name_base}{Character name specifying the base.}
 
 \item{cluster}{Vector specifying a partition of the samples.}
 

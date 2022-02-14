@@ -18,17 +18,17 @@ get_heteroplasmy(
 \item{raw_counts_allele}{A raw counts matrix obtained from
 \emph{get_raw_counts_allele}.}
 
-\item{name_position_allele}{A character vector with elements specifyng the
+\item{name_position_allele}{A character vector with elements specifying the
 genomic coordinate of the base and the allele (obtained from
 \emph{get_raw_counts_allele}).}
 
-\item{name_position}{A character vector with elements specifyng the genomic
+\item{name_position}{A character vector with elements specifying the genomic
 coordinate of the base (obtained from \emph{get_raw_counts_allele}).}
 
-\item{number_reads}{Integer specifying the minimun number of counts above
+\item{number_reads}{Integer specifying the minimum number of counts above
 which we consider the base covered by the sample.}
 
-\item{number_positions}{Integer specifying the minimun number of bases that
+\item{number_positions}{Integer specifying the minimumnumber of bases that
 must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 the sample for down-stream analysis.}
 
@@ -38,8 +38,8 @@ that are covered by all the samples are kept for the downstream analysis. If
 in each cluster (specified by \emph{my.clusters}) are kept for the down-stream
 analysis. Default is 1.}
 
-\item{my.clusters}{Charachter vector specifying a partition of the samples.
-It is only used when filtering is equal to 2. Deafult is NULL}
+\item{my.clusters}{Character vector specifying a partition of the samples.
+It is only used when filtering is equal to 2. Default is NULL}
 }
 \value{
 It returns a list with 5 elements:
@@ -76,31 +76,6 @@ only the ones that cover a number of bases above number_positions. The
 second one is on the bases, defined by the parameter filtering. The
 heteroplasmy for each sample-base pair is computed as \emph{1-max(f)}, where
 \emph{f} are the frequencies of the four alleles.
-}
-\examples{
-
-load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
-load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
-row.names(after_qc)=after_qc$new_name
-cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&
-(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
-after_qc_fmk_epi=after_qc[cells_fmk_epi,]
-my.clusters=after_qc_fmk_epi$cluster
-
-matrix_allele_counts=output_SNP_mt[[1]]
-name_position_allele=output_SNP_mt[[2]]
-name_position=output_SNP_mt[[3]]
-epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],
-name_position_allele,name_position,number_reads=50,number_positions=2000,
-filtering = 2,my.clusters)
-
-
-sum_matrix=epiblast_ci[[1]]
-sum_matrix_qc=epiblast_ci[[2]]
-heteroplasmy_matrix_ci=epiblast_ci[[3]]
-allele_matrix_ci=epiblast_ci[[4]]
-index=epiblast_ci[[5]]
-
 }
 \author{
 Gabriele Lubatti \email{gabriele.lubatti@helmholtz-muenchen.de}

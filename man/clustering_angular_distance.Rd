@@ -35,7 +35,7 @@ variance among \emph{top_pos} bases) is above \emph{min_value}.}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
-\item{minClusterSize_param}{Integer value specifyng the \emph{minClusterSize}
+\item{minClusterSize_param}{Integer value specifying the \emph{minClusterSize}
 parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 below.}
 
@@ -61,7 +61,7 @@ considered for down stream analysis.}
 It returns a list with 4 elements: \item{classification}{ Dataframe with
 two columns and n_row equal to n_row in heteroplasmy_matrix. The first
 column is the old cluster annotation provided by cluster. The second columns
-is the new cluster annotation obtained with hierarichal clustering on
+is the new cluster annotation obtained with hierarchical clustering on
 distance matrix based on heteroplasmy values.
 
 }
@@ -76,7 +76,7 @@ in the section \emph{Details}
 
 }
 
-\item{common_idx}{ Vector of indeces of samples for which hierarchical
+\item{common_idx}{ Vector of indices of samples for which hierarchical
 clustering is performed. If \emph{index} is NULL, then \emph{common_idx}=NULL
 
 }

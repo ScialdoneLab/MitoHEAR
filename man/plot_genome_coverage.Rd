@@ -16,7 +16,7 @@ Gene.end..bp., Chromosome.scaffold.name}
 genomic region of interest. It should be the same file used in
 \emph{get_raw_counts_allele}.}
 
-\item{chr_name}{Character specifyng the name of the chromosome of interest.
+\item{chr_name}{Character specifying the name of the chromosome of interest.
 It must be one of the names in the \emph{Chromosome.scaffold.name} column
 from the \emph{biomart_file}.}
 

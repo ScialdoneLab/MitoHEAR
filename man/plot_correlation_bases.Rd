@@ -7,7 +7,7 @@
 plot_correlation_bases(bases_vector, index, heteroplasmy_matrix)
 }
 \arguments{
-\item{bases_vector}{Character vector specyfing the bases for which the
+\item{bases_vector}{Character vector specifying the bases for which the
 spearman correlation across samples is computed.}
 
 \item{index}{Fifth element returned by \emph{get_heteroplasmy}.}

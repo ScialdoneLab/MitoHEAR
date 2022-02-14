@@ -21,11 +21,11 @@ plot_condition(
 
 \item{label_2}{Character vector of length equal to distribution_2}
 
-\item{name_x}{Character name specifyng the xlab argument in \emph{ggplot2}.}
+\item{name_x}{Character name specifying the xlab argument in \emph{ggplot2}.}
 
-\item{name_y}{Character name specifyng the ylab argument in ggplot2.}
+\item{name_y}{Character name specifying the ylab argument in ggplot2.}
 
-\item{name_title}{Character name specifyng the ggtitle argument in \emph{ggplot2}.}
+\item{name_title}{Character name specifying the ggtitle argument in \emph{ggplot2}.}
 }
 \value{
 \emph{ggplot2} boxplot of the quantities specified by \emph{distribution_1}
