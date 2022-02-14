@@ -102,7 +102,7 @@ epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_
 The output of **get_heteroplasmy** is a list with five elements.
 The most relevant elements are the matrix with heteroplasmy values (**heteroplasmy_matrix**) and the matrix with allele frequencies (**allele_matrix**), for all the cells and bases that pass the two step filtering procedures. 
 The heteroplasmy is computed as **1-max(f)**, where **f** are the frequencies of the four alleles for every sample-base pair.
-For more info about the ouput see **?get_geteroplasmy**.
+For more info about the ouput see **?get_heteroplasmy**.
 
 ```
 heteroplasmy_matrix=epiblast_cell_competition[[3]]
@@ -135,7 +135,7 @@ head(allele_matrix_ci[1:4,1:4])
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be usufel for lineage tracing analysis.
-For more exaustive information about the functions offered by **MitoHEAR** see **Tutorials** section below and the help page of the single functions. (**?function_name**).
+For more exhaustive information about the functions offered by **MitoHEAR** see **Tutorials** section below and the help page of the single functions. (**?function_name**).
 
 ## Vignettes
 
@@ -157,7 +157,7 @@ The top 10 bases with highest variation in heteroplasmy belong to the genes mt-R
 utils::vignette("cell_competition_bulk_data_mt_example_notebook")
 ```
 This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
-Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell linegaes only by looking at the heteroplasmy values of the mitochondrial bases.
+Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell lineages only by looking at the heteroplasmy values of the mitochondrial bases.
 
 
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/lineage_tracing_example_notebook.Rmd):**
