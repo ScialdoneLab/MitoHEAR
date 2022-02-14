@@ -102,7 +102,7 @@ epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_
 The output of **get_heteroplasmy** is a list with five elements.
 The most relevant elements are the matrix with heteroplasmy values (**heteroplasmy_matrix**) and the matrix with allele frequencies (**allele_matrix**), for all the cells and bases that pass the two step filtering procedures. 
 The heteroplasmy is computed as **1-max(f)**, where **f** are the frequencies of the four alleles for every sample-base pair.
-For more info about the ouput see **?get_geteroplasmy**.
+For more info about the ouput see **?get_heteroplasmy**.
 
 ```
 heteroplasmy_matrix=epiblast_cell_competition[[3]]
