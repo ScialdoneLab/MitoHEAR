@@ -19,9 +19,9 @@
 #' \emph{get_raw_counts_allele}).
 #' @param name_position A character vector with elements specifying the genomic
 #' coordinate of the base (obtained from \emph{get_raw_counts_allele}).
-#' @param number_reads Integer specifying the minimun number of counts above
+#' @param number_reads Integer specifying the minimum number of counts above
 #' which we consider the base covered by the sample.
-#' @param number_positions Integer specifying the minimun number of bases that
+#' @param number_positions Integer specifying the minimumnumber of bases that
 #' must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 #' the sample for down-stream analysis.
 #' @param filtering Numeric value equal to 1 or 2. If 1 then only the bases
@@ -29,7 +29,7 @@
 #' 2 then all the bases that are covered by more than 50\% of the the samples
 #' in each cluster (specified by \emph{my.clusters}) are kept for the down-stream
 #' analysis. Default is 1.
-#' @param my.clusters Charachter vector specifying a partition of the samples.
+#' @param my.clusters Character vector specifying a partition of the samples.
 #' It is only used when filtering is equal to 2. Default is NULL
 #' @return It returns a list with 5 elements:
 #'

@@ -76,7 +76,7 @@ in the section \emph{Details}
 
 }
 
-\item{common_idx}{ Vector of indeces of samples for which hierarchical
+\item{common_idx}{ Vector of indices of samples for which hierarchical
 clustering is performed. If \emph{index} is NULL, then \emph{common_idx}=NULL
 
 }

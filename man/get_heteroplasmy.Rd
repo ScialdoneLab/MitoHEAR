@@ -25,10 +25,10 @@ genomic coordinate of the base and the allele (obtained from
 \item{name_position}{A character vector with elements specifying the genomic
 coordinate of the base (obtained from \emph{get_raw_counts_allele}).}
 
-\item{number_reads}{Integer specifying the minimun number of counts above
+\item{number_reads}{Integer specifying the minimum number of counts above
 which we consider the base covered by the sample.}
 
-\item{number_positions}{Integer specifying the minimun number of bases that
+\item{number_positions}{Integer specifying the minimumnumber of bases that
 must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 the sample for down-stream analysis.}
 
@@ -38,7 +38,7 @@ that are covered by all the samples are kept for the downstream analysis. If
 in each cluster (specified by \emph{my.clusters}) are kept for the down-stream
 analysis. Default is 1.}
 
-\item{my.clusters}{Charachter vector specifying a partition of the samples.
+\item{my.clusters}{Character vector specifying a partition of the samples.
 It is only used when filtering is equal to 2. Default is NULL}
 }
 \value{
