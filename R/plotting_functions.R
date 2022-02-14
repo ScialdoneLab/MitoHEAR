@@ -234,8 +234,8 @@ plot_batch <- function(position, heteroplasmy_matrix, batch, cluster, text_size,
 #' plot_distribution
 #' @param quantity_counts_cell Vector returned by
 #' \emph{get_distribution}
-#' @param name_x Character name specifyng the xlab argument in \emph{ggplot2}.
-#' @param name_title Character name specifyng the ggtitle argument in \emph{ggplot2}.
+#' @param name_x Character name specifying the xlab argument in \emph{ggplot2}.
+#' @param name_title Character name specifying the ggtitle argument in \emph{ggplot2}.
 #' @return \emph{ggplot2} density plot of the Vector quantity_counts_cell.
 #' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}
 #' @export plot_distribution
@@ -258,7 +258,7 @@ plot_distribution <- function(quantity_counts_cell, name_x, name_title)
 #' @param distribution_1,distribution_2 Numeric vector
 #' @param label_1 Character vector of length equal to distribution_1
 #' @param label_2 Character vector of length equal to distribution_2
-#' @param name_y Character name specifyng the ylab argument in ggplot2.
+#' @param name_y Character name specifying the ylab argument in ggplot2.
 #' @inheritParams plot_distribution
 #' @return \emph{ggplot2} boxplot of the quantities specified by \emph{distribution_1}
 #' and \emph{distribution_2}, separated by the conditions denoted by
@@ -438,7 +438,7 @@ plot_dpt_epiblast <- function(position, heteroplasmy_matrix, cluster, time, gam_
 #' @param path_fasta Character string with full path to the fasta file of the
 #' genomic region of interest. It should be the same file used in
 #' \emph{get_raw_counts_allele}.
-#' @param chr_name Character specifyng the name of the chromosome of interest.
+#' @param chr_name Character specifying the name of the chromosome of interest.
 #' It must be one of the names in the \emph{Chromosome.scaffold.name} column
 #' from the \emph{biomart_file}.
 #' @inheritParams plot_heteroplasmy
@@ -746,7 +746,7 @@ plot_base_coverage = function(sum_matrix, sum_matrix_qc, selected_cells, interac
 
 
 #' plot_correlation_bases
-#' @param bases_vector Character vector specyfing the bases for which the
+#' @param bases_vector Character vector specifying the bases for which the
 #' spearman correlation across samples is computed.
 #' @inheritParams plot_heteroplasmy
 #' @return Heatmap plot produced by function \emph{Heatmap}
@@ -806,7 +806,7 @@ plot_correlation_bases = function(bases_vector, index, heteroplasmy_matrix) {
 
 
 #' plot_spider_chart
-#' @param name_base Character name specyfing the base.
+#' @param name_base Character name specifying the base.
 #' @inheritParams plot_heteroplasmy
 #' @return radarchart plot produced by function \emph{radarchart}.
 #' @author Gabriele Lubatti \email{gabriele.lubatti@@helmholtz-muenchen.de}

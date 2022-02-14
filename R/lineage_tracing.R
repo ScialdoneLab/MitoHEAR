@@ -18,7 +18,7 @@
 #' @param deepSplit_param Integer value between 0 and 4 for the \emph{deepSplit}
 #' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 #' below.
-#' @param minClusterSize_param Integer value specifyng the \emph{minClusterSize}
+#' @param minClusterSize_param Integer value specifying the \emph{minClusterSize}
 #' parameter of the function \emph{cutreeHybrid}. See section \emph{Details}
 #' below.
 #' @param threshold Numeric value. If a base has heteroplasmy greater or equal
@@ -38,7 +38,7 @@
 #' @return It returns a list with 4 elements: \item{classification}{ Dataframe with
 #' two columns and n_row equal to n_row in heteroplasmy_matrix. The first
 #' column is the old cluster annotation provided by cluster. The second columns
-#' is the new cluster annotation obtained with hierarichal clustering on
+#' is the new cluster annotation obtained with hierarchical clustering on
 #' distance matrix based on heteroplasmy values.
 #'
 #' }
@@ -771,7 +771,7 @@ plot_distance_matrix <- function(dist_ang_matrix, cluster){
 #' vi_comparison
 #' We compute the variation of information (VI) between the partition provided
 #' by \emph{new_classification} and \emph{old_classification}. The VI between a
-#' random partitions (obtained wth re-shuflle from original labels in
+#' random partitions (obtained with re-shuffle from original labels in
 #' \emph{old_classification}) and \emph{old_classification} is also computed. A
 #' distribution of VI values from random partitions is built. Finally, from the
 #' comparison with this distribution, an empirical p value is given to the VI

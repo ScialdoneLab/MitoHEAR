@@ -1,5 +1,5 @@
 #' get_distribution
-#' @param FUNCTION A character specifyng the function to be applied on each
+#' @param FUNCTION A character specifying the function to be applied on each
 #' column of \emph{matrix}. The possible values are:
 #' \emph{mean},\emph{max},\emph{min},\emph{median} and \emph{sum}.
 #' @param index index returned by \emph{get_heteroplasmy}.
