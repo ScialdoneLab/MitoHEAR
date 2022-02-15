@@ -21,7 +21,7 @@
 #' coordinate of the base (obtained from \emph{get_raw_counts_allele}).
 #' @param number_reads Integer specifying the minimum number of counts above
 #' which we consider the base covered by the sample.
-#' @param number_positions Integer specifying the minimumnumber of bases that
+#' @param number_positions Integer specifying the minimum number of bases that
 #' must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 #' the sample for down-stream analysis.
 #' @param filtering Numeric value equal to 1 or 2. If 1 then only the bases

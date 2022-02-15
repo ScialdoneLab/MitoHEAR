@@ -1,7 +1,3 @@
-#library(MitoHEAR)
-
-
-
 # Example with two samples and two bases whose reference allele is A and C.
 # The two samples have 100 reads in the reference allele and 0 in all the others.
 

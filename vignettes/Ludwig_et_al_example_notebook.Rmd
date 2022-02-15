@@ -34,7 +34,7 @@ load(system.file("extdata", "name_cells_fig_2_analysis.Rda", package = "MitoHEAR
 ```
 
 We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
-A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+A command line implementation of the function *get_raw_counts_allele* is also available (see github README file for info).
 
 
 
@@ -238,7 +238,7 @@ cell_old_summary[grep("_colonies", cell_old_summary)] <- substr(change, 1, nchar
 
 
 We don't execute the function *get_raw_counts_allele* here and  we directly load his output. 
-A command line implentation of the function *get_raw_counts_allele* is also available (see github README file for info).
+A command line implementation of the function *get_raw_counts_allele* is also available (see github README file for info).
 
 
 ```{r}

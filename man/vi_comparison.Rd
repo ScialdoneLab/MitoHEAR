@@ -2,14 +2,7 @@
 % Please edit documentation in R/lineage_tracing.R
 \name{vi_comparison}
 \alias{vi_comparison}
-\title{vi_comparison
-We compute the variation of information (VI) between the partition provided
-by \emph{new_classification} and \emph{old_classification}. The VI between a
-random partitions (obtained with re-shuffle from original labels in
-\emph{old_classification}) and \emph{old_classification} is also computed. A
-distribution of VI values from random partitions is built. Finally, from the
-comparison with this distribution, an empirical p value is given to the VI
-of the unsupervised cluster analysis.}
+\title{vi_comparison}
 \usage{
 vi_comparison(old_classification, new_classification, number_iter)
 }
@@ -29,7 +22,6 @@ generated (starting from re-shuffle of labels in \emph{old_classification}).}
 Empirical p value.
 }
 \description{
-vi_comparison
 We compute the variation of information (VI) between the partition provided
 by \emph{new_classification} and \emph{old_classification}. The VI between a
 random partitions (obtained with re-shuffle from original labels in

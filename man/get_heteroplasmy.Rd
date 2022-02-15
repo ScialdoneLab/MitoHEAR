@@ -28,7 +28,7 @@ coordinate of the base (obtained from \emph{get_raw_counts_allele}).}
 \item{number_reads}{Integer specifying the minimum number of counts above
 which we consider the base covered by the sample.}
 
-\item{number_positions}{Integer specifying the minimumnumber of bases that
+\item{number_positions}{Integer specifying the minimum number of bases that
 must be covered by the sample (with counts>\emph{number_reads}), in order to keep
 the sample for down-stream analysis.}
 

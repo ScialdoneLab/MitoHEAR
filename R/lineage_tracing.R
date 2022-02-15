@@ -769,6 +769,7 @@ plot_distance_matrix <- function(dist_ang_matrix, cluster){
 
 
 #' vi_comparison
+#'
 #' We compute the variation of information (VI) between the partition provided
 #' by \emph{new_classification} and \emph{old_classification}. The VI between a
 #' random partitions (obtained with re-shuffle from original labels in
