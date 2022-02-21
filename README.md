@@ -23,7 +23,7 @@ The package has two main functions: **get_raw_counts_allele** and **get_heteropl
 ### get_raw_counts_allele
 
 ```
-get_raw_counts_allele(bam_input,path_fasta,cell_names,cores_number=1) 
+get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1) 
 ```
 
 1. **bam_input**: character vector of sorted bam files (one for each sample) with full path.
@@ -36,13 +36,13 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 An example of input could be:
 ```
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
-cell_names=as.vector(after_qc$new_name)
+cell_names <- as.vector(after_qc$new_name)
 cell_names[1:5]
 [1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
-path_to_bam="full_path_to_bam_files"
-bam_input=paste(path_to_bam,cell_names,".unique.bam",sep="")
-path_fasta="full_path_to_fasta_file"
-output_SNP_mt=get_raw_counts_allele(bam_input,path_fasta,cell_names)
+path_to_bam <- "full_path_to_bam_files"
+bam_input <- paste(path_to_bam,cell_names, ".unique.bam", sep = "")
+path_fasta <- "full_path_to_fasta_file"
+output_SNP_mt <- get_raw_counts_allele(bam_input, path_fasta, cell_names)
 ```
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
 
@@ -53,8 +53,8 @@ The output of **get_raw_counts_allele** is a list with three elements:
 
 ```
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
-matrix_allele_counts=output_SNP_mt[[1]]
-## In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
+matrix_allele_counts <- output_SNP_mt[[1]]
+# In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
 dim(matrix_allele_counts)
 [1]   723 65196
 head(matrix_allele_counts[1:5,1:5])
@@ -65,11 +65,11 @@ head(matrix_allele_counts[1:5,1:5])
 24538_8_40        0        0        0        0        0
 24538_8_47        0        0        0        0        0
 
-name_position_allele=output_SNP_mt[[2]]
+name_position_allele <- output_SNP_mt[[2]]
 name_position_allele[1:8]
 [1] "1_A_G_MT" "1_C_G_MT" "1_G_G_MT" "1_T_G_MT" "2_A_T_MT" "2_C_T_MT" "2_G_T_MT" "2_T_T_MT"
 
-name_position=output_SNP_mt[[3]]
+name_position <- output_SNP_mt[[3]]
 name_position[1:8]
 [1] "1_MT" "1_MT" "1_MT" "1_MT" "2_MT" "2_MT" "2_MT" "2_MT"
 ```
@@ -77,7 +77,7 @@ name_position[1:8]
 
 ### get_heteroplasmy
 ```
-get_heteroplasmy(matrix_allele_counts,name_position_allele,name_position,number_reads,number_positions,filtering=1,my.clusters=NULL) 
+get_heteroplasmy(matrix_allele_counts, name_position_allele, name_position, number_reads, number_positions, filtering=1, my.clusters = NULL) 
 ``` 
 starts from the output of **get_raw_counts** and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
 
@@ -88,16 +88,16 @@ load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 
 ## We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
-row.names(after_qc)=after_qc$new_name
-cells_fmk_epi=after_qc[(after_qc$condition=="Cell competition OFF")&(after_qc$cluster==1|after_qc$cluster==3|after_qc$cluster==4),"new_name"]
-after_qc_fmk_epi=after_qc[cells_fmk_epi,]
-my.clusters=after_qc_fmk_epi$cluster
+row.names(after_qc) <- after_qc$new_name
+cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF") & (after_qc$cluster == 1 | after_qc$cluster == 3 | after_qc$cluster == 4), "new_name"]
+after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
+my.clusters <- after_qc_fmk_epi$cluster
 
-matrix_allele_counts=output_SNP_mt[[1]]
-name_position_allele=output_SNP_mt[[2]]
-name_position=output_SNP_mt[[3]]
+matrix_allele_counts <- output_SNP_mt[[1]]
+name_position_allele <- output_SNP_mt[[2]]
+name_position <- output_SNP_mt[[3]]
 
-epiblast_ci=get_heteroplasmy(matrix_allele_counts[cells_fmk_epi,],name_position_allele,name_position,number_reads=50,number_positions=2000,filtering = 2,my.clusters)
+epiblast_ci <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads=50, number_positions=2000, filtering = 2, my.clusters)
 ```
 The output of **get_heteroplasmy** is a list with five elements.
 The most relevant elements are the matrix with heteroplasmy values (**heteroplasmy_matrix**) and the matrix with allele frequencies (**allele_matrix**), for all the cells and bases that pass the two step filtering procedures. 
@@ -105,8 +105,8 @@ The heteroplasmy is computed as **1-max(f)**, where **f** are the frequencies of
 For more info about the output see **?get_heteroplasmy**.
 
 ```
-heteroplasmy_matrix=epiblast_cell_competition[[3]]
-## 261 cells and 5736 bases pass the two step filtering procedures
+heteroplasmy_matrix <- epiblast_cell_competition[[3]]
+# 261 cells and 5736 bases pass the two step filtering procedures
 dim(heteroplasmy_matrix_ci)
 [1]  261 5376
 head(heteroplasmy_matrix_ci[1:5,1:5])
@@ -117,8 +117,8 @@ head(heteroplasmy_matrix_ci[1:5,1:5])
 24538_8_47      0 0.0952381      0 0.000000000      0
 24538_8_69      0 0.0000000      0 0.000000000      0
 
-allele_matrix=epiblast_cell_competition[[4]]
-## 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
+allele_matrix <- epiblast_cell_competition[[4]]
+# 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
 dim(allele_matrix_ci)
 [1]   261 21504
 head(allele_matrix_ci[1:4,1:4])
@@ -135,7 +135,7 @@ head(allele_matrix_ci[1:4,1:4])
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis.
-For more exhaustive information about the functions offered by **MitoHEAR** see **Tutorials** section below and the help page of the single functions. (**?function_name**).
+For more exhaustive information about the functions offered by **MitoHEAR** see **Vignettes** section below and the help page of the single functions. (**?function_name**).
 
 ## Vignettes
 
