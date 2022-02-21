@@ -77,7 +77,7 @@ name_position[1:8]
 
 ### get_heteroplasmy
 ```
-get_heteroplasmy(matrix_allele_counts, name_position_allele, name_position, number_reads, number_positions, filtering=1, my.clusters = NULL) 
+get_heteroplasmy(raw_counts_allele, name_position_allele, name_position, number_reads, number_positions, filtering = 1, my.clusters = NULL) 
 ``` 
 starts from the output of **get_raw_counts** and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
 
