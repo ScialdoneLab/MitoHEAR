@@ -87,7 +87,7 @@ An example of input could be:
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 
-## We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
+# We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4
 row.names(after_qc) <- after_qc$new_name
 cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF") & (after_qc$cluster == 1 | after_qc$cluster == 3 | after_qc$cluster == 4), "new_name"]
 after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
