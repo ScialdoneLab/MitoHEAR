@@ -40,7 +40,7 @@ cell_names <- as.vector(after_qc$new_name)
 cell_names[1:5]
 [1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
 path_to_bam <- "full_path_to_bam_files"
-bam_input <- paste(path_to_bam,cell_names, ".unique.bam", sep="")
+bam_input <- paste(path_to_bam,cell_names, ".unique.bam", sep = "")
 path_fasta <- "full_path_to_fasta_file"
 output_SNP_mt <- get_raw_counts_allele(bam_input, path_fasta, cell_names)
 ```
@@ -54,7 +54,7 @@ The output of **get_raw_counts_allele** is a list with three elements:
 ```
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 matrix_allele_counts <- output_SNP_mt[[1]]
-## In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
+# In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
 dim(matrix_allele_counts)
 [1]   723 65196
 head(matrix_allele_counts[1:5,1:5])
@@ -77,7 +77,7 @@ name_position[1:8]
 
 ### get_heteroplasmy
 ```
-get_heteroplasmy(matrix_allele_counts, name_position_allele, name_position, number_reads, number_positions, filtering=1, my.clusters=NULL) 
+get_heteroplasmy(matrix_allele_counts, name_position_allele, name_position, number_reads, number_positions, filtering=1, my.clusters = NULL) 
 ``` 
 starts from the output of **get_raw_counts** and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
 
@@ -106,7 +106,7 @@ For more info about the output see **?get_heteroplasmy**.
 
 ```
 heteroplasmy_matrix <- epiblast_cell_competition[[3]]
-## 261 cells and 5736 bases pass the two step filtering procedures
+# 261 cells and 5736 bases pass the two step filtering procedures
 dim(heteroplasmy_matrix_ci)
 [1]  261 5376
 head(heteroplasmy_matrix_ci[1:5,1:5])
@@ -118,7 +118,7 @@ head(heteroplasmy_matrix_ci[1:5,1:5])
 24538_8_69      0 0.0000000      0 0.000000000      0
 
 allele_matrix <- epiblast_cell_competition[[4]]
-## 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
+# 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
 dim(allele_matrix_ci)
 [1]   261 21504
 head(allele_matrix_ci[1:4,1:4])
