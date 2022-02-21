@@ -384,7 +384,7 @@ plot_heatmap(new_classification, old_classification, (dist_matrix_sc), cluster_c
 The final number of clusters obtained does not change with the number of top bases used (determined with the parameter *min_value* in the function *choose_features_clustering*.
 The number in the clustree plot (1, 2, 3, 4) refers to the index of the vector min_frac. So in this case 1 refers to 0.1,  2 to 0.01 and so on.
 
-```{r}
+```{r, eval = FALSE}
 min_frac <- c(0.1, 0.01, 0.001, 0.0001)
 choose_features_clustering(heteroplasmy_matrix_ci_small, allele_matrix_ci_small, cluster_ci, top_pos = length(colnames(heteroplasmy_matrix_ci_small)), deepSplit_param = 0, minClusterSize_param = 100, min_frac, 0.2, index = index_ci)
 ```
