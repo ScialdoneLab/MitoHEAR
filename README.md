@@ -23,7 +23,7 @@ The package has two main functions: **get_raw_counts_allele** and **get_heteropl
 ### get_raw_counts_allele
 
 ```
-get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number=1) 
+get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1) 
 ```
 
 1. **bam_input**: character vector of sorted bam files (one for each sample) with full path.
