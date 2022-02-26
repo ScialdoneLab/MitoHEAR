@@ -1,6 +1,6 @@
 # MitoHEAR
 MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. 
-The package has been used in a recently published paper ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t)), where we revealed that cells with higher levels of heteroplasmy are eliminated by cell competition in mouse embryos and are characterized by specific gene expression patterns.
+The package has been used in a recently published paper ([Lima, A., Lubatti, G. , et al. Nature Metabolism](https://www.nature.com/articles/s42255-021-00422-7?proof=t)), where we revealed that cells with higher levels of heteroplasmy are eliminated by cell competition in mouse embryos and are characterized by specific gene expression patterns.
 
 ## Installation
 To install MitoHEAR, please run the following:
