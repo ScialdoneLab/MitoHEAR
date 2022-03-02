@@ -145,7 +145,7 @@ For more exhaustive information about the functions offered by **MitoHEAR** see 
 
 ## Vignettes
 
-The following vignettes are provided within the package **MitoHEAR** and are accessible within R:
+The following vignettes are provided within the package **MitoHEAR** (development version from [GitHub](https://github.com/)) and are accessible within R:
 
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
