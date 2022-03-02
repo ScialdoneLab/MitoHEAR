@@ -1,3 +1,13 @@
+<!-- badges: start -->
+[![](https://www.r-pkg.org/badges/version/CIARA)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/last-day/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
+
+
+<!-- badges: end -->
+
+
 # MitoHEAR
 MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. 
 
