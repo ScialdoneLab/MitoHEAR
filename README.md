@@ -1,8 +1,8 @@
 <!-- badges: start -->
-[![](https://www.r-pkg.org/badges/version/CIARA)](https://cran.r-project.org/package=MitoHEAR)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
-[![](http://cranlogs.r-pkg.org/badges/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
-[![](http://cranlogs.r-pkg.org/badges/last-day/CIARA?color=green)](https://cran.r-project.org/package=MitoHEAR)
+[![](https://www.r-pkg.org/badges/version/MitoHEAR)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
+[![](http://cranlogs.r-pkg.org/badges/last-day/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
 
 
 <!-- badges: end -->
