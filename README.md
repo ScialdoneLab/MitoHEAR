@@ -113,7 +113,7 @@ matrix_allele_counts <- output_SNP_mt[[1]]
 name_position_allele <- output_SNP_mt[[2]]
 name_position <- output_SNP_mt[[3]]
 
-epiblast_ci <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads=50, number_positions=2000, filtering = 2, my.clusters)
+epiblast_cell_competition <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads=50, number_positions=2000, filtering = 2, my.clusters)
 ```
 The output of **get_heteroplasmy** is a list with five elements.
 The most relevant elements are the matrix with heteroplasmy values (**heteroplasmy_matrix**) and the matrix with allele frequencies (**allele_matrix**), for all the cells and bases that pass the two step filtering procedures. 
