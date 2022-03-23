@@ -175,7 +175,7 @@ The top 10 bases with highest variation in heteroplasmy belong to the genes mt-R
 utils::vignette("cell_competition_bulk_data_mt_example_notebook")
 ```
 This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
-Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell lineages only by looking at the heteroplasmy values of the mitochondrial bases.
+Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell lines only by looking at the heteroplasmy values of the mitochondrial bases.
 
 
 ### **[lineage_tracing_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/lineage_tracing_example_notebook.Rmd):**
