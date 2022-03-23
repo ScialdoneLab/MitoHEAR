@@ -65,7 +65,7 @@ An example of input bam files (with 5 samples) is available [here](https://hmgub
 
 The output of **get_raw_counts_allele** is a list with three elements:
 1. **matrix_allele_counts**: matrix with rows equal to **cell_names** and with columns equal to the bases in the **path_fasta** file with the four possible alleles. For each pair sample-base there is the information about the counts on the alleles A,C,G and T
-2. **name_position_allele**: character vectors with length equal to *n_cols* of **matrix_allele_counts** with information about the name of the bases and the corresponding allele
+2. **name_position_allele**: character vectors with length equal to the number of columns in **matrix_allele_counts** with information about the name of the bases and the corresponding allele
 3. **name_position**: character vectors with information about the name of the bases.
 
 ```
