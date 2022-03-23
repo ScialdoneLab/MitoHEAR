@@ -124,9 +124,9 @@ For more info about the output see **?get_heteroplasmy**.
 ```
 heteroplasmy_matrix <- epiblast_cell_competition[[3]]
 # 261 cells and 5736 bases pass the two step filtering procedures
-dim(heteroplasmy_matrix_ci)
+dim(heteroplasmy_matrix)
 [1]  261 5376
-head(heteroplasmy_matrix_ci[1:5,1:5])
+head(heteroplasmy_matrix[1:5,1:5])
            136_MT    138_MT 140_MT      141_MT 142_MT
 24538_8_14      0 0.0000000      0 0.000000000      0
 24538_8_39      0 0.0000000      0 0.000000000      0
@@ -136,9 +136,9 @@ head(heteroplasmy_matrix_ci[1:5,1:5])
 
 allele_matrix <- epiblast_cell_competition[[4]]
 # 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
-dim(allele_matrix_ci)
+dim(allele_matrix)
 [1]   261 21504
-head(allele_matrix_ci[1:4,1:4])
+head(allele_matrix[1:4,1:4])
            136_A_G_MT 136_C_G_MT 136_G_G_MT 136_T_G_MT
 24538_8_14          0          0          1          0
 24538_8_39          0          0          1          0
