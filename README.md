@@ -49,7 +49,7 @@ get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1)
 
 In the same location of the sorted bam file, also the corresponding index bam file (.bai) should be present
 
-An example of input could be:
+An example of input could be (using the development version from GitHub):
 ```
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 cell_names <- as.vector(after_qc$new_name)
@@ -98,7 +98,7 @@ get_heteroplasmy(raw_counts_allele, name_position_allele, name_position, number_
 ``` 
 starts from the output of **get_raw_counts** and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than **number_reads** counts in more than **number_positions** bases and to keep only the bases that are covered by more than **number_reads** counts in all the cells (**filtering**=1)  or in at least 50% of cells in each cluster (**filtering**=2, with cluster specified by **my.clusters**).
 
-An example of input could be:
+An example of input could be (using the development version from GitHub):
 
 ```
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
