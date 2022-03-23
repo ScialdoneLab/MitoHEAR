@@ -69,6 +69,7 @@ The output of **get_raw_counts_allele** is a list with three elements:
 3. **name_position**: character vectors with information about the name of the bases.
 
 ```
+# development version from GitHub
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 matrix_allele_counts <- output_SNP_mt[[1]]
 # In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
