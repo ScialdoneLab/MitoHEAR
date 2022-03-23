@@ -164,7 +164,7 @@ The following vignettes are provided within the package **MitoHEAR** (developmen
 ```
 utils::vignette("cell_competition_mt_example_notebook")
 ```
-This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
+This tutorial uses single cell RNA seq mouse embryo data ([Lima *et al.*, Nature Metabolism, 2021](https://www.nature.com/articles/s42255-021-00422-7?proof=t))(Smart-Seq2 protocol).
 The heteroplasmy is computed for the mouse mitochondrial genome.
 Identification and plotting of most different bases according to heteroplasmy between clusters (with **get_wilcox_test**, **plot_heteroplasmy** and **plot_allele_frequency**) and along pseudo time (with **dpt_test** and **plot_dpt**) are shown.
 The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo time. 
@@ -174,7 +174,7 @@ The top 10 bases with highest variation in heteroplasmy belong to the genes mt-R
 ```
 utils::vignette("cell_competition_bulk_data_mt_example_notebook")
 ```
-This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
+This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)). 
 Cluster analysis among samples based on allele frequency values (done with **clustering_angular_distance**) reveals that we can perfectly distinguish between the two cell lines only by looking at the heteroplasmy values of the mitochondrial bases.
 
 
