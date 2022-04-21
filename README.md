@@ -17,9 +17,6 @@ The package has been used in a recently published paper ([Lima *et al.*, 2021, N
 
 You can install the released version of MitoHEAR from [CRAN](https://CRAN.R-project.org) with:
 
-```install.packages("MitoHEAR")```
-
-or using:
 ```
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
