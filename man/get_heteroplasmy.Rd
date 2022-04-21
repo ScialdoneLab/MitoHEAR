@@ -61,7 +61,7 @@ bases that pass the two consequentially filtering steps.}
 
 \item{index}{Indices of the samples that
 cover a base, for all bases and samples that pass the two consequentially
-filtering steps; if all the samples cover all the bases, then \emph{index} is NULL }
+filtering steps (if \emph{filtering} = 2); if all the samples cover all the bases (that is the case for \emph{filtering} = 1), then \emph{index} is NULL }
 }
 \description{
 It is one of the two main functions of the \strong{MitoHEAR} package
