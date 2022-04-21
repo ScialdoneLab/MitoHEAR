@@ -18,8 +18,12 @@ knitr::opts_chunk$set(
 
 ```
 
+The notebook depends on karyoploteR, regioneR, gam and fmsb packages
 ```{r setup}
 library(MitoHEAR)
+required <- c("karyoploteR", "regioneR", "gam", "fmsb")
+if (!all(unlist(lapply(required, function(pkg) requireNamespace(pkg, quietly = TRUE)))))
+  knitr::opts_chunk$set(eval = FALSE)
 ```
 
 
