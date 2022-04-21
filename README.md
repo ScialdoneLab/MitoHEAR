@@ -64,13 +64,18 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 
 An example of input could be (using the development version from GitHub):
 ```
+current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/" # change the path using your current working directory 
+url = "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
+destfile = paste0(current_wd,"input_bam_files.tar.gz")
+download.file(url, destfile,quiet = FALSE)
+untar(destfile, exdir=current_wd)
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 cell_names <- as.vector(after_qc$new_name)
 cell_names[1:5]
 [1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
-path_to_bam <- "full_path_to_bam_files"
+path_to_bam <- paste0(current_wd,"input_bam_files/")
 bam_input <- paste(path_to_bam,cell_names, ".unique.bam", sep = "")
-path_fasta <- "full_path_to_fasta_file"
+path_fasta <- system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
 output_SNP_mt <- get_raw_counts_allele(bam_input, path_fasta, cell_names)
 ```
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
