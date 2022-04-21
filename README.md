@@ -81,7 +81,7 @@ path_fasta <- system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa",
 output_SNP_mt <- get_raw_counts_allele(bam_input, path_fasta, cell_names)
 ```
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
-An example of input bam files (with 5 samples) is available [here](https://hmgubox2.helmholtz-muenchen.de/index.php/s/5WXBnkjDjj3A7C2).
+An example of input bam files (with 5 samples) is available [here](https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx).
 
 The output of **get_raw_counts_allele** is a list with three elements:
 1. **matrix_allele_counts**: matrix with rows equal to **cell_names** and with columns equal to the bases in the **path_fasta** file with the four possible alleles. For each pair sample-base there is the information about the counts on the alleles A,C,G and T
