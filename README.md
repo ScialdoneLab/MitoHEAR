@@ -66,6 +66,7 @@ An example of input could be (using the development version from GitHub):
 ```
 # change current_wd using your current working directory
 current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
+# example on input bam files (with 5 samples)
 url <- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
 destfile <- paste0(current_wd, "input_bam_files.tar.gz")
 download.file(url, destfile, quiet = FALSE)
