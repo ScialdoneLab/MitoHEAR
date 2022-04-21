@@ -64,7 +64,7 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 
 An example of input could be (using the development version from GitHub):
 ```
-# change the path using your current working directory
+# change current_wd using your current working directory
 current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
 url <- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
 destfile <- paste0(current_wd, "input_bam_files.tar.gz")
