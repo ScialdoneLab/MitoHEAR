@@ -15,18 +15,6 @@ The package has been used in a recently published paper ([Lima *et al.*, 2021, N
 
 ## Installation
 
-Before installing MitoHEAR, the following libraries should be installed
-```
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("Biostrings")
-BiocManager::install("ComplexHeatmap")
-BiocManager::install("GenomicRanges")
-BiocManager::install("rlist")
-BiocManager::install("Rsamtools")
-```
-
 You can install the released version of MitoHEAR from [CRAN](https://CRAN.R-project.org) with:
 
 ```install.packages("MitoHEAR")```
