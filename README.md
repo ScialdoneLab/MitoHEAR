@@ -31,6 +31,13 @@ You can install the released version of MitoHEAR from [CRAN](https://CRAN.R-proj
 
 ```install.packages("MitoHEAR")```
 
+or using:
+```
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("MitoHEAR")
+```
+
 And the development version from [GitHub](https://github.com/) with:
 ```
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
