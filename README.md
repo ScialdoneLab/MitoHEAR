@@ -79,7 +79,7 @@ cell_names[1:5]
 ```
 
 
-where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
+where after_qc is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
 
 
 ```
