@@ -203,7 +203,7 @@ plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt
 ```
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis. 
 The data shown in the example below is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
-```
+
 Pre-processing of the dataset following the same steps described in the section *Getting started*
 ```
 load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
