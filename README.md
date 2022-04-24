@@ -219,7 +219,7 @@ The heteroplasmy and the corresponding allele frequencies for the most relevant 
 plot_heteroplasmy(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci, cluster_ci, index_ci)
 plot_allele_frequency(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, name_position_qc, name_position_allele_qc, 5, index_ci)
 ```
-<img src="https://github.com/ScialdoneLab/MitoHEAR/blob/master/Draft/docs/img/paper_fig_1.png" width="800" height="500">
+
 
 ![](man/figures/paper_fig_1.png){width=60%}
 
@@ -230,9 +230,8 @@ dpt_analysis <- dpt_test(heteroplasmy_matrix_ci[, relevant_bases], time, index_c
 
 plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt_analysis, index_ci)
 ```
-<img src="https://github.com/ScialdoneLab/MitoHEAR/blob/master/Draft/docs/img/paper_fig_2.png" width="800" height="500">
 
-![](man/figures/paper_fig_2.png){width=60%}
+![](man/figures/paper_fig_2.png)
 
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_distance_matrix**. This approach could be useful for lineage tracing analysis. 
 The data shown in the example below (reproducible with the development version of **MitoHEAR**) is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)).
@@ -275,9 +274,8 @@ old_classification <- as.vector(old_new_classification[, 1])
 
 plot_distance_matrix(dist_matrix_sc, old_classification)
 ```
-<img src="https://github.com/ScialdoneLab/MitoHEAR/blob/master/Draft/docs/img/paper_fig_3.png" width="800" height="500">
 
-![](man/figures/paper_fig_3.png){width=60%}
+![](man/figures/paper_fig_3.png)
 
 For more exhaustive information about the functions offered by **MitoHEAR** see **Vignettes** section below and the help page of the single functions. (**?function_name**).
 
