@@ -165,15 +165,15 @@ head(allele_matrix[1:4,1:4])
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. The example is based again on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t) and is possible to run it using the development version of **MitoHEAR**.
 ```
-sum_matrix <- epiblast_ci[[1]]
-sum_matrix_qc <- epiblast_ci[[2]]
-heteroplasmy_matrix_ci <- epiblast_ci[[3]]
-allele_matrix_ci <- epiblast_ci[[4]]
+sum_matrix <- epiblast_cell_competition[[1]]
+sum_matrix_qc <- epiblast_cell_competition[[2]]
+heteroplasmy_matrix_ci <- epiblast_cell_competition[[3]]
+allele_matrix_ci <- epiblast_cell_competition[[4]]
 cluster_ci <- as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$cluster)
 cluster_ci[cluster_ci == "1"] <- "Winner Epiblast"
 cluster_ci[cluster_ci == "3"] <- "Intermediate"
 cluster_ci[cluster_ci == "4"] <- "Loser Epiblast"
-index_ci <- epiblast_ci[[5]]
+index_ci <- epiblast_cell_competition[[5]]
 
 name_position_allele_qc <- name_position_allele[name_position %in% colnames(sum_matrix_qc)]
 name_position_qc <-  name_position[name_position %in% colnames(sum_matrix_qc)]
