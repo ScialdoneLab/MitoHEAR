@@ -204,7 +204,7 @@ plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis. 
 The data shown in the example below is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
 
-Pre-processing of the dataset following the same steps described in the section *Getting started*
+Pre-processing of the dataset following the same steps described in the section **Getting started**
 ```
 load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
 load(system.file("extdata", "meta_data_ana_final_small.Rda", package = "MitoHEAR"))
@@ -229,17 +229,16 @@ cluster_bulk <- as.character(meta_data_ana_final_small[row.names(heteroplasmy_ma
 index_bulk <- bulk_data_competition[[5]]
 ```
 
-Unsupervised hierarchical clustering on the samples based on a distance matrix with the function *clustering_dist_ang*
+Unsupervised hierarchical clustering on the samples based on a distance matrix with the function **clustering_dist_ang**
 
 ```
 result_clustering_sc <- clustering_angular_distance(heteroplasmy_matrix_bulk, allele_matrix_bulk, cluster_bulk, length(colnames(heteroplasmy_matrix_bulk)), deepSplit_param = 1, minClusterSize_param = 8, 0.2, min_value = 0.001, index = index_bulk, relevant_bases = NULL)
 
-
 old_new_classification <- result_clustering_sc[[1]]
 dist_matrix_sc <- result_clustering_sc[[2]]
 top_dist <- result_clustering_sc[[3]]
-
 old_classification <- as.vector(old_new_classification[, 1])
+
 plot_distance_matrix(dist_matrix_sc, old_classification)
 ```
 
