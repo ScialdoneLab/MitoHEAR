@@ -191,7 +191,7 @@ p_value_wilcox_test_sort <- sort(p_value_wilcox_test, decreasing = F)
 The heteroplasmy and the corresponding allele frequencies for the most relevant base (according to Wilcoxon test) is shown.
 ```
 plot_heteroplasmy(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci, cluster_ci, index_ci)
-plot_allele_frequency(i, heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, name_position_qc, name_position_allele_qc, 5, index_ci)
+plot_allele_frequency(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, name_position_qc, name_position_allele_qc, 5, index_ci)
 ```
 <img src="https://github.com/ScialdoneLab/MitoHEAR/blob/master/Draft/docs/img/paper_fig_1.png" width="800" height="500">
 
