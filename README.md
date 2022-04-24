@@ -54,7 +54,7 @@ get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1)
 
 In the same location of the sorted bam file, also the corresponding index bam file (.bai) should be present
 
-Below an example of input using the development version from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
+Below an example of input using the development version of **MitoHEAR** from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
 ```
 # change current_wd using your current working directory
 current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
@@ -205,7 +205,7 @@ plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt
 <img src="https://github.com/ScialdoneLab/MitoHEAR/blob/master/Draft/docs/img/paper_fig_2.png" width="800" height="500">
 
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_distance_matrix**. This approach could be useful for lineage tracing analysis. 
-The data shown in the example below is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
+The data shown in the example below (reproducible with the development version of **MitoHEAR**) is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)).
 
 Pre-processing of the dataset following the same steps described in the section **Getting started**
 ```
