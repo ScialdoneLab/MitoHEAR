@@ -165,7 +165,7 @@ head(allele_matrix[1:4,1:4])
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. The example is based again on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t) and is possible to run it using the development version of **MitoHEAR**.
 
-Pre-processing of the dataset following the same steps described in the section **Getting started**
+Pre-processing of the dataset following the same steps described in the section **Getting started**.
 ```
 load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
@@ -224,7 +224,7 @@ plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_distance_matrix**. This approach could be useful for lineage tracing analysis. 
 The data shown in the example below (reproducible with the development version of **MitoHEAR**) is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)).
 
-Pre-processing of the dataset following the same steps described in the section **Getting started**
+Pre-processing of the dataset following the same steps described in the section **Getting started**.
 ```
 load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
 load(system.file("extdata", "meta_data_ana_final_small.Rda", package = "MitoHEAR"))
