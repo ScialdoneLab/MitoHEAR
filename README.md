@@ -56,12 +56,10 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 
 Below an example of input using the development version of **MitoHEAR** from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
 
-First we download the input bam files:
+First we download the input bam files (5 samples in the example):
 ````
 ```
-# change current_wd using your current working directory
 current_wd <- getwd()
-# example of input bam files (with 5 samples)
 url <- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
 destfile <- paste0(current_wd, "input_bam_files.tar.gz")
 download.file(url, destfile, quiet = FALSE)
@@ -71,13 +69,15 @@ untar(destfile, exdir=current_wd)
 
 The example of input bam files (with 5 samples) is available also [here](https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx).
 
+````
 ```
 load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
 cell_names <- as.vector(after_qc$new_name)
 cell_names <- cell_names[1:5]
 cell_names[1:5]
-[1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
 ```
+[1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
+````
 
 where **after_qc** is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
 
