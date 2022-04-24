@@ -11,7 +11,7 @@
 # MitoHEAR
 MitoHEAR (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. 
 
-The package has been used in a recently published paper ([Lima *et al.*, 2021, Nature Metabolism](https://www.nature.com/articles/s42255-021-00422-7?proof=t)), where we revealed that cells with higher levels of heteroplasmy are eliminated by cell competition in mouse embryos and are characterized by specific gene expression patterns.
+The package has been used in a recently published paper ([Lima *et al.*, 2021, Nature Metabolism](https://www.nature.com/articles/s42255-021-00422-7?proof=t), where we revealed that cells with higher levels of heteroplasmy are eliminated by cell competition in mouse embryos and are characterized by specific gene expression patterns.
 
 ## Installation
 
@@ -54,7 +54,7 @@ get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1)
 
 In the same location of the sorted bam file, also the corresponding index bam file (.bai) should be present
 
-Belwo an example of input using the development version from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)):
+Belwo an example of input using the development version from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
 ```
 # change current_wd using your current working directory
 current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
@@ -163,7 +163,7 @@ head(allele_matrix[1:4,1:4])
 ```
 ## Down-stream analysis
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
-For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. Below an example using single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
+For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**.
 ```
 sum_matrix <- epiblast_ci[[1]]
 sum_matrix_qc <- epiblast_ci[[2]]
@@ -195,7 +195,54 @@ plot_allele_frequency(i, heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, n
 ```
 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
-It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis.
+```
+time <- after_qc[row.names(heteroplasmy_matrix_ci), ]$pseudo_time
+dpt_analysis <- dpt_test(heteroplasmy_matrix_ci[, relevant_bases], time, index_ci, method =  "GAM")
+
+plot_dpt(dpt_analysis$Position[1], heteroplasmy_matrix_ci, cluster_ci, time, dpt_analysis, index_ci)
+```
+It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis. 
+The data shown in the example below is bulk RNA seq mouse data from two mtDNA cell lines labelled *Loser* and *Winner* ([Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
+```
+Pre-processing of the dataset following the same steps described in the section *Getting started*
+```
+load(system.file("extdata", "meta_data_ana_final_big.Rda", package = "MitoHEAR"))
+load(system.file("extdata", "meta_data_ana_final_small.Rda", package = "MitoHEAR"))
+cell_names <- as.vector(meta_data_ana_final_big$name_cell)
+cell_names_bulk <- cell_names
+load(system.file("extdata", "output_SNP_ana_mt.Rda", package = "MitoHEAR"))
+matrix_allele_counts <- output_SNP_ana_mt[[1]]
+name_position_allele <- output_SNP_ana_mt[[2]]
+name_position <- output_SNP_ana_mt[[3]]
+row.names(meta_data_ana_final_big) <- meta_data_ana_final_big$name_cell
+meta_data_ana_final_big <- meta_data_ana_final_big[row.names(matrix_allele_counts),]
+delete_duplicate <- meta_data_ana_final_big$name_cell[seq(1,48,3)]
+meta_data_ana_final_big_filter <- meta_data_ana_final_big[delete_duplicate,]
+bulk_sample <- meta_data_ana_final_big_filter$name_cell_original
+matrix_allele_counts <- matrix_allele_counts[delete_duplicate,]
+row.names(matrix_allele_counts) <- bulk_sample
+
+bulk_data_competition <- get_heteroplasmy(matrix_allele_counts[bulk_sample,],name_position_allele,name_position,50,2000,filtering = 1)
+heteroplasmy_matrix_bulk <- bulk_data_competition[[3]]
+allele_matrix_bulk <- bulk_data_competition[[4]]
+cluster_bulk <- as.character(meta_data_ana_final_small[row.names(heteroplasmy_matrix_bulk),]$status)
+index_bulk <- bulk_data_competition[[5]]
+```
+
+Unsupervised hierarchical clustering on the samples based on a distance matrix with the function *clustering_dist_ang*
+
+```
+result_clustering_sc <- clustering_angular_distance(heteroplasmy_matrix_bulk, allele_matrix_bulk, cluster_bulk, length(colnames(heteroplasmy_matrix_bulk)), deepSplit_param = 1, minClusterSize_param = 8, 0.2, min_value = 0.001, index = index_bulk, relevant_bases = NULL)
+
+
+old_new_classification <- result_clustering_sc[[1]]
+dist_matrix_sc <- result_clustering_sc[[2]]
+top_dist <- result_clustering_sc[[3]]
+
+old_classification <- as.vector(old_new_classification[, 1])
+plot_distance_matrix(dist_matrix_sc, old_classification)
+```
+
 For more exhaustive information about the functions offered by **MitoHEAR** see **Vignettes** section below and the help page of the single functions. (**?function_name**).
 
 ## Vignettes
