@@ -54,7 +54,7 @@ get_raw_counts_allele(bam_input, path_fasta, cell_names, cores_number = 1)
 
 In the same location of the sorted bam file, also the corresponding index bam file (.bai) should be present
 
-An example of input could be (using the development version from GitHub):
+Belwo an example of input using the development version from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t)):
 ```
 # change current_wd using your current working directory
 current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
@@ -165,15 +165,6 @@ head(allele_matrix[1:4,1:4])
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. Below an example using single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
 ```
-load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
-load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
-row.names(after_qc) <- after_qc$new_name
-cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF")&(after_qc$cluster == 1|after_qc$cluster == 3|after_qc$cluster == 4), "new_name"]
-after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
-my.clusters <- after_qc_fmk_epi$cluster
-
-epiblast_ci <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads = 50, number_positions = 2000, filtering = 2, my.clusters)
-
 sum_matrix <- epiblast_ci[[1]]
 sum_matrix_qc <- epiblast_ci[[2]]
 heteroplasmy_matrix_ci <- epiblast_ci[[3]]
@@ -182,7 +173,6 @@ cluster_ci <- as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$cluster
 cluster_ci[cluster_ci == "1"] <- "Winner Epiblast"
 cluster_ci[cluster_ci == "3"] <- "Intermediate"
 cluster_ci[cluster_ci == "4"] <- "Loser Epiblast"
-condition_ci <-  as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$condition)
 index_ci <- epiblast_ci[[5]]
 
 name_position_allele_qc <- name_position_allele[name_position %in% colnames(sum_matrix_qc)]
