@@ -57,7 +57,7 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 Below an example of input using the development version of **MitoHEAR** from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
 ```
 # change current_wd using your current working directory
-current_wd <- current_wd <- getwd()
+current_wd <- getwd()
 # example of input bam files (with 5 samples)
 url <- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
 destfile <- paste0(current_wd, "input_bam_files.tar.gz")
