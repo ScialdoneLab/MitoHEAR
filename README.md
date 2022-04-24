@@ -57,7 +57,7 @@ In the same location of the sorted bam file, also the corresponding index bam fi
 Below an example of input using the development version of **MitoHEAR** from GitHub. The example is based on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t):
 ```
 # change current_wd using your current working directory
-current_wd <- "/Users/gabriele.lubatti/Documents/test_bam/"
+current_wd <- current_wd <- getwd()
 # example of input bam files (with 5 samples)
 url <- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
 destfile <- paste0(current_wd, "input_bam_files.tar.gz")
@@ -164,6 +164,23 @@ head(allele_matrix[1:4,1:4])
 ## Down-stream analysis
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
 For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. The example is based again on single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t) and is possible to run it using the development version of **MitoHEAR**.
+
+Pre-processing of the dataset following the same steps described in the section **Getting started**
+```
+load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
+load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
+row.names(after_qc) <- after_qc$new_name
+cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF") & (after_qc$cluster == 1 | after_qc$cluster == 3 | after_qc$cluster == 4), "new_name"]
+after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
+my.clusters <- after_qc_fmk_epi$cluster
+
+matrix_allele_counts <- output_SNP_mt[[1]]
+name_position_allele <- output_SNP_mt[[2]]
+name_position <- output_SNP_mt[[3]]
+
+epiblast_cell_competition <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads=50, number_positions=2000, filtering = 2, my.clusters)
+```
+
 ```
 sum_matrix <- epiblast_cell_competition[[1]]
 sum_matrix_qc <- epiblast_cell_competition[[2]]
