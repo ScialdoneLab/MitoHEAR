@@ -282,7 +282,7 @@ For more exhaustive information about the functions offered by **MitoHEAR** see 
 
 The following vignettes are provided within the package **MitoHEAR** (development version from [GitHub](https://github.com/)) and are accessible within R.
 
-For a complete overview of the vignettes without the need of using R, please [click here](https://scialdonelab.github.io/MitoHEAR/)
+For a complete overview of the vignettes without the need of using R, please [click here](https://scialdonelab.github.io/MitoHEAR/articles/)
 
 ### **[cell_competition_mt_example_notebook.Rmd](https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_mt_example_notebook.Rmd):**
 ```
