@@ -241,7 +241,7 @@ old_classification <- as.vector(old_new_classification[, 1])
 
 plot_distance_matrix(dist_matrix_sc, old_classification)
 ```
-<img src="https://github.com/ScialdoneLab/MitoHEAR/blob/main/figures/paper_fig_3.png" width="700" height="500">
+<img src="https://github.com/ScialdoneLab/MitoHEAR/tree/master/Draft/docs/img/paper_fig_3.png" width="700" height="500">
 
 For more exhaustive information about the functions offered by **MitoHEAR** see **Vignettes** section below and the help page of the single functions. (**?function_name**).
 
