@@ -161,9 +161,49 @@ head(allele_matrix[1:4,1:4])
 
 
 ```
-### Down-stream analysis
+## Down-stream analysis
 **MitoHEAR** offers several ways to extrapolate relevant information from heteroplasmy measurement. 
-For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. 
+For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function **get_wilcox_test**.  The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with **plot_heteroplasmy** and **plot_allele_frequency**. Below an example using single cell RNA seq mouse embryo data from [Lima *et al.*, Nature Metabolism, 2021 ](https://www.nature.com/articles/s42255-021-00422-7?proof=t))
+```
+load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
+load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
+row.names(after_qc) <- after_qc$new_name
+cells_fmk_epi <- after_qc[(after_qc$condition == "Cell competition OFF")&(after_qc$cluster == 1|after_qc$cluster == 3|after_qc$cluster == 4), "new_name"]
+after_qc_fmk_epi <- after_qc[cells_fmk_epi, ]
+my.clusters <- after_qc_fmk_epi$cluster
+
+epiblast_ci <- get_heteroplasmy(matrix_allele_counts[cells_fmk_epi, ], name_position_allele, name_position, number_reads = 50, number_positions = 2000, filtering = 2, my.clusters)
+
+sum_matrix <- epiblast_ci[[1]]
+sum_matrix_qc <- epiblast_ci[[2]]
+heteroplasmy_matrix_ci <- epiblast_ci[[3]]
+allele_matrix_ci <- epiblast_ci[[4]]
+cluster_ci <- as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$cluster)
+cluster_ci[cluster_ci == "1"] <- "Winner Epiblast"
+cluster_ci[cluster_ci == "3"] <- "Intermediate"
+cluster_ci[cluster_ci == "4"] <- "Loser Epiblast"
+condition_ci <-  as.character(after_qc[row.names(heteroplasmy_matrix_ci), ]$condition)
+index_ci <- epiblast_ci[[5]]
+
+name_position_allele_qc <- name_position_allele[name_position %in% colnames(sum_matrix_qc)]
+name_position_qc <-  name_position[name_position %in% colnames(sum_matrix_qc)]
+```
+
+It is possible to perform an additional filtering step on the bases keeping only the ones with an heteroplasmy value above *min_heteroplasmy* in more than *min_cells*.
+```
+relevant_bases <- filter_bases(heteroplasmy_matrix_ci, min_heteroplasmy = 0.01, min_cells = 10, index_ci)
+```
+For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters *Winner Epiblast* and *Loser Epiblast*. As output, for each base, there is the adjusted p valued (FDR).
+```
+p_value_wilcox_test <- get_wilcox_test(heteroplasmy_matrix_ci[, relevant_bases], cluster_ci, "Winner Epiblast", "Loser Epiblast" , index_ci)
+p_value_wilcox_test_sort <- sort(p_value_wilcox_test, decreasing = F)
+```
+The heteroplasmy and the corresponding allele frequencies for the most relevant base (according to Wilcoxon test) is shown.
+```
+plot_heteroplasmy(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci, cluster_ci, index_ci)
+plot_allele_frequency(i, heteroplasmy_matrix_ci, allele_matrix_ci, cluster_ci, name_position_qc, name_position_allele_qc, 5, index_ci)
+```
+
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
 It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with **clustering_angular_distance** and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with **plot_heatmap**. This approach could be useful for lineage tracing analysis.
 For more exhaustive information about the functions offered by **MitoHEAR** see **Vignettes** section below and the help page of the single functions. (**?function_name**).
