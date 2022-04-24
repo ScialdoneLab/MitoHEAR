@@ -68,6 +68,8 @@ download.file(url, destfile, quiet = FALSE)
 untar(destfile, exdir=current_wd)
 ```
 ```
+
+```
 The example of input bam files (with 5 samples) is available also [here](https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx).
 ```
 ```
