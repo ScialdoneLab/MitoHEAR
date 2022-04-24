@@ -224,6 +224,7 @@ meta_data_ana_final_big_filter <- meta_data_ana_final_big[delete_duplicate,]
 bulk_sample <- meta_data_ana_final_big_filter$name_cell_original
 matrix_allele_counts <- matrix_allele_counts[delete_duplicate,]
 row.names(matrix_allele_counts) <- bulk_sample
+row.names(meta_data_ana_final_small) <- meta_data_ana_final_small$name_fastq
 
 bulk_data_competition <- get_heteroplasmy(matrix_allele_counts[bulk_sample,],name_position_allele,name_position,50,2000,filtering = 1)
 heteroplasmy_matrix_bulk <- bulk_data_competition[[3]]
