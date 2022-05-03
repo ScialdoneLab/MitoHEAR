@@ -320,7 +320,7 @@ We illustrate how unsupervised cluster analysis based on allele frequencies info
 
 
 ## Contributions and Support
-Contributions in the form of feedback, comments, code, and bug report are welcome.
+Contributions in the form of feedback, comments, code and bug report are welcome.
 * For any contributions, feel free to fork the source code and [submit a pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 * Please report any issues or bugs here: https://github.com/ScialdoneLab/MitoHEAR/issues.
 Any questions and requests for support can also be directed to the package maintainer (gabriele[dot]lubatti[at]helmholtz-muenchen[dot]de).
