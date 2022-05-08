@@ -16,8 +16,6 @@
   * [Vignettes](#vignettes)
   * [Contributions and Support](#contributions-and-support)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 # MitoHEAR
 [MitoHEAR](https://scialdonelab.github.io/MitoHEAR) (**Mito**chondrial **HE**teroplasmy **A**nalyze**R**) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets.
 
