@@ -1,8 +1,8 @@
 ---
-title: "cell_competition_bulk_data_mt_example_notebook"
+title: "Analysing mtDNA cell lines in bulk RNA seq data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cell_competition_bulk_data_mt_example_notebook}
+  %\VignetteIndexEntry{Analysing mtDNA cell lines in bulk RNA seq data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

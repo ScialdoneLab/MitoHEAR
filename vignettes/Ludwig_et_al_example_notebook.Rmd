@@ -1,8 +1,8 @@
 ---
-title: "Ludwig_et_al_example_notebook"
+title: "Lineage tracing with mtDNA heteroplasmy in single cell RNA seq human data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Ludwig_et_al_example_notebook}
+  %\VignetteIndexEntry{Lineage tracing with mtDNA heteroplasmy in single cell RNA seq human data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

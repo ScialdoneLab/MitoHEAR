@@ -1,8 +1,8 @@
 ---
-title: "cell_competition_mt_example_notebook"
+title: "Analysing mtDNA heteroplasmy in single cell RNA seq mouse data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cell_competition_mt_example_notebook}
+  %\VignetteIndexEntry{Analysing mtDNA heteroplasmy in single cell RNA seq mouse data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
