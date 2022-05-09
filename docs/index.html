@@ -50,16 +50,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Ludwig_et_al_example_notebook.html">Ludwig_et_al_example_notebook</a>
+      <a href="articles/Ludwig_et_al_example_notebook.html">Lineage tracing with mtDNA heteroplasmy in single cell RNA seq human data</a>
     </li>
     <li>
-      <a href="articles/cell_competition_bulk_data_mt_example_notebook.html">cell_competition_bulk_data_mt_example_notebook</a>
+      <a href="articles/cell_competition_bulk_data_mt_example_notebook.html">Analysing mtDNA cell lines in bulk RNA seq data</a>
     </li>
     <li>
-      <a href="articles/cell_competition_mt_example_notebook.html">cell_competition_mt_example_notebook</a>
+      <a href="articles/cell_competition_mt_example_notebook.html">Analysing mtDNA heteroplasmy in single cell RNA seq mouse data</a>
     </li>
     <li>
-      <a href="articles/lineage_tracing_example_notebook.html">lineage_tracing_example_notebook</a>
+      <a href="articles/lineage_tracing_example_notebook.html">Lineage tracing with mtDNA heteroplasmy in single cell RNA seq mouse data</a>
     </li>
   </ul>
 </li>
@@ -86,26 +86,47 @@
 
 
 <!-- badges: end -->
+<ul>
+<li>
+<a href="#mitohear">MitoHEAR</a>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li>
+<a href="#getting-started">Getting started</a>
+<ul>
+<li><a href="#get-raw-counts-allele">get_raw_counts_allele</a></li>
+<li><a href="#get-heteroplasmy">get_heteroplasmy</a></li>
+</ul>
+</li>
+<li><a href="#down-stream-analysis">Down-stream analysis</a></li>
+<li><a href="#vignettes">Vignettes</a></li>
+<li><a href="#contributions-and-support">Contributions and Support</a></li>
+</ul>
+</li>
+</ul>
 <div class="section level1">
 <div class="page-header"><h1 id="mitohear">MitoHEAR<a class="anchor" aria-label="anchor" href="#mitohear"></a>
 </h1></div>
-<p>MitoHEAR (<strong>Mito</strong>chondrial <strong>HE</strong>teroplasmy <strong>A</strong>nalyze<strong>R</strong>) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets.</p>
+<p><a href="https://scialdonelab.github.io/MitoHEAR" class="external-link">MitoHEAR</a> (<strong>Mito</strong>chondrial <strong>HE</strong>teroplasmy <strong>A</strong>nalyze<strong>R</strong>) is an R package that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets.</p>
 <p>The package has been used in a recently published paper (<a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, 2021, Nature Metabolism</a>), where we revealed that cells with higher levels of heteroplasmy are eliminated by cell competition in mouse embryos and are characterized by specific gene expression patterns.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the released version of MitoHEAR from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
-<pre><code><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"MitoHEAR"</span><span class="op">)</span></code></pre>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"MitoHEAR"</span><span class="op">)</span></code></pre></div>
 <p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<pre><code><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/ScialdoneLab/MitoHEAR/tree/master"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MitoHEAR</span><span class="op">)</span></code></pre>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MitoHEAR</span><span class="op">)</span></code></pre></div>
 <p>For installing also the vignettes provided within the package, please run the following:</p>
-<pre><code><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/ScialdoneLab/MitoHEAR/tree/master"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MitoHEAR</span><span class="op">)</span></code></pre>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MitoHEAR</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -114,7 +135,8 @@
 <div class="section level3">
 <h3 id="get_raw_counts_allele">get_raw_counts_allele<a class="anchor" aria-label="anchor" href="#get_raw_counts_allele"></a>
 </h3>
-<pre><code><span class="fu"><a href="reference/get_raw_counts_allele.html">get_raw_counts_allele</a></span><span class="op">(</span><span class="va">bam_input</span>, <span class="va">path_fasta</span>, <span class="va">cell_names</span>, cores_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/get_raw_counts_allele.html">get_raw_counts_allele</a></span><span class="op">(</span><span class="va">bam_input</span>, <span class="va">path_fasta</span>, <span class="va">cell_names</span>, cores_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> </code></pre></div>
 <ol style="list-style-type: decimal">
 <li>
 <strong>bam_input</strong>: character vector of sorted bam files (one for each sample) with full path.</li>
@@ -127,60 +149,57 @@
 </ol>
 <p>In the same location of the sorted bam file, also the corresponding index bam file (.bai) should be present</p>
 <p>Below an example of input using the development version of <strong>MitoHEAR</strong> from GitHub. The example is based on single cell RNA seq mouse embryo data from <a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, Nature Metabolism, 2021</a>:</p>
-<pre><code>First we download the input bam files (5 samples in the example):
-
-```
-current_wd &lt;- getwd()
-url &lt;- "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"
-destfile &lt;- paste0(current_wd, "input_bam_files.tar.gz")
-download.file(url, destfile, quiet = FALSE)
-untar(destfile, exdir=current_wd)
-
-load(system.file("extdata", "after_qc.Rda", package = "MitoHEAR"))
-cell_names &lt;- as.vector(after_qc$new_name)
-cell_names &lt;- cell_names[1:5]
-cell_names[1:5]
-[1] "24538_8_14" "24538_8_23" "24538_8_39" "24538_8_40" "24538_8_47"
-```
-where after_qc is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).
-
-```
-path_to_bam &lt;- paste0(current_wd, "input_bam_files/")
-bam_input &lt;- paste(path_to_bam, cell_names, ".unique.bam", sep = "")
-path_fasta &lt;- system.file("extdata", "Mus_musculus.GRCm38.dna.chromosome.MT.fa", package = "MitoHEAR")
-output_SNP_mt &lt;- get_raw_counts_allele(bam_input, path_fasta, cell_names)
-```</code></pre>
+<p>First we download the input bam files (5 samples in the example):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">current_wd &lt;-<span class="st"> </span><span class="kw">getwd</span>()</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">url &lt;-<span class="st"> "https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx/download/input_bam_files.tar.gz"</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">destfile &lt;-<span class="st"> </span><span class="kw">paste0</span>(current_wd, <span class="st">"input_bam_files.tar.gz"</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">download.file</span>(url, destfile, <span class="dt">quiet =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw">untar</span>(destfile, <span class="dt">exdir=</span>current_wd)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">load</span>(<span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"after_qc.Rda"</span>, <span class="dt">package =</span> <span class="st">"MitoHEAR"</span>))</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">cell_names &lt;-<span class="st"> </span><span class="kw">as.vector</span>(after_qc<span class="op">$</span>new_name)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">cell_names &lt;-<span class="st"> </span>cell_names[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">cell_names[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">[<span class="dv">1</span>] <span class="st">"24538_8_14"</span> <span class="st">"24538_8_23"</span> <span class="st">"24538_8_39"</span> <span class="st">"24538_8_40"</span> <span class="st">"24538_8_47"</span></a></code></pre></div>
+<p>where after_qc is a dataframe with number of rows equal to the number of samples and with columns related to meta data information (i.e. cluster and batch).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">path_to_bam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">current_wd</span>, <span class="st">"input_bam_files/"</span><span class="op">)</span>
+<span class="va">bam_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">path_to_bam</span>, <span class="va">cell_names</span>, <span class="st">".unique.bam"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
+<span class="va">path_fasta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Mus_musculus.GRCm38.dna.chromosome.MT.fa"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span>
+<span class="va">output_SNP_mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_raw_counts_allele.html">get_raw_counts_allele</a></span><span class="op">(</span><span class="va">bam_input</span>, <span class="va">path_fasta</span>, <span class="va">cell_names</span><span class="op">)</span></code></pre></div>
 <p>The example of input bam files (with 5 samples) is available also <a href="https://hmgubox2.helmholtz-muenchen.de/index.php/s/7P9C57RxfKnH5Qx" class="external-link">here</a>.</p>
 <p>The output of <strong>get_raw_counts_allele</strong> is a list with three elements: 1. <strong>matrix_allele_counts</strong>: matrix with rows equal to <strong>cell_names</strong> and with columns equal to the bases in the <strong>path_fasta</strong> file with the four possible alleles. For each pair sample-base there is the information about the counts on the alleles A,C,G and T 2. <strong>name_position_allele</strong>: character vectors with length equal to the number of columns in <strong>matrix_allele_counts</strong> with information about the name of the bases and the corresponding allele 3. <strong>name_position</strong>: character vectors with information about the name of the bases.</p>
-<pre><code># development version from GitHub
-load(system.file("extdata", "output_SNP_mt.Rda", package = "MitoHEAR"))
-matrix_allele_counts &lt;- output_SNP_mt[[1]]
-# In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)
-dim(matrix_allele_counts)
-[1]   723 65196
-head(matrix_allele_counts[1:5,1:5])
-           1_A_G_MT 1_C_G_MT 1_G_G_MT 1_T_G_MT 2_A_T_MT
-24538_8_14        0        0        0        0        0
-24538_8_23        0        0        0        0        0
-24538_8_39        0        0        0        0        0
-24538_8_40        0        0        0        0        0
-24538_8_47        0        0        0        0        0
-
-name_position_allele &lt;- output_SNP_mt[[2]]
-name_position_allele[1:8]
-[1] "1_A_G_MT" "1_C_G_MT" "1_G_G_MT" "1_T_G_MT" "2_A_T_MT" "2_C_T_MT" "2_G_T_MT" "2_T_T_MT"
-
-name_position &lt;- output_SNP_mt[[3]]
-name_position[1:8]
-[1] "1_MT" "1_MT" "1_MT" "1_MT" "2_MT" "2_MT" "2_MT" "2_MT"</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># development version from GitHub</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">load</span>(<span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"output_SNP_mt.Rda"</span>, <span class="dt">package =</span> <span class="st">"MitoHEAR"</span>))</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">matrix_allele_counts &lt;-<span class="st"> </span>output_SNP_mt[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co"># In this example we have 723 cells and 65196 columns (4 possible alleles for the 16299 bases in the mouse MT genome)</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">dim</span>(matrix_allele_counts)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">[<span class="dv">1</span>]   <span class="dv">723</span> <span class="dv">65196</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">head</span>(matrix_allele_counts[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>])</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">           <span class="dv">1</span>_A_G_MT <span class="dv">1</span>_C_G_MT <span class="dv">1</span>_G_G_MT <span class="dv">1</span>_T_G_MT <span class="dv">2</span>_A_T_MT</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">14</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">23</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">39</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">40</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">47</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span>        <span class="dv">0</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">name_position_allele &lt;-<span class="st"> </span>output_SNP_mt[[<span class="dv">2</span>]]</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">name_position_allele[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">[<span class="dv">1</span>] <span class="st">"1_A_G_MT"</span> <span class="st">"1_C_G_MT"</span> <span class="st">"1_G_G_MT"</span> <span class="st">"1_T_G_MT"</span> <span class="st">"2_A_T_MT"</span> <span class="st">"2_C_T_MT"</span> <span class="st">"2_G_T_MT"</span> <span class="st">"2_T_T_MT"</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19">name_position &lt;-<span class="st"> </span>output_SNP_mt[[<span class="dv">3</span>]]</a>
+<a class="sourceLine" id="cb7-20" data-line-number="20">name_position[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]</a>
+<a class="sourceLine" id="cb7-21" data-line-number="21">[<span class="dv">1</span>] <span class="st">"1_MT"</span> <span class="st">"1_MT"</span> <span class="st">"1_MT"</span> <span class="st">"1_MT"</span> <span class="st">"2_MT"</span> <span class="st">"2_MT"</span> <span class="st">"2_MT"</span> <span class="st">"2_MT"</span></a></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="get_heteroplasmy">get_heteroplasmy<a class="anchor" aria-label="anchor" href="#get_heteroplasmy"></a>
 </h3>
-<pre><code><span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">raw_counts_allele</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, <span class="va">number_reads</span>, <span class="va">number_positions</span>, filtering <span class="op">=</span> <span class="fl">1</span>, my.clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">raw_counts_allele</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, <span class="va">number_reads</span>, <span class="va">number_positions</span>, filtering <span class="op">=</span> <span class="fl">1</span>, my.clusters <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> </code></pre></div>
 <p>starts from the output of <strong>get_raw_counts</strong> and performs a two step filtering procedure, the first on the cells and the second on the bases. The aim is to keep only the cells that have more than <strong>number_reads</strong> counts in more than <strong>number_positions</strong> bases and to keep only the bases that are covered by more than <strong>number_reads</strong> counts in all the cells (<strong>filtering</strong>=1) or in at least 50% of cells in each cluster (<strong>filtering</strong>=2, with cluster specified by <strong>my.clusters</strong>).</p>
 <p>An example of input could be (using the development version from GitHub):</p>
-<pre><code><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"output_SNP_mt.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"output_SNP_mt.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"after_qc.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># We compute heteroplasmy only for cells that are in the condition "Cell competition OFF" and belong to cluster 1, 3 or 4</span>
@@ -193,32 +212,31 @@ name_position[1:8]
 <span class="va">name_position_allele</span> <span class="op">&lt;-</span> <span class="va">output_SNP_mt</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 <span class="va">name_position</span> <span class="op">&lt;-</span> <span class="va">output_SNP_mt</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 
-<span class="va">epiblast_cell_competition</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">matrix_allele_counts</span><span class="op">[</span><span class="va">cells_fmk_epi</span>, <span class="op">]</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, number_reads<span class="op">=</span><span class="fl">50</span>, number_positions<span class="op">=</span><span class="fl">2000</span>, filtering <span class="op">=</span> <span class="fl">2</span>, <span class="va">my.clusters</span><span class="op">)</span></code></pre>
+<span class="va">epiblast_cell_competition</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">matrix_allele_counts</span><span class="op">[</span><span class="va">cells_fmk_epi</span>, <span class="op">]</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, number_reads<span class="op">=</span><span class="fl">50</span>, number_positions<span class="op">=</span><span class="fl">2000</span>, filtering <span class="op">=</span> <span class="fl">2</span>, <span class="va">my.clusters</span><span class="op">)</span></code></pre></div>
 <p>The output of <strong>get_heteroplasmy</strong> is a list with five elements. The most relevant elements are the matrix with heteroplasmy values (<strong>heteroplasmy_matrix</strong>) and the matrix with allele frequencies (<strong>allele_matrix</strong>), for all the cells and bases that pass the two step filtering procedures. The heteroplasmy is computed as <strong>1-max(f)</strong>, where <strong>f</strong> are the frequencies of the four alleles for every sample-base pair. For more info about the output see <strong>?get_heteroplasmy</strong>.</p>
-<pre><code>heteroplasmy_matrix &lt;- epiblast_cell_competition[[3]]
-# 261 cells and 5736 bases pass the two step filtering procedures
-dim(heteroplasmy_matrix)
-[1]  261 5376
-head(heteroplasmy_matrix[1:5,1:5])
-           136_MT    138_MT 140_MT      141_MT 142_MT
-24538_8_14      0 0.0000000      0 0.000000000      0
-24538_8_39      0 0.0000000      0 0.000000000      0
-24538_8_40      0 0.0000000      0 0.008695652      0
-24538_8_47      0 0.0952381      0 0.000000000      0
-24538_8_69      0 0.0000000      0 0.000000000      0
-
-allele_matrix &lt;- epiblast_cell_competition[[4]]
-# 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).
-dim(allele_matrix)
-[1]   261 21504
-head(allele_matrix[1:4,1:4])
-           136_A_G_MT 136_C_G_MT 136_G_G_MT 136_T_G_MT
-24538_8_14          0          0          1          0
-24538_8_39          0          0          1          0
-24538_8_40          0          0          1          0
-24538_8_47          0          0          1          0
-
-</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">heteroplasmy_matrix &lt;-<span class="st"> </span>epiblast_cell_competition[[<span class="dv">3</span>]]</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co"># 261 cells and 5736 bases pass the two step filtering procedures</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">dim</span>(heteroplasmy_matrix)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">[<span class="dv">1</span>]  <span class="dv">261</span> <span class="dv">5376</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">head</span>(heteroplasmy_matrix[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>])</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">           <span class="dv">136</span>_MT    <span class="dv">138</span>_MT <span class="dv">140</span>_MT      <span class="dv">141</span>_MT <span class="dv">142</span>_MT</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">14</span>      <span class="dv">0</span> <span class="fl">0.0000000</span>      <span class="dv">0</span> <span class="fl">0.000000000</span>      <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">39</span>      <span class="dv">0</span> <span class="fl">0.0000000</span>      <span class="dv">0</span> <span class="fl">0.000000000</span>      <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">40</span>      <span class="dv">0</span> <span class="fl">0.0000000</span>      <span class="dv">0</span> <span class="fl">0.008695652</span>      <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">47</span>      <span class="dv">0</span> <span class="fl">0.0952381</span>      <span class="dv">0</span> <span class="fl">0.000000000</span>      <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">69</span>      <span class="dv">0</span> <span class="fl">0.0000000</span>      <span class="dv">0</span> <span class="fl">0.000000000</span>      <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13">allele_matrix &lt;-<span class="st"> </span>epiblast_cell_competition[[<span class="dv">4</span>]]</a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co"># 261 cells and 21504 allele-base (4 possible alleles for the 5736 bases).</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="kw">dim</span>(allele_matrix)</a>
+<a class="sourceLine" id="cb10-16" data-line-number="16">[<span class="dv">1</span>]   <span class="dv">261</span> <span class="dv">21504</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="kw">head</span>(allele_matrix[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</a>
+<a class="sourceLine" id="cb10-18" data-line-number="18">           <span class="dv">136</span>_A_G_MT <span class="dv">136</span>_C_G_MT <span class="dv">136</span>_G_G_MT <span class="dv">136</span>_T_G_MT</a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">14</span>          <span class="dv">0</span>          <span class="dv">0</span>          <span class="dv">1</span>          <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">39</span>          <span class="dv">0</span>          <span class="dv">0</span>          <span class="dv">1</span>          <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">40</span>          <span class="dv">0</span>          <span class="dv">0</span>          <span class="dv">1</span>          <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="dv">24538</span>_<span class="dv">8</span>_<span class="dv">47</span>          <span class="dv">0</span>          <span class="dv">0</span>          <span class="dv">1</span>          <span class="dv">0</span></a>
+<a class="sourceLine" id="cb10-23" data-line-number="23"></a></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -226,7 +244,8 @@ head(allele_matrix[1:4,1:4])
 </h2>
 <p><strong>MitoHEAR</strong> offers several ways to extrapolate relevant information from heteroplasmy measurement. For the identification of most different bases according to heteroplasmy between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed with the function <strong>get_wilcox_test</strong>. The heteroplasmy and the corresponding allele frequencies for a specific base can be plotted with <strong>plot_heteroplasmy</strong> and <strong>plot_allele_frequency</strong>. The example is based again on single cell RNA seq mouse embryo data from <a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, Nature Metabolism, 2021</a> and is possible to run it using the development version of <strong>MitoHEAR</strong>.</p>
 <p>Pre-processing of the dataset following the same steps described in the section <strong>Getting started</strong>:</p>
-<pre><code><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"output_SNP_mt.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"output_SNP_mt.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"after_qc.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">after_qc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">after_qc</span><span class="op">$</span><span class="va">new_name</span>
 <span class="va">cells_fmk_epi</span> <span class="op">&lt;-</span> <span class="va">after_qc</span><span class="op">[</span><span class="op">(</span><span class="va">after_qc</span><span class="op">$</span><span class="va">condition</span> <span class="op">==</span> <span class="st">"Cell competition OFF"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">after_qc</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">after_qc</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">|</span> <span class="va">after_qc</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>, <span class="st">"new_name"</span><span class="op">]</span>
@@ -237,8 +256,9 @@ head(allele_matrix[1:4,1:4])
 <span class="va">name_position_allele</span> <span class="op">&lt;-</span> <span class="va">output_SNP_mt</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 <span class="va">name_position</span> <span class="op">&lt;-</span> <span class="va">output_SNP_mt</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 
-<span class="va">epiblast_cell_competition</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">matrix_allele_counts</span><span class="op">[</span><span class="va">cells_fmk_epi</span>, <span class="op">]</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, number_reads<span class="op">=</span><span class="fl">50</span>, number_positions<span class="op">=</span><span class="fl">2000</span>, filtering <span class="op">=</span> <span class="fl">2</span>, <span class="va">my.clusters</span><span class="op">)</span></code></pre>
-<pre><code><span class="va">sum_matrix</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<span class="va">epiblast_cell_competition</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_heteroplasmy.html">get_heteroplasmy</a></span><span class="op">(</span><span class="va">matrix_allele_counts</span><span class="op">[</span><span class="va">cells_fmk_epi</span>, <span class="op">]</span>, <span class="va">name_position_allele</span>, <span class="va">name_position</span>, number_reads<span class="op">=</span><span class="fl">50</span>, number_positions<span class="op">=</span><span class="fl">2000</span>, filtering <span class="op">=</span> <span class="fl">2</span>, <span class="va">my.clusters</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sum_matrix</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">sum_matrix_qc</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 <span class="va">heteroplasmy_matrix_ci</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 <span class="va">allele_matrix_ci</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>
@@ -249,25 +269,30 @@ head(allele_matrix[1:4,1:4])
 <span class="va">index_ci</span> <span class="op">&lt;-</span> <span class="va">epiblast_cell_competition</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
 
 <span class="va">name_position_allele_qc</span> <span class="op">&lt;-</span> <span class="va">name_position_allele</span><span class="op">[</span><span class="va">name_position</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sum_matrix_qc</span><span class="op">)</span><span class="op">]</span>
-<span class="va">name_position_qc</span> <span class="op">&lt;-</span>  <span class="va">name_position</span><span class="op">[</span><span class="va">name_position</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sum_matrix_qc</span><span class="op">)</span><span class="op">]</span></code></pre>
+<span class="va">name_position_qc</span> <span class="op">&lt;-</span>  <span class="va">name_position</span><span class="op">[</span><span class="va">name_position</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sum_matrix_qc</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <p>It is possible to perform an additional filtering step on the bases keeping only the ones with an heteroplasmy value above <em>min_heteroplasmy</em> in more than <em>min_cells</em>.</p>
-<pre><code><span class="va">relevant_bases</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_bases.html">filter_bases</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span>, min_heteroplasmy <span class="op">=</span> <span class="fl">0.01</span>, min_cells <span class="op">=</span> <span class="fl">10</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">relevant_bases</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_bases.html">filter_bases</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span>, min_heteroplasmy <span class="op">=</span> <span class="fl">0.01</span>, min_cells <span class="op">=</span> <span class="fl">10</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre></div>
 <p>For detecting the difference in heteroplasmy values between two group of cells (i.e. two clusters), an unpaired two-samples Wilcoxon test is performed. In this case we run the test between the clusters <em>Winner Epiblast</em> and <em>Loser Epiblast</em>. As output, for each base, there is the adjusted p valued (FDR).</p>
-<pre><code><span class="va">p_value_wilcox_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_wilcox_test.html">get_wilcox_test</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span><span class="op">[</span>, <span class="va">relevant_bases</span><span class="op">]</span>, <span class="va">cluster_ci</span>, <span class="st">"Winner Epiblast"</span>, <span class="st">"Loser Epiblast"</span> , <span class="va">index_ci</span><span class="op">)</span>
-<span class="va">p_value_wilcox_test_sort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">p_value_wilcox_test</span>, decreasing <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_value_wilcox_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_wilcox_test.html">get_wilcox_test</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span><span class="op">[</span>, <span class="va">relevant_bases</span><span class="op">]</span>, <span class="va">cluster_ci</span>, <span class="st">"Winner Epiblast"</span>, <span class="st">"Loser Epiblast"</span> , <span class="va">index_ci</span><span class="op">)</span>
+<span class="va">p_value_wilcox_test_sort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">p_value_wilcox_test</span>, decreasing <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
 <p>The heteroplasmy and the corresponding allele frequencies for the most relevant base (according to Wilcoxon test) is shown.</p>
-<pre><code><span class="fu"><a href="reference/plot_heteroplasmy.html">plot_heteroplasmy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">p_value_wilcox_test_sort</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">index_ci</span><span class="op">)</span>
-<span class="fu"><a href="reference/plot_allele_frequency.html">plot_allele_frequency</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">p_value_wilcox_test_sort</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">allele_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">name_position_qc</span>, <span class="va">name_position_allele_qc</span>, <span class="fl">5</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre>
-<p><img src="reference/figures/paper_fig_1.png" style="width:60.0%"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/plot_heteroplasmy.html">plot_heteroplasmy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">p_value_wilcox_test_sort</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">index_ci</span><span class="op">)</span>
+<span class="fu"><a href="reference/plot_allele_frequency.html">plot_allele_frequency</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">p_value_wilcox_test_sort</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">allele_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">name_position_qc</span>, <span class="va">name_position_allele_qc</span>, <span class="fl">5</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/paper_fig_1.png"></p>
 <p>If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with <strong>dpt_test</strong> and to plot the trend with <strong>plot_dpt</strong>.</p>
-<pre><code><span class="va">time</span> <span class="op">&lt;-</span> <span class="va">after_qc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">pseudo_time</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">time</span> <span class="op">&lt;-</span> <span class="va">after_qc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span><span class="op">)</span>, <span class="op">]</span><span class="op">$</span><span class="va">pseudo_time</span>
 <span class="va">dpt_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dpt_test.html">dpt_test</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_ci</span><span class="op">[</span>, <span class="va">relevant_bases</span><span class="op">]</span>, <span class="va">time</span>, <span class="va">index_ci</span>, method <span class="op">=</span>  <span class="st">"GAM"</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/plot_dpt.html">plot_dpt</a></span><span class="op">(</span><span class="va">dpt_analysis</span><span class="op">$</span><span class="va">Position</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">time</span>, <span class="va">dpt_analysis</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre>
-<p><img src="reference/figures/paper_fig_2.png" style="width:60.0%"></p>
+<span class="fu"><a href="reference/plot_dpt.html">plot_dpt</a></span><span class="op">(</span><span class="va">dpt_analysis</span><span class="op">$</span><span class="va">Position</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">heteroplasmy_matrix_ci</span>, <span class="va">cluster_ci</span>, <span class="va">time</span>, <span class="va">dpt_analysis</span>, <span class="va">index_ci</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/paper_fig_2.png"></p>
 <p>It is also possible to perform a cluster analysis on the samples based on distance matrix obtained from allele frequencies with <strong>clustering_angular_distance</strong> and to visualize an heatmap of the distance matrix with samples sorted according to the cluster result with <strong>plot_distance_matrix</strong>. This approach could be useful for lineage tracing analysis. The data shown in the example below (reproducible with the development version of <strong>MitoHEAR</strong>) is bulk RNA seq mouse data from two mtDNA cell lines labelled <em>Loser</em> and <em>Winner</em> (<a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, Nature Metabolism, 2021</a>).</p>
 <p>Pre-processing of the dataset following the same steps described in the section <strong>Getting started</strong>:</p>
-<pre><code><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"meta_data_ana_final_big.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"meta_data_ana_final_big.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"meta_data_ana_final_small.Rda"</span>, package <span class="op">=</span> <span class="st">"MitoHEAR"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">cell_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">meta_data_ana_final_big</span><span class="op">$</span><span class="va">name_cell</span><span class="op">)</span>
 <span class="va">cell_names_bulk</span> <span class="op">&lt;-</span> <span class="va">cell_names</span>
@@ -288,56 +313,62 @@ head(allele_matrix[1:4,1:4])
 <span class="va">heteroplasmy_matrix_bulk</span> <span class="op">&lt;-</span> <span class="va">bulk_data_competition</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 <span class="va">allele_matrix_bulk</span> <span class="op">&lt;-</span> <span class="va">bulk_data_competition</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>
 <span class="va">cluster_bulk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">meta_data_ana_final_small</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_bulk</span><span class="op">)</span>,<span class="op">]</span><span class="op">$</span><span class="va">status</span><span class="op">)</span>
-<span class="va">index_bulk</span> <span class="op">&lt;-</span> <span class="va">bulk_data_competition</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></code></pre>
+<span class="va">index_bulk</span> <span class="op">&lt;-</span> <span class="va">bulk_data_competition</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <p>Unsupervised hierarchical clustering on the samples based on a distance matrix with the function <strong>clustering_dist_ang</strong>.</p>
-<pre><code><span class="va">result_clustering_sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clustering_angular_distance.html">clustering_angular_distance</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_bulk</span>, <span class="va">allele_matrix_bulk</span>, <span class="va">cluster_bulk</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_bulk</span><span class="op">)</span><span class="op">)</span>, deepSplit_param <span class="op">=</span> <span class="fl">1</span>, minClusterSize_param <span class="op">=</span> <span class="fl">8</span>, <span class="fl">0.2</span>, min_value <span class="op">=</span> <span class="fl">0.001</span>, index <span class="op">=</span> <span class="va">index_bulk</span>, relevant_bases <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">result_clustering_sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/clustering_angular_distance.html">clustering_angular_distance</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_bulk</span>, <span class="va">allele_matrix_bulk</span>, <span class="va">cluster_bulk</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">heteroplasmy_matrix_bulk</span><span class="op">)</span><span class="op">)</span>, deepSplit_param <span class="op">=</span> <span class="fl">1</span>, minClusterSize_param <span class="op">=</span> <span class="fl">8</span>, <span class="fl">0.2</span>, min_value <span class="op">=</span> <span class="fl">0.001</span>, index <span class="op">=</span> <span class="va">index_bulk</span>, relevant_bases <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="va">old_new_classification</span> <span class="op">&lt;-</span> <span class="va">result_clustering_sc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">dist_matrix_sc</span> <span class="op">&lt;-</span> <span class="va">result_clustering_sc</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 <span class="va">top_dist</span> <span class="op">&lt;-</span> <span class="va">result_clustering_sc</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 <span class="va">old_classification</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">old_new_classification</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/plot_distance_matrix.html">plot_distance_matrix</a></span><span class="op">(</span><span class="va">dist_matrix_sc</span>, <span class="va">old_classification</span><span class="op">)</span></code></pre>
-<p><img src="reference/figures/paper_fig_3.png" style="width:60.0%"></p>
+<span class="fu"><a href="reference/plot_distance_matrix.html">plot_distance_matrix</a></span><span class="op">(</span><span class="va">dist_matrix_sc</span>, <span class="va">old_classification</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/paper_fig_3.png"></p>
 <p>For more exhaustive information about the functions offered by <strong>MitoHEAR</strong> see <strong>Vignettes</strong> section below and the help page of the single functions. (<strong>?function_name</strong>).</p>
 </div>
 <div class="section level2">
 <h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
 </h2>
-<p>The following vignettes are provided within the package <strong>MitoHEAR</strong> (development version from <a href="https://github.com/" class="external-link">GitHub</a>) and are accessible within R:</p>
+<p>The following vignettes are provided within the package <strong>MitoHEAR</strong> (development version from <a href="https://github.com/" class="external-link">GitHub</a>) and are accessible within R.</p>
+<p>For a complete overview of the vignettes without the need of using R, please <a href="https://scialdonelab.github.io/MitoHEAR/articles/" class="external-link">click here</a></p>
 <div class="section level3">
 <h3 id="cell_competition_mt_example_notebook-rmd">
 <strong><a href="https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_mt_example_notebook.Rmd" class="external-link">cell_competition_mt_example_notebook.Rmd</a>:</strong><a class="anchor" aria-label="anchor" href="#cell_competition_mt_example_notebook-rmd"></a>
 </h3>
-<pre><code><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"cell_competition_mt_example_notebook"</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"cell_competition_mt_example_notebook"</span><span class="op">)</span></code></pre></div>
 <p>This tutorial uses single cell RNA seq mouse embryo data (<a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, Nature Metabolism, 2021</a>)(Smart-Seq2 protocol). The heteroplasmy is computed for the mouse mitochondrial genome. Identification and plotting of most different bases according to heteroplasmy between clusters (with <strong>get_wilcox_test</strong>, <strong>plot_heteroplasmy</strong> and <strong>plot_allele_frequency</strong>) and along pseudo time (with <strong>dpt_test</strong> and <strong>plot_dpt</strong>) are shown. The top 10 bases with highest variation in heteroplasmy belong to the genes mt-Rnr1 and mt-Rnr2 and in these positions the heteroplasmy always increases with the diffusion pseudo time.</p>
 </div>
 <div class="section level3">
 <h3 id="cell_competition_bulk_data_mt_example_notebook-rmd">
 <strong><a href="https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/cell_competition_bulk_data_mt_example_notebook.Rmd" class="external-link">cell_competition_bulk_data_mt_example_notebook.Rmd</a>:</strong><a class="anchor" aria-label="anchor" href="#cell_competition_bulk_data_mt_example_notebook-rmd"></a>
 </h3>
-<pre><code><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"cell_competition_bulk_data_mt_example_notebook"</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"cell_competition_bulk_data_mt_example_notebook"</span><span class="op">)</span></code></pre></div>
 <p>This tutorial uses bulk RNA seq data from data from two mtDNA cell lines( <a href="https://www.nature.com/articles/s42255-021-00422-7?proof=t" class="external-link">Lima <em>et al.</em>, Nature Metabolism, 2021</a>). Cluster analysis among samples based on allele frequency values (done with <strong>clustering_angular_distance</strong>) reveals that we can perfectly distinguish between the two cell lines only by looking at the heteroplasmy values of the mitochondrial bases.</p>
 </div>
 <div class="section level3">
 <h3 id="lineage_tracing_example_notebook-rmd">
 <strong><a href="https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/lineage_tracing_example_notebook.Rmd" class="external-link">lineage_tracing_example_notebook.Rmd</a>:</strong><a class="anchor" aria-label="anchor" href="#lineage_tracing_example_notebook-rmd"></a>
 </h3>
-<pre><code><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"lineage_tracing_example_notebook"</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"lineage_tracing_example_notebook"</span><span class="op">)</span></code></pre></div>
 <p>This tutorial uses single cell RNA seq mouse embryo data from <a href="https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-3321/?query=antonio+scialdone" class="external-link">Goolam <em>et al.</em>, Cell, 2016</a>(Smart-Seq2 protocol). There are embryos at different stages from 2-cells to 8-cells stage. At each stage, for every cell it is known the embryo of origin. We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with <strong>clustering_angular_distance</strong>) could be used in order to perform a lineage tracing analysis, by grouping together cells which are from the same embryo.</p>
 </div>
 <div class="section level3">
 <h3 id="ludwig_et_al_example_notebook-rmd">
 <strong><a href="https://github.com/ScialdoneLab/MitoHEAR/blob/master/vignettes/Ludwig_et_al_example_notebook.Rmd" class="external-link">Ludwig_et_al_example_notebook.Rmd</a>:</strong><a class="anchor" aria-label="anchor" href="#ludwig_et_al_example_notebook-rmd"></a>
 </h3>
-<pre><code><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"Ludwig_et_al_example_notebook"</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"Ludwig_et_al_example_notebook"</span><span class="op">)</span></code></pre></div>
 <p>This tutorial uses two single cell RNA seq human cells dataset from <a href="https://doi.org/10.1016/j.cell.2019.01.022" class="external-link">Ludwig <em>et al.</em>, Cell, 2019</a>. We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with <strong>clustering_angular_distance</strong>) can be used in order to aggregate cells. The result from unsupervised cluster analysis are consistent with previously available information (colonies of cells, donors).</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="contributions-and-support">Contributions and Support<a class="anchor" aria-label="anchor" href="#contributions-and-support"></a>
 </h2>
-<p>Contributions in the form of feedback, comments, code, and bug report are welcome. * For any contributions, feel free to fork the source code and <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork" class="external-link">submit a pull requests</a>. * Please report any issues or bugs here: <a href="https://github.com/ScialdoneLab/MitoHEAR/issues" class="external-link uri">https://github.com/ScialdoneLab/MitoHEAR/issues</a>. Any questions and requests for support can also be directed to the package maintainer (gabriele[dot]lubatti[at]helmholtz-muenchen[dot]de).</p>
+<p>Contributions in the form of feedback, comments, code and bug report are welcome. * For any contributions, feel free to fork the source code and <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork" class="external-link">submit a pull requests</a>. * Please report any issues or bugs here: <a href="https://github.com/ScialdoneLab/MitoHEAR/issues" class="external-link uri">https://github.com/ScialdoneLab/MitoHEAR/issues</a>. Any questions and requests for support can also be directed to the package maintainer (gabriele[dot]lubatti[at]helmholtz-muenchen[dot]de).</p>
 </div>
 </div>
 
