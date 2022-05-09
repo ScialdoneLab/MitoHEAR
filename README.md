@@ -230,7 +230,7 @@ plot_allele_frequency(names(p_value_wilcox_test_sort)[1], heteroplasmy_matrix_ci
 ![](man/figures/paper_fig_1.png)
 
 If for each sample a diffusion pseudo time information is available, then it is possible to detect the bases whose heteroplasmy changes in a significant way along pseudo-time with **dpt_test** and to plot the trend with **plot_dpt**.
-To run the function **dpt_analysis** with parameter **method** equal to **GAM**, the package **GAM** need to be installed.
+To run the function **dpt_test** with parameter **method** equal to **GAM**, the package **gam** need to be installed.
 ```r
 time <- after_qc[row.names(heteroplasmy_matrix_ci), ]$pseudo_time
 # install.packages('gam')
