@@ -11,11 +11,11 @@ authors:
   name: Antonio Scialdone^[corresponding author]
 affiliations:
 - index: 1
-  name: Institute of Epigenetics and Stem Cells, Helmholtz Zentrum München, Munich, Germany
+  name: Institute of Epigenetics and Stem Cells, Helmholtz Zentrum München, Munich, Germany
 - index: 2
-  name: Institute of Functional Epigenetics, Helmholtz Zentrum München, Neuherberg, Germany
+  name: Institute of Functional Epigenetics, Helmholtz Zentrum München, Neuherberg, Germany
 - index: 3
-  name: Institute of Computational Biology, Helmholtz Zentrum München, Neuherberg, Germany
+  name: Institute of Computational Biology, Helmholtz Zentrum München, Neuherberg, Germany
 tags:
 - R
 - bioinformatics
@@ -26,7 +26,7 @@ tags:
 # Summary
 Eukaryotic cells rely on mitochondria, organelles that are equipped with their own DNA (mtDNA) to produce the energy they need. Each cell includes multiple mtDNA copies that are not perfectly identical but have differences in their sequence; such sequence variability is called heteroplasmy.
 mtDNA heteroplasmy has been associated with diseases [@Nissanka2020], that can affect cellular fitness and have an impact on cellular competition [@Lima2020].
-Several single-cell sequencing protocols provide the data to estimate mtDNA heteroplasmy, including single-cell DNA-seq, RNA-seq and ATAC-seq, in addition to dedicated protocols like MAESTER [@Miller2021].
+Several single-cell sequencing protocols provide the data to estimate mtDNA heteroplasmy, including single-cell DNA-seq, RNA-seq and ATAC-seq, in addition to dedicated protocols like MAESTER [@Miller2022].
 Here, we provide MitoHEAR (Mitochondrial HEteroplasmy AnalyzeR), a user-friendly software written in R that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. MitoHEAR takes as input BAM files, computes the frequency of each allele and, starting from these, estimates the mtDNA heteroplasmy at each covered position for each cell.  
 The analysis parameters (e.g., the filtering of the mtDNA positions based on read quality and coverage) are easily tuneable. Moreover, statistical tests are available to explore the dependency of the mtDNA heteroplasmy on continuous or discrete cell covariates (e.g., culture conditions, differentiation states, etc), as extensively shown in the detailed tutorials we include. 
 
