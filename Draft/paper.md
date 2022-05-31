@@ -34,7 +34,7 @@ The analysis parameters (e.g., the filtering of the mtDNA positions based on rea
 # Statement of need
 Although mtDNA heteroplasmy has important consequences on human health [@Stewart2015] and embryonic development [@Floros2019], there are still many open questions on how heteroplasmy affects cells' ability to function and how cells keep it under control. 
 With the increasing availability of single-cell data, many questions can begin to be answered. Still, it is fundamental to have efficient and streamlined computational tools enabling researchers to estimate and analyse mtDNA heteroplasmy. 
-Existing packages [@Huang2021; @Prashant2020; @Calabrese2014] focus only on the first step of quantifying heteroplasmy from BAM files, and do not provide any specific tools for further statistical analyses or plotting.
+Existing packages [@Huang2021; @Prashant2021; @Calabrese2014] focus only on the first step of quantifying heteroplasmy from BAM files, and do not provide any specific tools for further statistical analyses or plotting.
 Instead, MitoHEAR covers all steps of the analysis in a unique user-friendly package, with highly customisable functions. Starting from BAM files, MitoHEAR estimates heteroplasmy and offers several options for downstream analyses. For example, statistical tests are provided to investigate the relationship of the mtDNA heteroplasmy with continuous or discrete cell covariates. Moreover,  there are plotting functions to visualise heteroplasmy and allele frequencies and to perform hierarchical clustering of cells based on heteroplasmy values. 
 
 
