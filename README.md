@@ -3,13 +3,13 @@
 [![](http://cranlogs.r-pkg.org/badges/grand-total/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
 [![](http://cranlogs.r-pkg.org/badges/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
 [![](http://cranlogs.r-pkg.org/badges/last-day/MitoHEAR?color=green)](https://cran.r-project.org/package=MitoHEAR)
-<a style="border-width:0" href="https://doi.org/10.21105/joss.04265">
-  <img src="https://joss.theoj.org/papers/10.21105/joss.04265/status.svg" alt="DOI badge" >
-</a>
+
 
 
 <!-- badges: end -->
-
+<a style="border-width:0" href="https://doi.org/10.21105/joss.04265">
+  <img src="https://joss.theoj.org/papers/10.21105/joss.04265/status.svg" alt="DOI badge" >
+</a>
 
 
 
