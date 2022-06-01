@@ -9,17 +9,12 @@
 
 
 
-Markdown:
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.04265/status.svg)](https://doi.org/10.21105/joss.04265)
 
 HTML:
 <a style="border-width:0" href="https://doi.org/10.21105/joss.04265">
   <img src="https://joss.theoj.org/papers/10.21105/joss.04265/status.svg" alt="DOI badge" >
 </a>
 
-reStructuredText:
-.. image:: https://joss.theoj.org/papers/10.21105/joss.04265/status.svg
-   :target: https://doi.org/10.21105/joss.04265
 
 - [MitoHEAR](#mitohear)
   * [Installation](#installation)
