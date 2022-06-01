@@ -24,26 +24,26 @@ tags:
 ---
 
 # Summary
-Eukaryotic cells rely on mitochondria, organelles that are equipped with their own DNA (mtDNA) to produce the energy they need. Each cell includes multiple mtDNA copies that are not perfectly identical but have differences in their sequence; such sequence variability is called heteroplasmy.
-mtDNA heteroplasmy has been associated with diseases [@Nissanka2020], that can affect cellular fitness and have an impact on cellular competition [@Lima2020].
-Several single-cell sequencing protocols provide the data to estimate mtDNA heteroplasmy, including single-cell DNA-seq, RNA-seq and ATAC-seq, in addition to dedicated protocols like MAESTER [@Miller2022].
-Here, we provide MitoHEAR (Mitochondrial HEteroplasmy AnalyzeR), a user-friendly software written in R that allows the estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. MitoHEAR takes as input BAM files, computes the frequency of each allele and, starting from these, estimates the mtDNA heteroplasmy at each covered position for each cell.  
-The analysis parameters (e.g., the filtering of the mtDNA positions based on read quality and coverage) are easily tuneable. Moreover, statistical tests are available to explore the dependency of the mtDNA heteroplasmy on continuous or discrete cell covariates (e.g., culture conditions, differentiation states, etc), as extensively shown in the detailed tutorials we include. 
+Eukaryotic cells rely on mitochondria: organelles that are equipped with their own DNA (mtDNA) to produce the energy they need. Each cell includes multiple mtDNA copies that are not perfectly identical but have differences in their sequence; such sequence variability is called heteroplasmy.
+mtDNA heteroplasmy has been associated with diseases [@Nissanka2020], which can affect cellular fitness and have an impact on cellular competition [@Lima2020].
+Several single-cell sequencing protocols provide the data to estimate mtDNA heteroplasmy, including single-cell DNA-seq, RNA-seq, and ATAC-seq, in addition to dedicated protocols like MAESTER [@Miller2022].
+Here, we provide MitoHEAR (Mitochondrial HEteroplasmy AnalyzeR), a user-friendly software package written in R that allows this estimation as well as downstream statistical analysis of the mtDNA heteroplasmy calculated from single-cell datasets. MitoHEAR takes as input BAM files, computes the frequency of each allele and, starting from these, estimates the mtDNA heteroplasmy at each covered position for each cell.  
+The analysis parameters (e.g., the filtering of the mtDNA positions based on read quality and coverage) are easily tuneable. Moreover, statistical tests are available to explore the dependency of the mtDNA heteroplasmy on continuous or discrete cell covariates (e.g., culture conditions, differentiation states, etc.), as extensively shown in the included detailed tutorials. 
 
 
 # Statement of need
 Although mtDNA heteroplasmy has important consequences on human health [@Stewart2015] and embryonic development [@Floros2019], there are still many open questions on how heteroplasmy affects cells' ability to function and how cells keep it under control. 
-With the increasing availability of single-cell data, many questions can begin to be answered. Still, it is fundamental to have efficient and streamlined computational tools enabling researchers to estimate and analyse mtDNA heteroplasmy. 
+With the increasing availability of single-cell data, many questions can begin to be answered. Still, it is essential to have efficient and streamlined computational tools that enable researchers to estimate and analyse mtDNA heteroplasmy. 
 Existing packages [@Huang2021; @Prashant2021; @Calabrese2014] focus only on the first step of quantifying heteroplasmy from BAM files, and do not provide any specific tools for further statistical analyses or plotting.
-Instead, MitoHEAR covers all steps of the analysis in a unique user-friendly package, with highly customisable functions. Starting from BAM files, MitoHEAR estimates heteroplasmy and offers several options for downstream analyses. For example, statistical tests are provided to investigate the relationship of the mtDNA heteroplasmy with continuous or discrete cell covariates. Moreover,  there are plotting functions to visualise heteroplasmy and allele frequencies and to perform hierarchical clustering of cells based on heteroplasmy values. 
+MitoHEAR covers all steps of the analysis in a unique user-friendly package, with highly customisable functions. Starting from BAM files, MitoHEAR estimates heteroplasmy and offers several options for downstream analyses. For example, statistical tests are provided to investigate the relationship of the mtDNA heteroplasmy with continuous or discrete cell covariates. Moreover, it includes plotting functions to visualise heteroplasmy and allele frequencies and to perform hierarchical clustering of cells based on heteroplasmy values. 
 
 
 # Key functions
 
 The two main functions of `MitoHEAR` are:
 
-1. `get_raw_counts_allele`: a parallelised function that relies on Rsamtools and generates the raw counts matrix starting from BAM files, with cells as rows and bases with the four possible alleles as columns.
-2. `get_heteroplasmy`: Starting from the output of `get_raw_counts_allele`, it computes the matrix with heteroplasmy values (defined as 1 minus the frequency of the most common allele) and the matrix with allele frequency values, for all the cells and bases that pass a filtering procedure.
+1. `get_raw_counts_allele`: A parallelised function that relies on Rsamtools and generates the raw counts matrix starting from BAM files, with cells as rows and bases with the four possible alleles as columns.
+2. `get_heteroplasmy`: Starting from the output of `get_raw_counts_allele`, this function computes the matrix with heteroplasmy values (defined as 1 minus the frequency of the most common allele) and the matrix with allele frequency values, for all the cells and bases that pass a filtering procedure.
 
 Among the downstream analyses implemented in the package are: 
 
