@@ -24,7 +24,7 @@
     + [get_heteroplasmy](#get-heteroplasmy)
   * [Down-stream analysis](#down-stream-analysis)
   * [Vignettes](#vignettes)
-  * [How to cite](#How-to-cite)
+  * [Citation](#Citation)
   * [Contributions and Support](#contributions-and-support)
 
 # MitoHEAR
@@ -338,8 +338,7 @@ utils::vignette("Ludwig_et_al_example_notebook")
 This tutorial uses two single cell RNA seq human cells dataset from  [Ludwig *et al.*, Cell, 2019 ](https://doi.org/10.1016/j.cell.2019.01.022). 
 We illustrate how unsupervised cluster analysis based on allele frequencies information (performed with **clustering_angular_distance**) can be used in order to aggregate cells. The result from unsupervised cluster analysis are consistent with previously available information (colonies of cells, donors).
 
-## How to cite
-To cite **MitoHEAR** in publications use:
+## Citation
 
 Lubatti et al., (2022). MitoHEAR: an R package for the estimation and downstream statistical analysis of the mitochondrial DNA heteroplasmy calculated from single-cell datasets. Journal of Open Source Software, 7(74), 4265, https://doi.org/10.21105/joss.04265
 
