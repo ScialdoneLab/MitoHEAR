@@ -340,9 +340,9 @@ We illustrate how unsupervised cluster analysis based on allele frequencies info
 
 ## How to cite
 To cite **MitoHEAR** in publications use:
-```
+
 Lubatti et al., (2022). MitoHEAR: an R package for the estimation and downstream statistical analysis of the mitochondrial DNA heteroplasmy calculated from single-cell datasets. Journal of Open Source Software, 7(74), 4265, https://doi.org/10.21105/joss.04265
-```
+
 
 
 ## Contributions and Support
